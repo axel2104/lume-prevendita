@@ -229,11 +229,34 @@
       <div class="field" data-f="firstName"><label>Nome <span class="req">*</span></label><input type="text" autocomplete="given-name" /><span class="err">Inserisci il nome</span></div>
       <div class="field" data-f="lastName"><label>Cognome <span class="req">*</span></label><input type="text" autocomplete="family-name" /><span class="err">Inserisci il cognome</span></div>
       <div class="field" data-f="email"><label>Email <span class="req">*</span></label><input type="email" autocomplete="email" /><span class="err">Email non valida</span></div>
-      <div class="field" data-f="phone"><label>Cellulare <span class="req">*</span></label><input type="tel" autocomplete="tel" placeholder="+39" /><span class="err">Numero non valido</span></div>
+      <div class="field" data-f="phone"><label>Cellulare <span class="req">*</span></label>
+        <div style="display:flex;gap:8px">
+          <select id="phonePrefix" class="prefix-sel" style="max-width:132px"></select>
+          <input id="phoneNumber" type="tel" inputmode="tel" autocomplete="tel" placeholder="333 1234567" style="flex:1" />
+        </div><span class="err">Numero non valido</span></div>
       <div class="field" data-f="birthDate"><label>Data di nascita <span class="req">*</span></label><input type="date" /><span class="err">Campo obbligatorio</span></div>
       <div class="field" data-f="gender"><label>Sesso <span class="req">*</span></label><select><option value="">—</option><option value="F">Femmina</option><option value="M">Maschio</option><option value="X">Altro</option></select><span class="err">Campo obbligatorio</span></div>
       <div class="field" data-f="fiscalCode"><label>Codice fiscale <span class="req">*</span></label><input type="text" maxlength="16" style="text-transform:uppercase" /><span class="err">Codice fiscale non valido</span></div>
       <div class="field" data-f="city"><label>Città</label><input type="text" autocomplete="address-level2" /><span class="err"></span></div>
+    </div>
+
+    <!-- Sezione genitore/tutore (mostrata se minorenne) -->
+    <div id="parentSection" style="display:none;margin-top:18px">
+      <div style="background:rgba(196,0,66,.12);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:14px;color:#ffd0df;line-height:1.5">
+        L'intestatario risulta <b>minorenne</b>: inserisci i dati del <b>genitore/tutore</b> che firmerà il contratto.
+      </div>
+      <div class="grid two">
+        <div class="field" data-pf="firstName"><label>Nome genitore <span class="req">*</span></label><input type="text" /><span class="err">Inserisci il nome</span></div>
+        <div class="field" data-pf="lastName"><label>Cognome genitore <span class="req">*</span></label><input type="text" /><span class="err">Inserisci il cognome</span></div>
+        <div class="field" data-pf="email"><label>Email genitore <span class="req">*</span></label><input type="email" /><span class="err">Email non valida</span></div>
+        <div class="field" data-pf="phone"><label>Cellulare genitore <span class="req">*</span></label>
+          <div style="display:flex;gap:8px">
+            <select id="pPhonePrefix" class="prefix-sel" style="max-width:132px"></select>
+            <input id="pPhoneNumber" type="tel" inputmode="tel" placeholder="333 1234567" style="flex:1" />
+          </div><span class="err">Numero non valido</span></div>
+        <div class="field" data-pf="birthDate"><label>Data di nascita genitore <span class="req">*</span></label><input type="date" /><span class="err">Campo obbligatorio</span></div>
+        <div class="field" data-pf="fiscalCode"><label>Codice fiscale genitore <span class="req">*</span></label><input type="text" maxlength="16" style="text-transform:uppercase" /><span class="err">Codice fiscale non valido</span></div>
+      </div>
     </div>
     <div class="nav">
       <button class="btn btn-ghost" data-back>Indietro</button>
@@ -252,6 +275,20 @@
       <label class="consent"><input type="checkbox" id="cTerms" /><span>Accetto i termini dell'offerta di prevendita e le condizioni dell'abbonamento. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
       <label class="consent"><input type="checkbox" id="cMkt" /><span>Acconsento a ricevere comunicazioni promozionali da Lume Fitness (facoltativo).</span></label>
     </div>
+
+    <!-- Firma del contratto -->
+    <div class="field" style="margin-top:18px">
+      <label>Firma del contratto <span class="req" style="color:var(--accent-hi)">*</span></label>
+      <div style="position:relative;background:#fbfbfb;border:2px solid var(--line);border-radius:10px;overflow:hidden">
+        <canvas id="sigPad" style="display:block;width:100%;height:170px;touch-action:none;cursor:crosshair"></canvas>
+        <span id="sigHint" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#b0b0b0;font-size:14px;pointer-events:none">Firma qui con dito o mouse</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+        <span style="font-size:12.5px;color:var(--text-mut)">La firma verrà applicata al contratto PDF.</span>
+        <button type="button" id="sigClear" style="background:transparent;border:1px solid var(--line);color:var(--text-dim);border-radius:8px;padding:5px 12px;font-family:var(--body);font-size:13px;cursor:pointer">Cancella</button>
+      </div>
+    </div>
+
     <div class="nav">
       <button class="btn btn-ghost" data-back>Indietro</button>
       <button class="btn btn-primary" data-next disabled id="toPayBtn">Vai al pagamento</button>
@@ -260,10 +297,10 @@
 
   <!-- STEP 5: PAGAMENTO -->
   <section class="step" data-step="5">
-    <h1 class="step-title">Acconto di prevendita</h1>
-    <p class="step-sub">Versa l'acconto per bloccare la tua tariffa.</p>
+    <h1 class="step-title">Pagamento</h1>
+    <p class="step-sub">Completa l'acquisto del tuo abbonamento di prevendita.</p>
     <div class="pay-box">
-      <p class="lead">Stai versando un acconto di <b id="depAmt" style="color:#fff"></b>. Il saldo verrà perfezionato all'apertura della sede. Pagamento sicuro.</p>
+      <p class="lead">Importo da pagare: <b id="depAmt" style="color:#fff"></b>. Pagamento sicuro.</p>
       <div id="payElement"></div>
       <div class="alert" id="payErr"></div>
     </div>
@@ -297,9 +334,6 @@ const CONFIG = {
   API_BASE: '',
   // Paese di default per i dati anagrafici PerfectGym
   COUNTRY_SYMBOL: 'IT',
-  // Acconto di prevendita mostrato (informativo). L'addebito reale è gestito
-  // dal Payment Plan PerfectGym associato (prima rata). DA CONFERMARE l'importo.
-  DEPOSIT_EUR: 50,
   // Quota di attivazione applicata DOPO la prevendita (informativa)
   ACTIVATION_FEE_EUR: 50,
   // NB: per ora TUTTE le prevendite vengono caricate su clubId=2 (Montecassiano),
@@ -389,19 +423,47 @@ function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
 function isPhone(v){return /^[+]?[\d\s().-]{7,20}$/.test(v);}
 function isCF(v){return /^[A-Z0-9]{16}$/.test(v.toUpperCase());}
 
-function validateStep3(){
+function calcAge(d){
+  if(!d) return null; const b=new Date(d); if(isNaN(b)) return null;
+  const t=new Date(); let a=t.getFullYear()-b.getFullYear();
+  const m=t.getMonth()-b.getMonth();
+  if(m<0||(m===0&&t.getDate()<b.getDate())) a--;
+  return a;
+}
+function fullPhone(prefixSel, numInput){
+  const p=(prefixSel&&prefixSel.value||'').trim();
+  const n=(numInput&&numInput.value||'').trim();
+  return n ? (p+' '+n) : '';
+}
+function validateGroup(rootSel, attr, target, requireGender){
   let ok=true;
-  document.querySelectorAll('[data-step="3"] .field').forEach(f=>{
-    const key=f.dataset.f, inp=f.querySelector('input,select'), v=(inp.value||'').trim();
-    let valid=true;
-    if(['firstName','lastName','birthDate','gender'].includes(key)) valid = v.length>0;
-    else if(key==='email') valid=isEmail(v);
-    else if(key==='phone') valid=isPhone(v);
-    else if(key==='fiscalCode') valid=isCF(v);
-    else valid=true;
+  document.querySelectorAll(rootSel+' .field['+attr+']').forEach(f=>{
+    const key=f.getAttribute(attr); let valid=true, val='';
+    if(key==='phone'){
+      const num=f.querySelector('input[type=tel]'); const pre=f.querySelector('select.prefix-sel');
+      val=fullPhone(pre,num); valid=isPhone((num.value||'').trim()) && (num.value||'').trim().length>=6;
+    } else {
+      const inp=f.querySelector('input,select'); val=(inp.value||'').trim();
+      if(['firstName','lastName','birthDate'].includes(key)) valid=val.length>0;
+      else if(key==='gender') valid = requireGender ? val.length>0 : true;
+      else if(key==='email') valid=isEmail(val);
+      else if(key==='fiscalCode') valid=isCF(val);
+      else valid=true;
+    }
     f.classList.toggle('invalid',!valid);
-    if(!valid) ok=false; else state.member[key]=v;
+    if(!valid) ok=false; else target[key]=val;
   });
+  return ok;
+}
+function validateStep3(){
+  state.member={};
+  let ok=validateGroup('[data-step="3"]','data-f',state.member,true);
+  const age=calcAge(state.member.birthDate); state.member.age=age;
+  const minor = age!=null && age<18; state.isMinor=minor;
+  if(minor){
+    state.parent={};
+    ok = validateGroup('[data-step="3"]','data-pf',state.parent,false) && ok;
+  } else { state.parent=null; }
   return ok;
 }
 
@@ -414,12 +476,12 @@ function renderSummary(){
     <div class="row"><span class="k">Sede</span><span class="v">${state.club.name}</span></div>
     <div class="row"><span class="k">Abbonamento</span><span class="v">${state.plan.name}</span></div>
     <div class="row"><span class="k">Intestatario</span><span class="v">${state.member.firstName} ${state.member.lastName}</span></div>
+    ${state.isMinor && state.parent ? `<div class="row"><span class="k">Genitore/tutore</span><span class="v">${state.parent.firstName} ${state.parent.lastName}</span></div>` : ''}
     <div class="row"><span class="k">Email</span><span class="v">${state.member.email}</span></div>
-    <div class="row"><span class="k">Totale abbonamento</span><span class="v">${eur(state.plan.total)}</span></div>
-    <div class="row total"><span class="k">Acconto da versare ora</span><span class="v">${eur(CONFIG.DEPOSIT_EUR)}</span></div>`;
+    <div class="row total"><span class="k">Totale da pagare ora</span><span class="v">${eur(state.plan.total)}</span></div>`;
   document.getElementById('planNote').textContent =
-    `${state.plan.terms} Successivamente all'attivazione verrà applicata una quota di attivazione di ${eur(CONFIG.ACTIVATION_FEE_EUR)}. L'acconto versato oggi verrà scalato dal totale.`;
-  document.getElementById('depAmt').textContent = eur(CONFIG.DEPOSIT_EUR);
+    `${state.plan.terms} Successivamente all'attivazione verrà applicata una quota di attivazione di ${eur(CONFIG.ACTIVATION_FEE_EUR)}.`;
+  document.getElementById('depAmt').textContent = eur(state.plan.total);
 }
 
 /* ============================================================
@@ -439,20 +501,63 @@ function goto(n){
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
   if(state.step===1){ renderPlans(); goto(2); }
   else if(state.step===2){ goto(3); }
-  else if(state.step===3){ if(validateStep3()){ renderSummary(); goto(4); } }
+  else if(state.step===3){ if(validateStep3()){ renderSummary(); goto(4); setTimeout(()=>window.__sigResize&&window.__sigResize(),60); } }
   else if(state.step===4){ initPayment(); goto(5); }
 }));
 document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>goto(state.step-1)));
 
-/* consents gate */
+/* consents gate (privacy + termini + firma) */
 function refreshConsents(){
   state.consents.privacy=cPrivacy.checked; state.consents.terms=cTerms.checked; state.consents.mkt=cMkt.checked;
-  document.getElementById('toPayBtn').disabled = !(cPrivacy.checked && cTerms.checked);
+  document.getElementById('toPayBtn').disabled = !(cPrivacy.checked && cTerms.checked && state.signaturePresent);
 }
 ['cPrivacy','cTerms','cMkt'].forEach(id=>document.getElementById(id).addEventListener('change',refreshConsents));
 
-/* uppercase CF live */
-document.querySelector('[data-f="fiscalCode"] input').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+/* uppercase CF live (intestatario + genitore) */
+document.querySelectorAll('[data-f="fiscalCode"] input, [data-pf="fiscalCode"] input').forEach(inp=>
+  inp.addEventListener('input',e=>e.target.value=e.target.value.toUpperCase()));
+
+/* ===== Prefissi telefonici (default Italia +39) ===== */
+const PREFIXES=[['+39','🇮🇹 +39'],['+1','🇺🇸 +1'],['+44','🇬🇧 +44'],['+33','🇫🇷 +33'],['+49','🇩🇪 +49'],['+34','🇪🇸 +34'],['+41','🇨🇭 +41'],['+43','🇦🇹 +43'],['+32','🇧🇪 +32'],['+31','🇳🇱 +31'],['+351','🇵🇹 +351'],['+30','🇬🇷 +30'],['+40','🇷🇴 +40'],['+48','🇵🇱 +48'],['+359','🇧🇬 +359'],['+385','🇭🇷 +385'],['+386','🇸🇮 +386'],['+420','🇨🇿 +420'],['+36','🇭🇺 +36'],['+352','🇱🇺 +352'],['+212','🇲🇦 +212'],['+216','🇹🇳 +216'],['+355','🇦🇱 +355'],['+380','🇺🇦 +380'],['+7','🇷🇺 +7'],['+86','🇨🇳 +86'],['+91','🇮🇳 +91'],['+55','🇧🇷 +55'],['+61','🇦🇺 +61']];
+function fillPrefixes(sel){ if(!sel) return; sel.innerHTML=PREFIXES.map(([v,l])=>`<option value="${v}"${v==='+39'?' selected':''}>${l}</option>`).join(''); }
+fillPrefixes(document.getElementById('phonePrefix'));
+fillPrefixes(document.getElementById('pPhonePrefix'));
+
+/* ===== Maggiore età → sezione genitore/tutore ===== */
+const birthInput=document.querySelector('[data-step="3"] .field[data-f="birthDate"] input');
+function updateMinorUI(){
+  const age=calcAge(birthInput.value);
+  const minor = age!=null && age<18;
+  document.getElementById('parentSection').style.display = minor?'block':'none';
+}
+birthInput.addEventListener('change',updateMinorUI);
+birthInput.addEventListener('input',updateMinorUI);
+
+/* ===== Pad firma (esportabile come PNG per il PDF) ===== */
+(function(){
+  const c=document.getElementById('sigPad'); if(!c) return;
+  const ctx=c.getContext('2d'); const hint=document.getElementById('sigHint');
+  let drawing=false, last=null, sized=false;
+  state.signaturePresent=false;
+  function sizeOnce(){
+    const r=c.getBoundingClientRect(); if(r.width===0||sized) return; sized=true;
+    const dpr=window.devicePixelRatio||1;
+    c.width=Math.round(r.width*dpr); c.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.lineWidth=2.4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#141414';
+  }
+  window.__sigResize=sizeOnce;
+  function pos(e){ const r=c.getBoundingClientRect(); const cx=(e.touches?e.touches[0].clientX:e.clientX); const cy=(e.touches?e.touches[0].clientY:e.clientY); return {x:cx-r.left,y:cy-r.top}; }
+  function start(e){ e.preventDefault(); sizeOnce(); drawing=true; last=pos(e); }
+  function move(e){ if(!drawing) return; e.preventDefault(); const p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p;
+    if(!state.signaturePresent){ state.signaturePresent=true; hint.style.display='none'; refreshConsents(); } }
+  function end(){ if(drawing){ drawing=false; state.signature=c.toDataURL('image/png'); } }
+  c.addEventListener('pointerdown',start); c.addEventListener('pointermove',move); window.addEventListener('pointerup',end);
+  c.addEventListener('touchstart',start,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',end);
+  document.getElementById('sigClear').addEventListener('click',()=>{
+    ctx.clearRect(0,0,c.width,c.height); state.signaturePresent=false; state.signature=null; hint.style.display=''; refreshConsents();
+  });
+})();
 
 /* ============================================================
    PAYMENT — adapter isolato.
@@ -462,7 +567,7 @@ document.querySelector('[data-f="fiscalCode"] input').addEventListener('input',e
    ============================================================ */
 let paymentReady=false;
 function initPayment(){
-  document.getElementById('depAmt').textContent = eur(CONFIG.DEPOSIT_EUR);
+  document.getElementById('depAmt').textContent = eur(state.plan.total);
   if(!paymentReady){
     const html = CONFIG.DEMO_MODE
       ? '<div style="background:rgba(196,0,66,.12);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;color:#ffd0df;font-size:14px;line-height:1.6">'
@@ -470,7 +575,7 @@ function initPayment(){
         + 'addebito e non viene creato nulla in PerfectGym: serve solo a mostrare il flusso completo.</div>'
       : '<div style="color:var(--text-dim);font-size:14px;padding:6px 0;line-height:1.6">'
         + 'Premendo <b>Paga e conferma</b> creiamo la tua iscrizione e ti portiamo alla pagina sicura di PerfectGym '
-        + 'per registrare la carta. L\'addebito dell\'acconto avviene su quella pagina (PCI-compliant): '
+        + 'per registrare la carta. L\'addebito avviene su quella pagina (PCI-compliant): '
         + 'i dati della carta non transitano mai dai nostri server.</div>';
     document.getElementById('payElement').innerHTML = html;
     paymentReady=true;
@@ -500,11 +605,15 @@ function payloadForBackend(){
       birthDate: state.member.birthDate,
       gender:    state.member.gender,      // F | M | X  -> Female/Male/Other
       fiscalCode:state.member.fiscalCode,  // -> personalData.personalId
-      city:      state.member.city
+      city:      state.member.city,
+      age:       state.member.age
     },
+    isMinor: !!state.isMinor,
+    parent: state.isMinor ? state.parent : null,   // genitore/tutore se minorenne
+    signature: state.signature || null,            // PNG dataURL da applicare al PDF
     countrySymbol: CONFIG.COUNTRY_SYMBOL,
     consents: state.consents,
-    deposit: CONFIG.DEPOSIT_EUR
+    amount: state.plan.total
   };
 }
 
