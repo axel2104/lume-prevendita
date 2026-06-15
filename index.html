@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Prevendita — Lume Fitness Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+  /* ===================== BRAND TOKENS (da lumefitness.it) ===================== */
+  :root{
+    --bg:        #1d1d1d;
+    --surface:   #262626;
+    --surface-2: #2f2f2f;
+    --line:      #3a3a3a;
+    --gray:      #33373d;
+    --accent:    #c40042;   /* magenta/cremisi - bottoni primari */
+    --accent-2:  #d7272a;   /* rosso */
+    --accent-hi: #e4135c;
+    --text:      #ffffff;
+    --text-dim:  #b9b9b9;
+    --text-mut:  #8a8a8a;
+    --ok:        #34c759;
+    --err:       #ff5252;
+    --radius:    14px;
+    --maxw:      720px;
+    --display:   'Teko', sans-serif;
+    --body:      'Roboto Condensed', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--body);
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:28px 18px 80px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ===================== HEADER ===================== */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .topbar img{height:46px;width:auto;display:block;}
+  .topbar .tag{
+    font-family:var(--display);
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:18px;
+    color:var(--accent-hi);
+    font-weight:600;
+    margin-left:auto;
+  }
+
+  /* ===================== PROGRESS ===================== */
+  .progress{margin:22px 0 26px;}
+  .progress .bar{height:5px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+  .progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-hi));border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1);}
+  .progress .meta{display:flex;justify-content:space-between;margin-top:9px;font-size:13px;color:var(--text-mut);text-transform:uppercase;letter-spacing:.1em;}
+  .progress .meta b{color:var(--text-dim);font-weight:700;}
+
+  /* ===================== STEP ===================== */
+  .step{display:none;animation:in .4s ease;}
+  .step.active{display:block;}
+  @keyframes in{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  h1.step-title{
+    font-family:var(--display);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    font-size:42px;
+    line-height:1;
+    margin:4px 0 6px;
+  }
+  .step-sub{color:var(--text-dim);font-size:16px;margin:0 0 22px;font-weight:300;}
+
+  /* ===================== SELECTABLE CARDS ===================== */
+  .cards{display:grid;gap:14px;}
+  @media(min-width:560px){.cards.two{grid-template-columns:1fr 1fr;}}
+  .card{
+    position:relative;
+    background:var(--surface);
+    border:2px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 18px;
+    cursor:pointer;
+    transition:border-color .2s, transform .15s, background .2s;
+  }
+  .card:hover{border-color:#555;transform:translateY(-2px);}
+  .card.sel{border-color:var(--accent);background:linear-gradient(180deg,rgba(196,0,66,.14),rgba(196,0,66,.04));}
+  .card .check{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.2s;}
+  .card.sel .check{background:var(--accent);border-color:var(--accent);}
+  .card .check svg{width:13px;height:13px;opacity:0;transition:.2s;}
+  .card.sel .check svg{opacity:1;}
+  .card h3{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:26px;margin:0 0 2px;}
+  .card .desc{color:var(--text-dim);font-size:14px;font-weight:300;}
+  .card .price{font-family:var(--display);font-size:34px;font-weight:600;color:#fff;margin-top:8px;line-height:1;}
+  .card .price small{font-size:15px;color:var(--text-mut);font-family:var(--body);font-weight:300;}
+  .card .badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 9px;border-radius:99px;margin-bottom:10px;font-weight:700;}
+  .card .terms{font-size:13px;color:var(--text-mut);margin-top:10px;}
+
+  /* ===================== FORM FIELDS ===================== */
+  .grid{display:grid;gap:14px;}
+  @media(min-width:560px){.grid.two{grid-template-columns:1fr 1fr;}}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);font-weight:700;}
+  .field label .req{color:var(--accent-hi);}
+  .field input,.field select{
+    background:var(--surface);
+    border:2px solid var(--line);
+    border-radius:10px;
+    padding:13px 14px;
+    color:#fff;
+    font-family:var(--body);
+    font-size:16px;
+    transition:border-color .2s;
+    width:100%;
+  }
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent);}
+  .field input::placeholder{color:#6a6a6a;}
+  .field.invalid input,.field.invalid select{border-color:var(--err);}
+  .field .err{font-size:12.5px;color:var(--err);display:none;}
+  .field.invalid .err{display:block;}
+
+  /* ===================== CONSENTS ===================== */
+  .consent{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;}
+  .consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto;}
+  .consent span{font-size:14px;color:var(--text-dim);}
+  .consent a{color:var(--accent-hi);}
+
+  /* ===================== SUMMARY ===================== */
+  .summary{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  .summary .row{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);font-size:15px;}
+  .summary .row:last-child{border-bottom:none;}
+  .summary .row .k{color:var(--text-mut);text-transform:uppercase;letter-spacing:.06em;font-size:13px;}
+  .summary .row .v{font-weight:700;text-align:right;}
+  .summary .total{background:linear-gradient(180deg,rgba(196,0,66,.18),rgba(196,0,66,.05));}
+  .summary .total .v{font-family:var(--display);font-size:30px;color:#fff;}
+  .note{font-size:13px;color:var(--text-mut);margin-top:12px;line-height:1.5;}
+
+  /* ===================== BUTTONS ===================== */
+  .nav{display:flex;gap:12px;margin-top:28px;}
+  .btn{
+    font-family:var(--display);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:20px;
+    font-weight:600;
+    border:none;
+    border-radius:10px;
+    padding:14px 26px;
+    cursor:pointer;
+    transition:transform .12s, filter .2s, background .2s;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn-primary{background:var(--accent);color:#fff;flex:1;}
+  .btn-primary:hover{filter:brightness(1.12);}
+  .btn-primary:disabled{background:var(--gray);color:var(--text-mut);cursor:not-allowed;filter:none;}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:2px solid var(--line);}
+  .btn-ghost:hover{border-color:#666;color:#fff;}
+
+  /* ===================== DONE ===================== */
+  .done{text-align:center;padding:30px 0;}
+  .done .circle{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-hi));display:grid;place-items:center;margin:0 auto 22px;}
+  .done .circle svg{width:44px;height:44px;}
+  .done h1{font-family:var(--display);font-size:46px;text-transform:uppercase;margin:0 0 8px;}
+  .done p{color:var(--text-dim);font-size:16px;max-width:440px;margin:0 auto;}
+
+  /* spinner */
+  .spin{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px;margin-right:8px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  .pay-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
+  .pay-box .lead{font-size:15px;color:var(--text-dim);margin:0 0 16px;}
+  #payElement{min-height:40px;}
+  .alert{background:rgba(255,82,82,.12);border:1px solid var(--err);color:#ffb4b4;padding:12px 14px;border-radius:10px;font-size:14px;margin-top:14px;display:none;}
+  .alert.show{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" alt="Lume Fitness Club" />
+    <span class="tag">Prevendita</span>
+  </div>
+
+  <div class="progress">
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="meta"><span id="stepName">Sede</span><span>Step <b id="stepNum">1</b>/<span id="stepTot">5</span></span></div>
+  </div>
+
+  <!-- STEP 1: SEDE -->
+  <section class="step active" data-step="1">
+    <h1 class="step-title">Scegli la tua sede</h1>
+    <p class="step-sub">Dove vuoi allenarti con Lume?</p>
+    <div class="cards two" id="clubCards"></div>
+    <div class="nav">
+      <button class="btn btn-primary" data-next disabled>Continua</button>
+    </div>
+  </section>
+
+  <!-- STEP 2: PIANO -->
+  <section class="step" data-step="2">
+    <h1 class="step-title">Scegli l'abbonamento</h1>
+    <p class="step-sub" id="planSub">Offerta di prevendita riservata.</p>
+    <div class="cards" id="planCards"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" data-back>Indietro</button>
+      <button class="btn btn-primary" data-next disabled>Continua</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: DATI -->
+  <section class="step" data-step="3">
+    <h1 class="step-title">I tuoi dati</h1>
+    <p class="step-sub">Servono per intestare l'abbonamento.</p>
+    <div class="grid two">
+      <div class="field" data-f="firstName"><label>Nome <span class="req">*</span></label><input type="text" autocomplete="given-name" /><span class="err">Inserisci il nome</span></div>
+      <div class="field" data-f="lastName"><label>Cognome <span class="req">*</span></label><input type="text" autocomplete="family-name" /><span class="err">Inserisci il cognome</span></div>
+      <div class="field" data-f="email"><label>Email <span class="req">*</span></label><input type="email" autocomplete="email" /><span class="err">Email non valida</span></div>
+      <div class="field" data-f="phone"><label>Cellulare <span class="req">*</span></label><input type="tel" autocomplete="tel" placeholder="+39" /><span class="err">Numero non valido</span></div>
+      <div class="field" data-f="birthDate"><label>Data di nascita <span class="req">*</span></label><input type="date" /><span class="err">Campo obbligatorio</span></div>
+      <div class="field" data-f="gender"><label>Sesso <span class="req">*</span></label><select><option value="">—</option><option value="F">Femmina</option><option value="M">Maschio</option><option value="X">Altro</option></select><span class="err">Campo obbligatorio</span></div>
+      <div class="field" data-f="fiscalCode"><label>Codice fiscale <span class="req">*</span></label><input type="text" maxlength="16" style="text-transform:uppercase" /><span class="err">Codice fiscale non valido</span></div>
+      <div class="field" data-f="city"><label>Città</label><input type="text" autocomplete="address-level2" /><span class="err"></span></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-ghost" data-back>Indietro</button>
+      <button class="btn btn-primary" data-next>Continua</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: RIEPILOGO -->
+  <section class="step" data-step="4">
+    <h1 class="step-title">Riepilogo</h1>
+    <p class="step-sub">Controlla tutto prima di procedere.</p>
+    <div class="summary" id="summary"></div>
+    <p class="note" id="planNote"></p>
+    <div style="margin-top:18px">
+      <label class="consent"><input type="checkbox" id="cPrivacy" /><span>Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> e acconsento al trattamento dei dati. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
+      <label class="consent"><input type="checkbox" id="cTerms" /><span>Accetto i termini dell'offerta di prevendita e le condizioni dell'abbonamento. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
+      <label class="consent"><input type="checkbox" id="cMkt" /><span>Acconsento a ricevere comunicazioni promozionali da Lume Fitness (facoltativo).</span></label>
+    </div>
+    <div class="nav">
+      <button class="btn btn-ghost" data-back>Indietro</button>
+      <button class="btn btn-primary" data-next disabled id="toPayBtn">Vai al pagamento</button>
+    </div>
+  </section>
+
+  <!-- STEP 5: PAGAMENTO -->
+  <section class="step" data-step="5">
+    <h1 class="step-title">Acconto di prevendita</h1>
+    <p class="step-sub">Versa l'acconto per bloccare la tua tariffa.</p>
+    <div class="pay-box">
+      <p class="lead">Stai versando un acconto di <b id="depAmt" style="color:#fff"></b>. Il saldo verrà perfezionato all'apertura della sede. Pagamento sicuro.</p>
+      <div id="payElement"></div>
+      <div class="alert" id="payErr"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-ghost" data-back>Indietro</button>
+      <button class="btn btn-primary" id="payBtn">Paga e conferma</button>
+    </div>
+  </section>
+
+  <!-- DONE -->
+  <section class="step" data-step="6">
+    <div class="done">
+      <div class="circle"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1>Ci sei!</h1>
+      <p id="doneMsg">La tua prevendita è registrata. Ti abbiamo inviato una email di conferma. Ci vediamo presto in Lume!</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — modifica qui sedi, piani, acconto e endpoint backend
+   ============================================================ */
+const CONFIG = {
+  // DEMO: true = solo dimostrativo (nessun backend, nessun addebito, nessuna
+  // scrittura su PerfectGym). Mettere false quando si collega il backend Vercel.
+  DEMO_MODE: true,
+  // Base URL del backend serverless (Vercel). '' = stesso dominio.
+  // In sviluppo locale usa es. 'http://localhost:3000'.
+  API_BASE: '',
+  // Paese di default per i dati anagrafici PerfectGym
+  COUNTRY_SYMBOL: 'IT',
+  // Acconto di prevendita mostrato (informativo). L'addebito reale è gestito
+  // dal Payment Plan PerfectGym associato (prima rata). DA CONFERMARE l'importo.
+  DEPOSIT_EUR: 50,
+  // Quota di attivazione applicata DOPO la prevendita (informativa)
+  ACTIVATION_FEE_EUR: 50,
+  // NB: per ora TUTTE le prevendite vengono caricate su clubId=2 (Montecassiano),
+  // come richiesto. Cambiare pgClubId quando le sedi saranno create in PerfectGym.
+  // pgPaymentPlanId = ID del Payment Plan PerfectGym corrispondente all'offerta.
+  // Vanno inseriti gli ID reali (vedi README → /api/payment-plans).
+  CLUBS: [
+    {
+      id: 'macerata',
+      pgClubId: 2,                 // TEMP: tutto su club 2
+      name: 'Lume Macerata',
+      desc: 'Centro Lume Fitness Macerata',
+      plans: [
+        { id: 'mac-unica', pgPaymentPlanId: null, name: 'Annuale — Soluzione Unica', desc: 'Pagamento in un’unica soluzione', priceLabel: '360', priceSuffix: '€ / anno', badge: 'Miglior prezzo', total: 360, installments: 1,
+          terms: 'Abbonamento annuale pagato in soluzione unica.' },
+        { id: 'mac-rate3', pgPaymentPlanId: null, name: 'Annuale — 3 rate', desc: '3 rate da 130€ ogni 30 giorni', priceLabel: '130', priceSuffix: '€ x3', total: 390, installments: 3,
+          terms: '3 rate da 130€ a distanza di 30 giorni (totale 390€).' }
+      ]
+    },
+    {
+      id: 'piediripa',
+      pgClubId: 2,                 // TEMP: tutto su club 2 (sede non ancora creata)
+      name: 'Lume Piediripa',
+      desc: 'Nuova sede Lume Fitness Piediripa',
+      plans: [
+        { id: 'pie-unica', pgPaymentPlanId: null, name: 'Annuale — Soluzione Unica', desc: 'Pagamento in un’unica soluzione', priceLabel: '480', priceSuffix: '€ / anno', badge: 'Miglior prezzo', total: 480, installments: 1,
+          terms: 'Abbonamento annuale pagato in soluzione unica.' },
+        { id: 'pie-rate4', pgPaymentPlanId: null, name: 'Annuale — 4 rate', desc: '4 rate da 130€', priceLabel: '130', priceSuffix: '€ x4', total: 520, installments: 4,
+          terms: '4 rate da 130€ (totale 520€).' }
+      ]
+    }
+  ]
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = { step: 1, club: null, plan: null, member: {}, consents:{} };
+const TOTAL_FORM_STEPS = 5; // step visibili nella progress (escluso "done")
+const stepNames = {1:'Sede',2:'Abbonamento',3:'Dati',4:'Riepilogo',5:'Pagamento'};
+const eur = n => new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(n);
+
+/* ============================================================
+   RENDER: cards sede
+   ============================================================ */
+const clubCards = document.getElementById('clubCards');
+CONFIG.CLUBS.forEach(c=>{
+  const el = document.createElement('div');
+  el.className='card'; el.dataset.club=c.id;
+  el.innerHTML = `<div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h3>${c.name}</h3><div class="desc">${c.desc}</div>`;
+  el.addEventListener('click',()=>{
+    clubCards.querySelectorAll('.card').forEach(x=>x.classList.remove('sel'));
+    el.classList.add('sel'); state.club=c; state.plan=null;
+    document.querySelector('[data-step="1"] [data-next]').disabled=false;
+  });
+  clubCards.appendChild(el);
+});
+
+/* ============================================================
+   RENDER: cards piano (dipende dalla sede)
+   ============================================================ */
+function renderPlans(){
+  const wrap=document.getElementById('planCards'); wrap.innerHTML='';
+  document.getElementById('planSub').textContent = `Offerta di prevendita — ${state.club.name}`;
+  state.club.plans.forEach(p=>{
+    const el=document.createElement('div'); el.className='card'; el.dataset.plan=p.id;
+    el.innerHTML = `<div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      ${p.badge?`<span class="badge">${p.badge}</span><br>`:''}
+      <h3>${p.name}</h3><div class="desc">${p.desc}</div>
+      <div class="price">${p.priceLabel}<small> ${p.priceSuffix}</small></div>
+      <div class="terms">${p.terms}</div>`;
+    el.addEventListener('click',()=>{
+      wrap.querySelectorAll('.card').forEach(x=>x.classList.remove('sel'));
+      el.classList.add('sel'); state.plan=p;
+      document.querySelector('[data-step="2"] [data-next]').disabled=false;
+    });
+    wrap.appendChild(el);
+  });
+  document.querySelector('[data-step="2"] [data-next]').disabled = !state.plan;
+}
+
+/* ============================================================
+   VALIDATION
+   ============================================================ */
+function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+function isPhone(v){return /^[+]?[\d\s().-]{7,20}$/.test(v);}
+function isCF(v){return /^[A-Z0-9]{16}$/.test(v.toUpperCase());}
+
+function validateStep3(){
+  let ok=true;
+  document.querySelectorAll('[data-step="3"] .field').forEach(f=>{
+    const key=f.dataset.f, inp=f.querySelector('input,select'), v=(inp.value||'').trim();
+    let valid=true;
+    if(['firstName','lastName','birthDate','gender'].includes(key)) valid = v.length>0;
+    else if(key==='email') valid=isEmail(v);
+    else if(key==='phone') valid=isPhone(v);
+    else if(key==='fiscalCode') valid=isCF(v);
+    else valid=true;
+    f.classList.toggle('invalid',!valid);
+    if(!valid) ok=false; else state.member[key]=v;
+  });
+  return ok;
+}
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+function renderSummary(){
+  const s=document.getElementById('summary');
+  s.innerHTML = `
+    <div class="row"><span class="k">Sede</span><span class="v">${state.club.name}</span></div>
+    <div class="row"><span class="k">Abbonamento</span><span class="v">${state.plan.name}</span></div>
+    <div class="row"><span class="k">Intestatario</span><span class="v">${state.member.firstName} ${state.member.lastName}</span></div>
+    <div class="row"><span class="k">Email</span><span class="v">${state.member.email}</span></div>
+    <div class="row"><span class="k">Totale abbonamento</span><span class="v">${eur(state.plan.total)}</span></div>
+    <div class="row total"><span class="k">Acconto da versare ora</span><span class="v">${eur(CONFIG.DEPOSIT_EUR)}</span></div>`;
+  document.getElementById('planNote').textContent =
+    `${state.plan.terms} Successivamente all'attivazione verrà applicata una quota di attivazione di ${eur(CONFIG.ACTIVATION_FEE_EUR)}. L'acconto versato oggi verrà scalato dal totale.`;
+  document.getElementById('depAmt').textContent = eur(CONFIG.DEPOSIT_EUR);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+function goto(n){
+  state.step=n;
+  document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active', +s.dataset.step===n));
+  const pct = Math.min(n, TOTAL_FORM_STEPS)/TOTAL_FORM_STEPS*100;
+  document.getElementById('fill').style.width = pct+'%';
+  document.getElementById('stepNum').textContent = Math.min(n,TOTAL_FORM_STEPS);
+  document.getElementById('stepTot').textContent = TOTAL_FORM_STEPS;
+  document.getElementById('stepName').textContent = stepNames[Math.min(n,TOTAL_FORM_STEPS)]||'';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
+  if(state.step===1){ renderPlans(); goto(2); }
+  else if(state.step===2){ goto(3); }
+  else if(state.step===3){ if(validateStep3()){ renderSummary(); goto(4); } }
+  else if(state.step===4){ initPayment(); goto(5); }
+}));
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>goto(state.step-1)));
+
+/* consents gate */
+function refreshConsents(){
+  state.consents.privacy=cPrivacy.checked; state.consents.terms=cTerms.checked; state.consents.mkt=cMkt.checked;
+  document.getElementById('toPayBtn').disabled = !(cPrivacy.checked && cTerms.checked);
+}
+['cPrivacy','cTerms','cMkt'].forEach(id=>document.getElementById(id).addEventListener('change',refreshConsents));
+
+/* uppercase CF live */
+document.querySelector('[data-f="fiscalCode"] input').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+
+/* ============================================================
+   PAYMENT — adapter isolato.
+   Vedi backend: crea ordine/PaymentIntent, poi conferma.
+   Qui c'è un mock se il backend non è configurato (API_BASE vuoto
+   e nessun gateway) per poter testare il flusso UI.
+   ============================================================ */
+let paymentReady=false;
+function initPayment(){
+  document.getElementById('depAmt').textContent = eur(CONFIG.DEPOSIT_EUR);
+  if(!paymentReady){
+    const html = CONFIG.DEMO_MODE
+      ? '<div style="background:rgba(196,0,66,.12);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;color:#ffd0df;font-size:14px;line-height:1.6">'
+        + '<b>Versione dimostrativa.</b> Premendo <b>Paga e conferma</b> non viene effettuato alcun '
+        + 'addebito e non viene creato nulla in PerfectGym: serve solo a mostrare il flusso completo.</div>'
+      : '<div style="color:var(--text-dim);font-size:14px;padding:6px 0;line-height:1.6">'
+        + 'Premendo <b>Paga e conferma</b> creiamo la tua iscrizione e ti portiamo alla pagina sicura di PerfectGym '
+        + 'per registrare la carta. L\'addebito dell\'acconto avviene su quella pagina (PCI-compliant): '
+        + 'i dati della carta non transitano mai dai nostri server.</div>';
+    document.getElementById('payElement').innerHTML = html;
+    paymentReady=true;
+  }
+}
+
+async function api(path, body){
+  const r = await fetch((CONFIG.API_BASE||'')+path,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+  });
+  if(!r.ok){ const t=await r.text().catch(()=> ''); throw new Error(t||('HTTP '+r.status)); }
+  return r.json();
+}
+
+function payloadForBackend(){
+  return {
+    club:{ id:state.club.id, pgClubId:state.club.pgClubId, name:state.club.name },
+    plan:{ id:state.plan.id, name:state.plan.name, total:state.plan.total,
+           installments:state.plan.installments, pgPaymentPlanId:state.plan.pgPaymentPlanId },
+    // dati anagrafici (il backend li mappa sullo schema PerfectGym AddContractMember)
+    member: {
+      firstName: state.member.firstName,
+      lastName:  state.member.lastName,
+      email:     state.member.email,
+      phone:     state.member.phone,
+      birthDate: state.member.birthDate,
+      gender:    state.member.gender,      // F | M | X  -> Female/Male/Other
+      fiscalCode:state.member.fiscalCode,  // -> personalData.personalId
+      city:      state.member.city
+    },
+    countrySymbol: CONFIG.COUNTRY_SYMBOL,
+    consents: state.consents,
+    deposit: CONFIG.DEPOSIT_EUR
+  };
+}
+
+const payBtn=document.getElementById('payBtn');
+payBtn.addEventListener('click', async ()=>{
+  const errBox=document.getElementById('payErr'); errBox.classList.remove('show');
+  payBtn.disabled=true; const orig=payBtn.innerHTML; payBtn.innerHTML='<span class="spin"></span>Elaborazione…';
+  try{
+    if(CONFIG.DEMO_MODE || CONFIG.API_BASE===''){
+      // MODALITÀ DEMO: nessun backend, nessun addebito, nessuna scrittura su PerfectGym
+      await new Promise(r=>setTimeout(r,1000));
+      document.getElementById('doneMsg').textContent =
+        'Questa è una dimostrazione: nessun dato è stato inviato e nessun pagamento è stato eseguito. Il flusso completo è quello che hai appena visto.';
+    }else{
+      // 1) Il backend crea membro+contratto (AddContractMember) e inizializza
+      //    la registrazione carta (InitExternalCreditCardRegistration).
+      const init = await api('/api/register', payloadForBackend());
+      // 2) Redirect alla pagina sicura PerfectGym per registrare la carta / acconto.
+      if(init && init.redirectUrl){ window.location.href=init.redirectUrl; return; }
+      // (se il backend non restituisce un redirect, mostriamo conferma diretta)
+    }
+    goto(6);
+  }catch(e){
+    errBox.textContent = 'Si è verificato un errore durante il pagamento. Riprova o contattaci. ('+e.message+')';
+    errBox.classList.add('show');
+    payBtn.disabled=false; payBtn.innerHTML=orig;
+  }
+});
+
+/* init */
+goto(1);
+</script>
+</body>
+</html>
