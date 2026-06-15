@@ -258,6 +258,15 @@
         <div class="field" data-pf="fiscalCode"><label>Codice fiscale genitore <span class="req">*</span></label><input type="text" maxlength="16" style="text-transform:uppercase" /><span class="err">Codice fiscale non valido</span></div>
       </div>
     </div>
+
+    <!-- Consensi -->
+    <div style="margin-top:20px">
+      <label class="consent"><input type="checkbox" id="cPrivacy" /><span>Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> e acconsento al trattamento dei dati. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
+      <label class="consent"><input type="checkbox" id="cTerms" /><span>Accetto i termini dell'offerta di prevendita e le condizioni dell'abbonamento. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
+      <label class="consent"><input type="checkbox" id="cMkt" /><span>Acconsento a ricevere comunicazioni promozionali da Lume Fitness (facoltativo).</span></label>
+      <p id="consentErr" style="display:none;color:var(--err);font-size:13px;margin:2px 0 0">Devi accettare privacy e termini per proseguire.</p>
+    </div>
+
     <div class="nav">
       <button class="btn btn-ghost" data-back>Indietro</button>
       <button class="btn btn-primary" data-next>Continua</button>
@@ -270,11 +279,6 @@
     <p class="step-sub">Controlla tutto prima di procedere.</p>
     <div class="summary" id="summary"></div>
     <p class="note" id="planNote"></p>
-    <div style="margin-top:18px">
-      <label class="consent"><input type="checkbox" id="cPrivacy" /><span>Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> e acconsento al trattamento dei dati. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
-      <label class="consent"><input type="checkbox" id="cTerms" /><span>Accetto i termini dell'offerta di prevendita e le condizioni dell'abbonamento. <span class="req" style="color:var(--accent-hi)">*</span></span></label>
-      <label class="consent"><input type="checkbox" id="cMkt" /><span>Acconsento a ricevere comunicazioni promozionali da Lume Fitness (facoltativo).</span></label>
-    </div>
 
     <!-- Firma del contratto -->
     <div class="field" style="margin-top:18px">
@@ -464,7 +468,11 @@ function validateStep3(){
     state.parent={};
     ok = validateGroup('[data-step="3"]','data-pf',state.parent,false) && ok;
   } else { state.parent=null; }
-  return ok;
+  // consensi obbligatori (privacy + termini)
+  state.consents={ privacy:cPrivacy.checked, terms:cTerms.checked, mkt:cMkt.checked };
+  const consentOk = cPrivacy.checked && cTerms.checked;
+  document.getElementById('consentErr').style.display = consentOk ? 'none' : 'block';
+  return ok && consentOk;
 }
 
 /* ============================================================
@@ -506,12 +514,14 @@ document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',(
 }));
 document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>goto(state.step-1)));
 
-/* consents gate (privacy + termini + firma) */
-function refreshConsents(){
+/* consensi (nello step Dati): aggiorna stato e nasconde l'errore quando ok */
+function readConsents(){
   state.consents.privacy=cPrivacy.checked; state.consents.terms=cTerms.checked; state.consents.mkt=cMkt.checked;
-  document.getElementById('toPayBtn').disabled = !(cPrivacy.checked && cTerms.checked && state.signaturePresent);
+  if(cPrivacy.checked && cTerms.checked){ const e=document.getElementById('consentErr'); if(e) e.style.display='none'; }
 }
-['cPrivacy','cTerms','cMkt'].forEach(id=>document.getElementById(id).addEventListener('change',refreshConsents));
+['cPrivacy','cTerms','cMkt'].forEach(id=>document.getElementById(id).addEventListener('change',readConsents));
+/* firma → abilita "Vai al pagamento" nello step Riepilogo */
+function refreshSignatureGate(){ const b=document.getElementById('toPayBtn'); if(b) b.disabled = !state.signaturePresent; }
 
 /* uppercase CF live (intestatario + genitore) */
 document.querySelectorAll('[data-f="fiscalCode"] input, [data-pf="fiscalCode"] input').forEach(inp=>
@@ -550,12 +560,12 @@ birthInput.addEventListener('input',updateMinorUI);
   function pos(e){ const r=c.getBoundingClientRect(); const cx=(e.touches?e.touches[0].clientX:e.clientX); const cy=(e.touches?e.touches[0].clientY:e.clientY); return {x:cx-r.left,y:cy-r.top}; }
   function start(e){ e.preventDefault(); sizeOnce(); drawing=true; last=pos(e); }
   function move(e){ if(!drawing) return; e.preventDefault(); const p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p;
-    if(!state.signaturePresent){ state.signaturePresent=true; hint.style.display='none'; refreshConsents(); } }
+    if(!state.signaturePresent){ state.signaturePresent=true; hint.style.display='none'; refreshSignatureGate(); } }
   function end(){ if(drawing){ drawing=false; state.signature=c.toDataURL('image/png'); } }
   c.addEventListener('pointerdown',start); c.addEventListener('pointermove',move); window.addEventListener('pointerup',end);
   c.addEventListener('touchstart',start,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',end);
   document.getElementById('sigClear').addEventListener('click',()=>{
-    ctx.clearRect(0,0,c.width,c.height); state.signaturePresent=false; state.signature=null; hint.style.display=''; refreshConsents();
+    ctx.clearRect(0,0,c.width,c.height); state.signaturePresent=false; state.signature=null; hint.style.display=''; refreshSignatureGate();
   });
 })();
 
