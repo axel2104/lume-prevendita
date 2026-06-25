@@ -510,19 +510,19 @@
     }, utmData);
 
     /* ── WEBHOOK (test URL — sostituire con production quando si va live) ── */
-    fetch('https://n8n.lumeflow.it/webhook-test/promo-prova', {
+    fetch('https://n8n.lumeflow.it/webhook/promo-prova', {
       method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload)
     })
-    .then(function () {
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       goStep(3);
     })
     .catch(function () {
       btn.disabled    = false;
       btn.textContent = 'Invia →';
-      alert('Errore di rete. Controlla la connessione e riprova.');
+      alert('Errore durante l\'invio. Controlla la connessione e riprova.');
     });
   });
 })();
