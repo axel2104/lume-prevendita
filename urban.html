@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" />
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{
   --bg:#1d1d1d;--surface:#262626;--surface-2:#2f2f2f;--line:#3a3a3a;--gray:#33373d;
@@ -115,6 +116,11 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .pay-info{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--text-mut);line-height:1.5;margin-bottom:4px;}
 .pay-info b{color:var(--text-dim);}
 .pay-info a{color:var(--accent-hi);}
+
+/* stripe card element */
+.stripe-wrap{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:16px 14px;transition:border-color .2s;margin-bottom:6px;}
+.stripe-wrap.focused{border-color:var(--accent);}
+.stripe-wrap.invalid{border-color:var(--err);}
 
 /* geo */
 .addr-wrap{position:relative;}
@@ -449,29 +455,17 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     <h1 class="title">Contratto</h1>
     <p class="sub">Scegli il metodo di pagamento e firma il contratto.</p>
 
-    <div class="section-label">Modalità di Pagamento</div>
-    <p style="font-size:14px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Il pagamento avviene tramite <b style="color:var(--text)">addebito ricorrente automatico</b>. Scegli il metodo preferito: <span style="color:var(--accent-hi)">*</span></p>
+    <div class="section-label">Pagamento</div>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Inserisci i dati della tua <b style="color:var(--text)">carta di credito o debito</b>. Il pagamento è gestito in modo sicuro da <b style="color:var(--text)">Stripe</b>. <span style="color:var(--accent-hi)">*</span></p>
 
-    <div class="pm-cards" id="pmCards">
-      <div class="pm-card" id="pm-carta" onclick="selectPayMethod('carta')">
-        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pm-ico">💳</div>
-        <h4>Carta di Pagamento</h4>
-        <div class="pm-desc">Credito o Debito</div>
-        <div class="pm-desc" style="margin-top:6px;color:var(--text-mut);font-size:12px">via <b style="color:var(--text-dim)">Stripe</b></div>
-      </div>
-      <div class="pm-card" id="pm-conto" onclick="selectPayMethod('conto')">
-        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pm-ico">🏦</div>
-        <h4>Addebito C/C</h4>
-        <div class="pm-desc">Conto Corrente Bancario</div>
-        <div class="pm-desc" style="margin-top:6px;color:var(--text-mut);font-size:12px">via <b style="color:var(--text-dim)">GoCardless</b></div>
-      </div>
+    <div class="stripe-wrap" id="stripeWrap">
+      <div id="stripeCard"></div>
     </div>
-    <div class="pay-info">
-      Dopo l'invio sarai <b>reindirizzato al provider di pagamento</b> per inserire i dati in modo sicuro. Il pagamento della prima rata (o unica soluzione) avviene subito; per le rate successive l'addebito è automatico ogni 30 giorni. L'abbonamento si <b>rinnova automaticamente</b> ogni 12 mesi, salvo disdetta a <b>disdetta@lumefitness.it</b> almeno 10 giorni prima della scadenza.
+    <div id="stripeCardErr" style="display:none;font-size:12.5px;color:var(--err);margin-top:4px"></div>
+
+    <div class="pay-info" style="margin-top:12px">
+      🔒 <b>Pagamento sicuro via Stripe.</b> I dati della carta non transitano sui nostri server. Il pagamento della prima rata (o unica soluzione) avviene subito dopo la firma; per le rate successive l'addebito è automatico ogni 30 giorni. L'abbonamento si <b>rinnova automaticamente</b> ogni 12 mesi, salvo disdetta a <b>disdetta@lumefitness.it</b> almeno 10 giorni prima della scadenza.
     </div>
-    <div id="payMethodErr" style="display:none;font-size:12.5px;color:var(--err);margin-bottom:10px">Seleziona una modalità di pagamento per proseguire.</div>
 
     <div class="section-label">Condizioni Contrattuali</div>
 
@@ -564,7 +558,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 /* ========================================================
    STATE
    ======================================================== */
-const state = { step: 1, plan: null, paymentMethod: null, signature: null };
+const state = { step: 1, plan: null, cardComplete: false, signature: null };
 
 const PLANS = {
   unica: {
@@ -594,6 +588,7 @@ function goto(n) {
   document.getElementById('stepNum').textContent = Math.min(n, 4);
   document.getElementById('stepName').textContent = stepNames[n] || '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 4) setTimeout(initStripe, 100);
 }
 
 document.getElementById('step1Next').addEventListener('click', () => goto(2));
@@ -644,13 +639,43 @@ document.getElementById('geoBtn').addEventListener('click', function () {
 });
 
 /* ========================================================
-   PAYMENT METHOD SELECTION
+   STRIPE
    ======================================================== */
-function selectPayMethod(key) {
-  state.paymentMethod = key;
-  document.querySelectorAll('.pm-card').forEach(c => c.classList.remove('sel'));
-  document.getElementById('pm-' + key).classList.add('sel');
-  document.getElementById('payMethodErr').style.display = 'none';
+const STRIPE_PK = 'pk_test_YOUR_KEY_HERE';
+let stripe, stripeElements, cardElement;
+
+function initStripe() {
+  if (stripe) return;
+  stripe = Stripe(STRIPE_PK);
+  stripeElements = stripe.elements({
+    fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400&display=swap' }]
+  });
+  cardElement = stripeElements.create('card', {
+    style: {
+      base: {
+        color: '#ffffff',
+        fontFamily: '"Roboto Condensed", sans-serif',
+        fontSize: '16px',
+        '::placeholder': { color: '#6a6a6a' }
+      },
+      invalid: { color: '#ff5252', iconColor: '#ff5252' }
+    },
+    hidePostalCode: true
+  });
+  cardElement.mount('#stripeCard');
+  cardElement.on('change', e => {
+    state.cardComplete = e.complete;
+    const wrap = document.getElementById('stripeWrap');
+    const err  = document.getElementById('stripeCardErr');
+    if (e.error) {
+      err.textContent = e.error.message; err.style.display = 'block';
+      wrap.classList.add('invalid');
+    } else {
+      err.style.display = 'none'; wrap.classList.remove('invalid');
+    }
+  });
+  cardElement.on('focus', () => document.getElementById('stripeWrap').classList.add('focused'));
+  cardElement.on('blur',  () => document.getElementById('stripeWrap').classList.remove('focused'));
 }
 
 /* ========================================================
@@ -768,8 +793,14 @@ function validateAnag() {
 }
 
 function validateContract() {
-  const pmOk = !!state.paymentMethod;
-  document.getElementById('payMethodErr').style.display = pmOk ? 'none' : 'block';
+  const cardOk = state.cardComplete;
+  const wrap = document.getElementById('stripeWrap');
+  const err  = document.getElementById('stripeCardErr');
+  if (!cardOk) {
+    wrap.classList.add('invalid');
+    err.textContent = 'Inserisci i dati della carta per proseguire.';
+    err.style.display = 'block';
+  }
 
   const terminiOk = document.getElementById('chk-termini').checked;
   const vessatOk  = document.getElementById('chk-vessat').checked;
@@ -782,7 +813,7 @@ function validateContract() {
   const sigOk = !!state.signature;
   document.getElementById('sigErr').style.display = sigOk ? 'none' : 'block';
 
-  return pmOk && consentOk && sigOk;
+  return cardOk && consentOk && sigOk;
 }
 
 /* ========================================================
@@ -849,6 +880,22 @@ async function submitContract() {
   const btn = document.getElementById('step4Next');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Invio…';
 
+  const { paymentMethod, error } = await stripe.createPaymentMethod({
+    type: 'card',
+    card: cardElement,
+    billing_details: {
+      name: document.getElementById('inp-nome').value.trim() + ' ' + document.getElementById('inp-cognome').value.trim(),
+      email: document.getElementById('inp-email').value.trim()
+    }
+  });
+  if (error) {
+    const err = document.getElementById('stripeCardErr');
+    err.textContent = error.message; err.style.display = 'block';
+    document.getElementById('stripeWrap').classList.add('invalid');
+    btn.disabled = false; btn.textContent = 'Invia iscrizione';
+    return;
+  }
+
   const payload = {
     email: document.getElementById('inp-email').value.trim(),
     nome: document.getElementById('inp-nome').value.trim(),
@@ -858,7 +905,7 @@ async function submitContract() {
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
     rate: state.plan ? state.plan.installments : null,
-    metodo_pagamento: state.paymentMethod,
+    stripe_payment_method_id: paymentMethod.id,
     firma: state.signature
   };
 
