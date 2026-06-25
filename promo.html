@@ -512,17 +512,17 @@
     /* ── WEBHOOK (test URL — sostituire con production quando si va live) ── */
     fetch('https://n8n.lumeflow.it/webhook-test/promo-prova', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body:    JSON.stringify(payload)
     })
-    .then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+    .then(function () {
       goStep(3);
     })
     .catch(function () {
       btn.disabled    = false;
       btn.textContent = 'Invia →';
-      alert('Errore durante l\'invio. Controlla la connessione e riprova.');
+      alert('Errore di rete. Controlla la connessione e riprova.');
     });
   });
 })();
