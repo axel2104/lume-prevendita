@@ -79,6 +79,20 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .card .deadline{font-size:13px;color:var(--text-mut);margin-top:10px;}
 .card .deadline b{color:var(--accent-hi);}
 
+/* savings banner */
+.savings-banner{background:linear-gradient(135deg,rgba(196,0,66,.22) 0%,rgba(228,19,92,.1) 100%);border:2px solid rgba(196,0,66,.65);border-radius:var(--radius);padding:22px 18px 18px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
+.savings-banner::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(196,0,66,.045) 0px,rgba(196,0,66,.045) 1px,transparent 1px,transparent 10px);pointer-events:none;}
+.savings-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent-hi);margin-bottom:12px;}
+.savings-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;}
+.savings-old{font-family:'Teko',sans-serif;font-size:56px;font-weight:700;line-height:1;color:var(--text-mut);text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:3px;}
+.savings-arrow{font-family:'Teko',sans-serif;font-size:38px;color:var(--accent-hi);line-height:1;}
+.savings-new{font-family:'Teko',sans-serif;font-size:72px;font-weight:700;line-height:1;color:#7efa4e;text-shadow:0 0 28px rgba(126,250,78,.35);}
+.savings-body{font-size:14px;color:var(--text-dim);line-height:1.5;position:relative;}
+.savings-body b{color:#fff;}
+.savings-urgency{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-mut);padding:5px 14px;border-radius:99px;}
+.card-saving{display:flex;align-items:center;gap:8px;background:rgba(126,250,78,.1);border:1px solid rgba(126,250,78,.28);color:#7efa4e;font-size:13px;font-weight:700;padding:7px 12px;border-radius:8px;margin-top:10px;}
+.card-saving s{color:rgba(255,255,255,.35);font-weight:400;font-style:normal;text-decoration-color:rgba(196,0,66,.7);}
+
 /* form fields */
 .grid{display:grid;gap:14px;}
 @media(min-width:560px){.grid.two{grid-template-columns:1fr 1fr;}}
@@ -293,7 +307,20 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
       <button class="btn-back-top" id="step2Back">← Indietro</button>
     </div>
     <h1 class="title">Abbonamento</h1>
-    <p class="sub">Prevendita Early Bird — valida entro il <b style="color:var(--accent-hi)">31 Luglio 2026</b></p>
+    <p class="sub">Iscriviti adesso e risparmia. <b style="color:var(--accent-hi)">Offerta scade il 31 Luglio 2026.</b></p>
+
+    <div class="savings-banner">
+      <div class="savings-label">⚡ Early Bird — Solo per i primissimi iscritti</div>
+      <div class="savings-row">
+        <span class="savings-old">€50</span>
+        <span class="savings-arrow">→</span>
+        <span class="savings-new">GRATIS</span>
+      </div>
+      <div class="savings-body">
+        La <b>quota di attivazione</b> — normalmente <b>€50</b> — è <b style="color:#7efa4e">completamente azzerata</b> per chi si iscrive in prevendita entro la scadenza.
+      </div>
+      <div class="savings-urgency">⏰ Scade il 31 Luglio 2026</div>
+    </div>
 
     <div class="cards" id="planCards">
 
@@ -305,6 +332,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
         <div class="cdesc">Pagamento in un'unica soluzione. Massimo risparmio garantito.</div>
         <div class="price">360<small> € / anno</small></div>
         <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
+        <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
       </div>
 
       <div class="card" id="card-rate3" onclick="selectPlan('rate3')">
@@ -315,6 +343,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
         <div class="price">130<small> € / rata</small></div>
         <div class="rate-detail"><b>3 rate × €130</b> ogni 30 giorni — totale €390</div>
         <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
+        <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
       </div>
 
     </div>
