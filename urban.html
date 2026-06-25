@@ -209,7 +209,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 
   <div class="progress">
     <div class="bar"><div class="fill" id="fill"></div></div>
-    <div class="pmeta"><span id="stepName">La sede</span><span>Step <b id="stepNum">1</b> / 3</span></div>
+    <div class="pmeta"><span id="stepName">La sede</span><span>Step <b id="stepNum">1</b> / 4</span></div>
   </div>
 
   <!-- ========== STEP 1: STRUTTURA ========== -->
@@ -317,13 +317,13 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     </div>
   </section>
 
-  <!-- ========== STEP 3: CONTRATTO ========== -->
+  <!-- ========== STEP 3: DATI PERSONALI ========== -->
   <section class="step" data-step="3">
     <div class="step-nav">
       <button class="btn-back-top" id="step3Back">← Indietro</button>
     </div>
-    <h1 class="title">Contratto</h1>
-    <p class="sub">Compila i tuoi dati per attivare la prevendita.</p>
+    <h1 class="title">Dati Personali</h1>
+    <p class="sub">Inserisci i tuoi dati anagrafici e i consensi privacy.</p>
 
     <div class="section-label">Dati Personali</div>
     <div class="grid two" style="margin-bottom:14px">
@@ -419,6 +419,35 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
       </div>
     </div>
 
+    <div class="section-label">Consensi Privacy</div>
+
+    <label class="consent-box" id="cbox-privacy">
+      <input type="checkbox" id="chk-privacy" />
+      <div class="ctext">
+        Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> di Lume Fitness Club S.r.l. e acconsento al trattamento dei miei dati personali per la gestione del contratto di abbonamento. <span style="color:var(--accent-hi)">*</span>
+      </div>
+    </label>
+
+    <label class="consent-box">
+      <input type="checkbox" id="chk-mkt" />
+      <div class="ctext">Acconsento a ricevere comunicazioni promozionali, newsletter e offerte da Lume Fitness Club (facoltativo).</div>
+    </label>
+
+    <div id="privacyErr" class="alert" style="margin-top:4px">Accetta il consenso privacy per proseguire.</div>
+
+    <div class="nav">
+      <button class="btn btn-primary" id="step3Next">Continua</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 4: CONTRATTO ========== -->
+  <section class="step" data-step="4">
+    <div class="step-nav">
+      <button class="btn-back-top" id="step4Back">← Indietro</button>
+    </div>
+    <h1 class="title">Contratto</h1>
+    <p class="sub">Scegli il metodo di pagamento e firma il contratto.</p>
+
     <div class="section-label">Modalità di Pagamento</div>
     <p style="font-size:14px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Il pagamento avviene tramite <b style="color:var(--text)">addebito ricorrente automatico</b>. Scegli il metodo preferito: <span style="color:var(--accent-hi)">*</span></p>
 
@@ -459,18 +488,6 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
       </div>
     </label>
 
-    <label class="consent-box" id="cbox-privacy">
-      <input type="checkbox" id="chk-privacy" />
-      <div class="ctext">
-        Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> di Lume Fitness Club S.r.l. e acconsento al trattamento dei miei dati personali per la gestione del contratto di abbonamento. <span style="color:var(--accent-hi)">*</span>
-      </div>
-    </label>
-
-    <label class="consent-box">
-      <input type="checkbox" id="chk-mkt" />
-      <div class="ctext">Acconsento a ricevere comunicazioni promozionali, newsletter e offerte da Lume Fitness Club (facoltativo).</div>
-    </label>
-
     <div id="consentErr" class="alert" style="margin-top:4px">Accetta tutti i consensi obbligatori contrassegnati con * per proseguire.</div>
 
     <div class="section-label">Firma del Contratto</div>
@@ -494,12 +511,12 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     <div id="sigErr" style="display:none;font-size:12.5px;color:var(--err);margin-top:6px">La firma è obbligatoria per procedere.</div>
 
     <div class="nav">
-      <button class="btn btn-primary" id="step3Next">Invia iscrizione</button>
+      <button class="btn btn-primary" id="step4Next">Invia iscrizione</button>
     </div>
   </section>
 
-  <!-- ========== STEP 4: DONE ========== -->
-  <section class="step" data-step="4">
+  <!-- ========== STEP 5: DONE ========== -->
+  <section class="step" data-step="5">
     <div class="done">
       <div class="done-circle">
         <svg viewBox="0 0 24 24" fill="none" width="44" height="44"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -566,14 +583,14 @@ const PLANS = {
 /* ========================================================
    NAVIGATION
    ======================================================== */
-const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Contratto', 4:'Iscritto!' };
+const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contratto', 5:'Iscritto!' };
 
 function goto(n) {
   state.step = n;
   document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
-  const pct = n <= 3 ? ((n - 1) / 3 * 100) : 100;
+  const pct = n <= 4 ? ((n - 1) / 4 * 100) : 100;
   document.getElementById('fill').style.width = pct + '%';
-  document.getElementById('stepNum').textContent = Math.min(n, 3);
+  document.getElementById('stepNum').textContent = Math.min(n, 4);
   document.getElementById('stepName').textContent = stepNames[n] || '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -582,7 +599,9 @@ document.getElementById('step1Next').addEventListener('click', () => goto(2));
 document.getElementById('step2Back').addEventListener('click', () => goto(1));
 document.getElementById('step2Next').addEventListener('click', () => goto(3));
 document.getElementById('step3Back').addEventListener('click', () => goto(2));
-document.getElementById('step3Next').addEventListener('click', submitForm);
+document.getElementById('step3Next').addEventListener('click', submitAnag);
+document.getElementById('step4Back').addEventListener('click', () => goto(3));
+document.getElementById('step4Next').addEventListener('click', submitContract);
 
 /* ========================================================
    PLAN SELECTION
@@ -700,10 +719,9 @@ function fullPhone(prefixId, numId) {
   return n ? p + ' ' + n : '';
 }
 
-function validateForm() {
+function validateAnag() {
   let ok = true;
 
-  /* — dati intestatario — */
   const ddnVal = document.getElementById('inp-ddn').value;
   const age = calcAge(ddnVal);
   const ddnOk = ddnVal.length > 0 && age !== null && age >= 12;
@@ -724,7 +742,6 @@ function validateForm() {
     if (!valid) ok = false;
   });
 
-  /* — dati genitore (solo se minorenne) — */
   const minor = age !== null && age < 18;
   if (minor) {
     const pRows = [
@@ -742,40 +759,123 @@ function validateForm() {
     });
   }
 
+  const privacyOk = document.getElementById('chk-privacy').checked;
+  document.getElementById('cbox-privacy').classList.toggle('invalid-c', !privacyOk);
+  document.getElementById('privacyErr').classList.toggle('show', !privacyOk);
+
+  return ok && privacyOk;
+}
+
+function validateContract() {
   const pmOk = !!state.paymentMethod;
   document.getElementById('payMethodErr').style.display = pmOk ? 'none' : 'block';
 
   const terminiOk = document.getElementById('chk-termini').checked;
   const vessatOk  = document.getElementById('chk-vessat').checked;
-  const privacyOk = document.getElementById('chk-privacy').checked;
-  const consentOk = terminiOk && vessatOk && privacyOk;
-  ['cbox-termini','cbox-vessat','cbox-privacy'].forEach((id, i) => {
-    const checked = [terminiOk, vessatOk, privacyOk][i];
-    document.getElementById(id).classList.toggle('invalid-c', !checked);
+  const consentOk = terminiOk && vessatOk;
+  ['cbox-termini', 'cbox-vessat'].forEach((id, i) => {
+    document.getElementById(id).classList.toggle('invalid-c', ![terminiOk, vessatOk][i]);
   });
   document.getElementById('consentErr').classList.toggle('show', !consentOk);
 
   const sigOk = !!state.signature;
   document.getElementById('sigErr').style.display = sigOk ? 'none' : 'block';
 
-  return ok && pmOk && consentOk && sigOk;
+  return pmOk && consentOk && sigOk;
 }
 
 /* ========================================================
-   SUBMIT
+   SUBMIT STEP 3 — anagrafica + webhook iscrizione
    ======================================================== */
-async function submitForm() {
-  if (!validateForm()) {
-    // scroll to first error
+async function submitAnag() {
+  if (!validateAnag()) {
     const first = document.querySelector('.step.active .invalid, .step.active .invalid-c');
     if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
   const btn = document.getElementById('step3Next');
-  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Invio…';
-  // TODO: collega backend /api/register
-  await new Promise(r => setTimeout(r, 900));
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Salvataggio…';
+
+  const age = calcAge(document.getElementById('inp-ddn').value);
+  const minor = age !== null && age < 18;
+  const payload = {
+    nome: document.getElementById('inp-nome').value.trim(),
+    cognome: document.getElementById('inp-cognome').value.trim(),
+    email: document.getElementById('inp-email').value.trim(),
+    telefono: fullPhone('tel-prefix', 'inp-tel'),
+    data_nascita: document.getElementById('inp-ddn').value,
+    codice_fiscale: document.getElementById('inp-cf').value.trim(),
+    via: document.getElementById('inp-via').value.trim(),
+    comune: document.getElementById('inp-comune').value.trim(),
+    piano_id: state.plan ? state.plan.id : null,
+    piano_nome: state.plan ? state.plan.name : null,
+    importo: state.plan ? state.plan.total : null,
+    rate: state.plan ? state.plan.installments : null,
+    marketing: document.getElementById('chk-mkt').checked
+  };
+  if (minor) {
+    payload.genitore = {
+      nome: document.getElementById('inp-pnome').value.trim(),
+      cognome: document.getElementById('inp-pcognome').value.trim(),
+      data_nascita: document.getElementById('inp-pddn').value,
+      codice_fiscale: document.getElementById('inp-pcf').value.trim(),
+      telefono: fullPhone('ptel-prefix', 'inp-ptel'),
+      email: document.getElementById('inp-pemail').value.trim()
+    };
+  }
+
+  try {
+    await fetch('https://n8n.lumeflow.it/webhook-test/iscrizione', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { /* continua anche se il webhook non risponde */ }
+
+  btn.disabled = false; btn.textContent = 'Continua';
   goto(4);
+}
+
+/* ========================================================
+   SUBMIT STEP 4 — contratto + webhook → redirect pagamento
+   ======================================================== */
+async function submitContract() {
+  if (!validateContract()) {
+    const first = document.querySelector('.step.active .invalid, .step.active .invalid-c');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const btn = document.getElementById('step4Next');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Invio…';
+
+  const payload = {
+    email: document.getElementById('inp-email').value.trim(),
+    nome: document.getElementById('inp-nome').value.trim(),
+    cognome: document.getElementById('inp-cognome').value.trim(),
+    codice_fiscale: document.getElementById('inp-cf').value.trim(),
+    piano_id: state.plan ? state.plan.id : null,
+    piano_nome: state.plan ? state.plan.name : null,
+    importo: state.plan ? state.plan.total : null,
+    rate: state.plan ? state.plan.installments : null,
+    metodo_pagamento: state.paymentMethod,
+    firma: state.signature
+  };
+
+  try {
+    const res = await fetch('https://n8n.lumeflow.it/webhook-test/contratto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data.paymentUrl) {
+      window.location.href = data.paymentUrl;
+      return;
+    }
+  } catch(e) { /* continua anche se il webhook non risponde */ }
+
+  btn.disabled = false; btn.textContent = 'Invia iscrizione';
+  goto(5);
 }
 
 /* ========================================================
