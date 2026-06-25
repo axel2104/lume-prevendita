@@ -362,13 +362,18 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
       </div>
     </div>
 
-    <div class="field" id="f-addr" style="margin-bottom:6px">
-      <label>Indirizzo <span class="req">*</span></label>
+    <div class="field" id="f-via" style="margin-bottom:6px">
+      <label>Via / Piazza <span class="req">*</span></label>
       <div class="addr-wrap">
-        <input type="text" id="inp-addr" class="addr-input" autocomplete="street-address" placeholder="Via Roma 1, 62100 Macerata MC" />
+        <input type="text" id="inp-via" class="addr-input" autocomplete="address-line1" placeholder="Via Roma 1" />
         <button class="geo-btn" id="geoBtn" type="button">📍 Usa posizione</button>
       </div>
-      <span class="ferr">Indirizzo obbligatorio</span>
+      <span class="ferr">Via obbligatoria</span>
+    </div>
+    <div class="field" id="f-comune" style="margin-bottom:6px">
+      <label>Comune <span class="req">*</span></label>
+      <input type="text" id="inp-comune" autocomplete="address-level2" placeholder="62100 Macerata" />
+      <span class="ferr">Comune obbligatorio</span>
     </div>
 
     <!-- Sezione genitore/tutore — visibile solo se minorenne -->
@@ -606,8 +611,9 @@ document.getElementById('geoBtn').addEventListener('click', function () {
         .then(data => {
           const a = data.address || {};
           const road = a.road ? (a.road + (a.house_number ? ' ' + a.house_number : '')) : '';
-          const parts = [road, a.postcode, a.city || a.town || a.village, a.state].filter(Boolean);
-          document.getElementById('inp-addr').value = parts.join(', ');
+          const city = a.city || a.town || a.village || '';
+          document.getElementById('inp-via').value = road;
+          document.getElementById('inp-comune').value = [a.postcode, city].filter(Boolean).join(' ');
           btn.textContent = '✓ Trovato';
           setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Usa posizione'; }, 2500);
         })
@@ -709,7 +715,8 @@ function validateForm() {
     ['f-tel',     () => isPhone(document.getElementById('inp-tel').value.trim())],
     ['f-ddn',     () => ddnOk],
     ['f-cf',      () => isCF(document.getElementById('inp-cf').value.trim())],
-    ['f-addr',    () => document.getElementById('inp-addr').value.trim().length > 0],
+    ['f-via',     () => document.getElementById('inp-via').value.trim().length > 0],
+    ['f-comune',  () => document.getElementById('inp-comune').value.trim().length > 0],
   ];
   rows.forEach(([id, fn]) => {
     const field = document.getElementById(id); const valid = fn();
@@ -788,7 +795,9 @@ function buildContractHTML() {
   const tel = fullPhone('tel-prefix', 'inp-tel');
   const d  = document.getElementById('inp-ddn').value;
   const f  = document.getElementById('inp-cf').value.trim();
-  const a  = document.getElementById('inp-addr').value.trim();
+  const via    = document.getElementById('inp-via').value.trim();
+  const comune = document.getElementById('inp-comune').value.trim();
+  const a = [via, comune].filter(Boolean).join(', ');
   const p  = state.plan;
   const age = calcAge(d);
   const minor = age !== null && age < 18;
