@@ -247,14 +247,28 @@
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { filter: brightness(1.12); }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; filter: none; }
-    .btn-back {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,.12);
-      font-size: 16px;
+    .step-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 28px;
     }
-    .btn-back:hover { background: rgba(255,255,255,.06); color: var(--text); }
-    .btn-row { display: flex; flex-direction: column; gap: 10px; }
+    .btn-back-top {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 4px 0 4px 2px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+      transition: color .18s;
+    }
+    .btn-back-top:hover { color: var(--text); }
 
     /* ── STEP 3: SUCCESS ── */
     .success-card {
@@ -304,9 +318,12 @@
   <!-- ══ STEP 1: PROMO INFO ══ -->
   <div id="step1" class="step active">
 
-    <div>
+    <div class="step-nav">
       <div id="sedeBadge1" class="sede-badge" style="display:none"></div>
-      <p class="promo-eyebrow" style="margin-top:10px">Guest Pass Premium</p>
+      <button class="btn-back-top" id="btnBack1">← Indietro</button>
+    </div>
+    <div>
+      <p class="promo-eyebrow">Guest Pass Premium</p>
       <h1 class="promo-title">7 Giorni</h1>
       <p class="promo-subtitle">Richiedi il Codice Promozionale<br>da attivare entro 30 giorni.</p>
     </div>
@@ -330,18 +347,18 @@
       </p>
     </div>
 
-    <div class="btn-row">
-      <button class="btn btn-primary" id="btnAvanti">Avanti →</button>
-      <button class="btn btn-back" id="btnBack1">← Indietro</button>
-    </div>
+    <button class="btn btn-primary" id="btnAvanti">Avanti →</button>
   </div>
 
   <!-- ══ STEP 2: FORM ══ -->
   <div id="step2" class="step">
 
-    <div>
+    <div class="step-nav">
       <div id="sedeBadge2" class="sede-badge" style="display:none"></div>
-      <h2 class="form-title" style="margin-top:10px">I tuoi dati</h2>
+      <button class="btn-back-top" id="btnBack2">← Indietro</button>
+    </div>
+    <div>
+      <h2 class="form-title">I tuoi dati</h2>
       <p class="form-sub">Compila il modulo per ricevere il codice promozionale.</p>
     </div>
 
@@ -386,10 +403,7 @@
         </div>
         <span class="error-msg" id="err_privacy">Devi accettare la privacy per continuare.</span>
 
-        <div class="btn-row">
-          <button type="submit" class="btn btn-primary" id="submitBtn">Invia →</button>
-          <button type="button" class="btn btn-back" id="btnBack2">← Indietro</button>
-        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Invia →</button>
       </form>
     </div>
   </div>
