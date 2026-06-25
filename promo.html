@@ -330,15 +330,7 @@
 
     <div class="card">
       <p class="card-label">Allenati per 1 settimana e potrai provare:</p>
-      <ul class="activity-list">
-        <li><span class="check">✓</span> Gym Floor</li>
-        <li><span class="check">✓</span> Corsi Fitness</li>
-        <li><span class="check">✓</span> Corsi Aqua Fitness</li>
-        <li><span class="check">✓</span> Nuoto Libero assistito</li>
-        <li><span class="check">✓</span> Scuola Nuoto Adulti</li>
-        <li><span class="check">✓</span> CrossFit</li>
-        <li><span class="check">✓</span> Pilates Reformer</li>
-      </ul>
+      <ul class="activity-list" id="activityList"></ul>
       <div class="sep"></div>
       <p class="promo-nb">NB: Guest Pass senza obbligo di rinnovo</p>
       <p class="promo-price">
@@ -435,6 +427,21 @@
 
   /* ── Mostra badge sede ── */
   var SEDE_NAMES = { macerata: 'Lume HQ', montecassiano: 'Lume Balance' };
+
+  var SEDE_ACTIVITIES = {
+    macerata:      ['Sala Pesi', 'Corsi Fitness', 'Pilates Reformer', 'Personal Training'],
+    montecassiano: ['Sala Pesi', 'Corsi Fitness', 'Pilates Reformer', 'Personal Training', 'Aqua Fitness', 'Nuoto']
+  };
+
+  var activities = SEDE_ACTIVITIES[sede] || Object.values(SEDE_ACTIVITIES).reduce(function(a, b) {
+    return a.length >= b.length ? a : b;
+  });
+  var list = document.getElementById('activityList');
+  activities.forEach(function(act) {
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="check">✓</span> ' + act;
+    list.appendChild(li);
+  });
   var sedeName = SEDE_NAMES[sede] || '';
   if (sedeName) {
     ['sedeBadge1', 'sedeBadge2'].forEach(function (id) {
