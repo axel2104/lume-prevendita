@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Guest Pass Premium — Lume Fitness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #121212;
+      --card:     #1e1e1e;
+      --card2:    #252525;
+      --line:     rgba(255,255,255,.08);
+      --accent:   #c40042;
+      --accent-hi:#e4135c;
+      --text:     #f0f0f0;
+      --muted:    #888;
+      --green:    #22c55e;
+      --radius:   14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-text-size-adjust: 100%; }
+    body { min-height: 100dvh; display: flex; flex-direction: column; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .topbar img { height: 36px; width: auto; }
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      background: rgba(228,19,92,.12);
+      border: 1px solid rgba(228,19,92,.28);
+      border-radius: 20px;
+      padding: 4px 10px;
+    }
+
+    /* ── LAYOUT ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 40px;
+      width: 100%;
+    }
+    .inner {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── STEPS ── */
+    .step { display: none; flex-direction: column; gap: 20px; }
+    .step.active { display: flex; }
+
+    /* ── SEDE BADGE ── */
+    .sede-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(228,19,92,.10);
+      border: 1px solid rgba(228,19,92,.25);
+      color: var(--accent-hi);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      align-self: flex-start;
+    }
+
+    /* ── STEP 1: PROMO INFO ── */
+    .promo-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .promo-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(52px, 16vw, 80px);
+      font-weight: 700;
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: .01em;
+      margin: 6px 0;
+    }
+    .promo-subtitle {
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.55;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .activity-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .activity-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .check {
+      width: 22px; height: 22px; min-width: 22px;
+      border-radius: 50%;
+      background: rgba(34,197,94,.14);
+      border: 1px solid rgba(34,197,94,.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .sep { height: 1px; background: var(--line); }
+    .promo-nb {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .promo-price {
+      font-size: 14px;
+      color: #ccc;
+      line-height: 1.6;
+    }
+    .promo-price strong {
+      color: var(--accent-hi);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    /* ── STEP 2: FORM ── */
+    .form-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(30px, 9vw, 44px);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .form-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field input[type=text],
+    .field input[type=email],
+    .field input[type=tel] {
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: #444; }
+
+    .privacy-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .privacy-row input[type=checkbox] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+      width: 16px; height: 16px;
+      cursor: pointer;
+    }
+    .privacy-text {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    .privacy-text a { color: var(--accent-hi); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 13px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: filter .2s, transform .12s;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.12); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; filter: none; }
+    .btn-back {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 16px;
+    }
+    .btn-back:hover { background: rgba(255,255,255,.06); color: var(--text); }
+    .btn-row { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── STEP 3: SUCCESS ── */
+    .success-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      padding: 40px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(34,197,94,.14);
+      border: 2px solid rgba(34,197,94,.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      color: var(--green);
+    }
+    .success-title {
+      font-family: 'Teko', sans-serif;
+      font-size: clamp(32px, 9vw, 46px);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .success-text { font-size: 15px; color: #bbb; line-height: 1.65; }
+
+    /* ── ERROR STATE ── */
+    .field-error { border-color: var(--accent) !important; }
+    .error-msg { font-size: 12px; color: var(--accent-hi); margin-top: 2px; display: none; }
+    .error-msg.show { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" alt="Lume Fitness" />
+  <span class="tag">Promo</span>
+</div>
+
+<div class="main">
+<div class="inner">
+
+  <!-- ══ STEP 1: PROMO INFO ══ -->
+  <div id="step1" class="step active">
+
+    <div>
+      <div id="sedeBadge1" class="sede-badge" style="display:none"></div>
+      <p class="promo-eyebrow" style="margin-top:10px">Guest Pass Premium</p>
+      <h1 class="promo-title">7 Giorni</h1>
+      <p class="promo-subtitle">Richiedi il Codice Promozionale<br>da attivare entro 30 giorni.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Allenati per 1 settimana e potrai provare:</p>
+      <ul class="activity-list">
+        <li><span class="check">✓</span> Gym Floor</li>
+        <li><span class="check">✓</span> Corsi Fitness</li>
+        <li><span class="check">✓</span> Corsi Aqua Fitness</li>
+        <li><span class="check">✓</span> Nuoto Libero assistito</li>
+        <li><span class="check">✓</span> Scuola Nuoto Adulti</li>
+        <li><span class="check">✓</span> CrossFit</li>
+        <li><span class="check">✓</span> Pilates Reformer</li>
+      </ul>
+      <div class="sep"></div>
+      <p class="promo-nb">NB: Guest Pass senza obbligo di rinnovo</p>
+      <p class="promo-price">
+        Attivabile da nuovi utenti (senza Abbonamento o Pass dal 2024)
+        al costo di <strong>€15</strong>
+      </p>
+    </div>
+
+    <button class="btn btn-primary" id="btnAvanti">Avanti →</button>
+  </div>
+
+  <!-- ══ STEP 2: FORM ══ -->
+  <div id="step2" class="step">
+
+    <div>
+      <div id="sedeBadge2" class="sede-badge" style="display:none"></div>
+      <h2 class="form-title" style="margin-top:10px">I tuoi dati</h2>
+      <p class="form-sub">Compila il modulo per ricevere il codice promozionale.</p>
+    </div>
+
+    <div class="card">
+      <form id="promoForm" novalidate>
+
+        <div class="field">
+          <label for="f_nome">Nome</label>
+          <input type="text" id="f_nome" autocomplete="given-name" placeholder="Mario" />
+          <span class="error-msg" id="err_nome">Inserisci il tuo nome.</span>
+        </div>
+
+        <div class="field">
+          <label for="f_cognome">Cognome</label>
+          <input type="text" id="f_cognome" autocomplete="family-name" placeholder="Rossi" />
+          <span class="error-msg" id="err_cognome">Inserisci il tuo cognome.</span>
+        </div>
+
+        <div class="field">
+          <label for="f_email">Email</label>
+          <input type="email" id="f_email" autocomplete="email" placeholder="mario@esempio.it" />
+          <span class="error-msg" id="err_email">Inserisci un indirizzo email valido.</span>
+        </div>
+
+        <div class="field">
+          <label for="f_cellulare">Cellulare</label>
+          <input type="tel" id="f_cellulare" autocomplete="tel" placeholder="+39 333 123 4567" />
+          <span class="error-msg" id="err_cellulare">Inserisci il tuo numero di cellulare.</span>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="privacy-row">
+          <input type="checkbox" id="f_privacy" />
+          <label class="privacy-text" for="f_privacy">
+            Inviando questo modulo accetti che i tuoi dati vengano trasmessi a
+            Supergym 2.0 SSDrl, che potrà utilizzarli per inviarti comunicazioni
+            su prodotti e servizi. Puoi annullare l'iscrizione in qualsiasi momento.
+            Per maggiori informazioni consulta la nostra
+            <a href="#" target="_blank" rel="noopener">Informativa sulla Privacy</a>.
+          </label>
+        </div>
+        <span class="error-msg" id="err_privacy">Devi accettare la privacy per continuare.</span>
+
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Invia →</button>
+          <button type="button" class="btn btn-back" id="btnBack2">← Indietro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3: SUCCESS ══ -->
+  <div id="step3" class="step">
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Richiesta inviata!</h2>
+      <p class="success-text">
+        Riceverai il tuo <strong>codice Guest Pass</strong> via email entro breve.<br><br>
+        Ti aspettiamo in palestra!
+      </p>
+      <button class="btn btn-back" id="btnBack3" style="max-width:260px">← Modifica i dati</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function () {
+  /* ── Leggi URL params (UTM + sede) ── */
+  var p = new URLSearchParams(window.location.search);
+  var sede = p.get('sede') || '';
+
+  var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+  var utmData = {};
+  UTM_KEYS.forEach(function (k) { utmData[k] = p.get(k) || ''; });
+
+  /* ── Mostra badge sede ── */
+  var SEDE_NAMES = { macerata: 'Lume HQ', montecassiano: 'Lume Balance' };
+  var sedeName = SEDE_NAMES[sede] || '';
+  if (sedeName) {
+    ['sedeBadge1', 'sedeBadge2'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.textContent = '📍 ' + sedeName;
+      el.style.display = 'inline-flex';
+    });
+  }
+
+  /* ── Navigazione step ── */
+  function goStep(n) {
+    [1, 2, 3].forEach(function (i) {
+      var el = document.getElementById('step' + i);
+      el.classList.toggle('active', i === n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('btnAvanti').addEventListener('click', function () { goStep(2); });
+  document.getElementById('btnBack2').addEventListener('click', function ()  { goStep(1); });
+  document.getElementById('btnBack3').addEventListener('click', function ()  { goStep(2); });
+
+  /* ── Validazione ── */
+  function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function setError(id, errId, show) {
+    var input = document.getElementById(id);
+    var msg   = document.getElementById(errId);
+    if (input) input.classList.toggle('field-error', show);
+    if (msg)   msg.classList.toggle('show', show);
+  }
+
+  /* ── Submit ── */
+  document.getElementById('promoForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var nome      = document.getElementById('f_nome').value.trim();
+    var cognome   = document.getElementById('f_cognome').value.trim();
+    var email     = document.getElementById('f_email').value.trim();
+    var cellulare = document.getElementById('f_cellulare').value.trim();
+    var privacy   = document.getElementById('f_privacy').checked;
+
+    var ok = true;
+    setError('f_nome',      'err_nome',      !nome);      if (!nome)                   ok = false;
+    setError('f_cognome',   'err_cognome',   !cognome);   if (!cognome)                ok = false;
+    setError('f_email',     'err_email',     !validateEmail(email)); if (!validateEmail(email)) ok = false;
+    setError('f_cellulare', 'err_cellulare', !cellulare); if (!cellulare)              ok = false;
+
+    var errPrivacy = document.getElementById('err_privacy');
+    errPrivacy.classList.toggle('show', !privacy);
+    if (!privacy) ok = false;
+
+    if (!ok) return;
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled    = true;
+    btn.textContent = 'Invio in corso…';
+
+    var payload = Object.assign({
+      nome:      nome,
+      cognome:   cognome,
+      email:     email,
+      cellulare: cellulare,
+      sede:      sede,
+      timestamp: new Date().toISOString()
+    }, utmData);
+
+    /* ── WEBHOOK (test URL — sostituire con production quando si va live) ── */
+    fetch('https://n8n.lumeflow.it/webhook-test/promo-prova', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      goStep(3);
+    })
+    .catch(function () {
+      btn.disabled    = false;
+      btn.textContent = 'Invia →';
+      alert('Errore durante l\'invio. Controlla la connessione e riprova.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

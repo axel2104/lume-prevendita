@@ -309,7 +309,7 @@
         <span class="pill">Pilates Reformer</span>
         <span class="pill">Personal Training</span>
       </div>
-      <a href="form.html?sede=macerata" class="cta cta-promo">Scopri la promo</a>
+      <a href="promo.html?sede=macerata" class="cta cta-promo">Scopri la promo</a>
     </div>
 
     <!-- 2 — Lume Balance -->
@@ -333,7 +333,7 @@
         <span class="pill">Aqua Fitness</span>
         <span class="pill">Nuoto</span>
       </div>
-      <a href="form.html?sede=montecassiano" class="cta cta-promo">Scopri la promo</a>
+      <a href="promo.html?sede=montecassiano" class="cta cta-promo">Scopri la promo</a>
     </div>
 
     <!-- 3 — Lume Urban -->
@@ -449,6 +449,23 @@
   document.getElementById('mapClose').addEventListener('click', closeModal);
   modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+})();
+</script>
+
+<script>
+/* Propaga i parametri UTM di Google Ads / Facebook su tutti i link CTA */
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  var hasUtm = UTM_KEYS.some(function(k){ return !!p.get(k); });
+  if(!hasUtm) return;
+  document.querySelectorAll('a.cta').forEach(function(a){
+    try {
+      var url = new URL(a.href, location.origin);
+      UTM_KEYS.forEach(function(k){ if(p.get(k)) url.searchParams.set(k, p.get(k)); });
+      a.href = url.toString();
+    } catch(e){}
+  });
 })();
 </script>
 </body>
