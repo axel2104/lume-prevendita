@@ -330,7 +330,10 @@
       </p>
     </div>
 
-    <button class="btn btn-primary" id="btnAvanti">Avanti →</button>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnAvanti">Avanti →</button>
+      <button class="btn btn-back" id="btnBack1">← Indietro</button>
+    </div>
   </div>
 
   <!-- ══ STEP 2: FORM ══ -->
@@ -400,7 +403,6 @@
         Riceverai il tuo <strong>codice Guest Pass</strong> via email entro breve.<br><br>
         Ti aspettiamo in palestra!
       </p>
-      <button class="btn btn-back" id="btnBack3" style="max-width:260px">← Modifica i dati</button>
     </div>
   </div>
 
@@ -438,8 +440,8 @@
   }
 
   document.getElementById('btnAvanti').addEventListener('click', function () { goStep(2); });
+  document.getElementById('btnBack1').addEventListener('click', function ()  { history.back(); });
   document.getElementById('btnBack2').addEventListener('click', function ()  { goStep(1); });
-  document.getElementById('btnBack3').addEventListener('click', function ()  { goStep(2); });
 
   /* ── Validazione ── */
   function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
