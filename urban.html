@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Prevendita Early Bird — Lume Urban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#1d1d1d;--surface:#262626;--surface-2:#2f2f2f;--line:#3a3a3a;--gray:#33373d;
+  --accent:#c40042;--accent-hi:#e4135c;--text:#ffffff;--text-dim:#b9b9b9;--text-mut:#8a8a8a;
+  --ok:#34c759;--err:#ff5252;--radius:14px;--maxw:720px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100dvh;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:24px 18px 80px;display:flex;flex-direction:column;}
+
+/* topbar */
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+.topbar img{height:44px;width:auto;display:block;}
+.tag{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:18px;color:var(--accent-hi);font-weight:600;margin-left:auto;}
+
+/* progress */
+.progress{margin:18px 0 24px;}
+.bar{height:5px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-hi));border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1);}
+.pmeta{display:flex;justify-content:space-between;margin-top:8px;font-size:13px;color:var(--text-mut);text-transform:uppercase;letter-spacing:.1em;}
+.pmeta b{color:var(--text-dim);}
+
+/* steps */
+.step{display:none;animation:fadein .35s ease;}
+.step.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1;margin:4px 0 6px;}
+.sub{color:var(--text-dim);font-size:15px;font-weight:300;margin-bottom:22px;}
+
+/* struttura */
+.struttura-banner{background:linear-gradient(165deg,rgba(196,0,66,.18) 0%,rgba(196,0,66,.04) 100%);border:1px solid rgba(196,0,66,.3);border-radius:var(--radius);padding:24px 20px 20px;margin-bottom:18px;}
+.opening-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;background:rgba(196,0,66,.18);color:var(--accent-hi);border:1px solid rgba(196,0,66,.35);padding:4px 12px;border-radius:99px;margin-bottom:12px;}
+.struttura-banner h2{font-family:'Teko',sans-serif;font-size:56px;font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:14px;}
+.addr-line{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--text-dim);margin-bottom:16px;}
+.addr-line svg{width:15px;height:15px;flex-shrink:0;fill:var(--accent-hi);}
+.activity-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{background:#383838;border:1px solid #4e4e4e;color:#fff;font-size:13px;padding:4px 12px;border-radius:99px;font-weight:500;}
+
+.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+@media(max-width:480px){.features{grid-template-columns:1fr;}}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.feat .ico{font-size:22px;margin-bottom:6px;}
+.feat h4{font-family:'Teko',sans-serif;font-size:21px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+.feat p{font-size:13px;color:var(--text-dim);font-weight:300;line-height:1.45;}
+
+.info-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+.info-chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+.info-chip b{color:var(--text);}
+
+/* plan cards */
+.cards{display:grid;gap:14px;}
+.card{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:20px 18px 18px;cursor:pointer;transition:border-color .2s,transform .15s,background .2s;}
+.card:hover{border-color:#555;transform:translateY(-2px);}
+.card.sel{border-color:var(--accent);background:linear-gradient(180deg,rgba(196,0,66,.14),rgba(196,0,66,.04));}
+.check{position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.2s;}
+.card.sel .check{background:var(--accent);border-color:var(--accent);}
+.check svg{width:13px;height:13px;opacity:0;transition:.2s;}
+.card.sel .check svg{opacity:1;}
+.badge-best{display:inline-block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 10px;border-radius:99px;font-weight:700;margin-bottom:6px;}
+.badge-early{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:#1a6600;border:1px solid #2d9e00;color:#7efa4e;padding:3px 10px;border-radius:99px;font-weight:700;margin-bottom:10px;}
+.card h3{font-family:'Teko',sans-serif;font-size:28px;text-transform:uppercase;font-weight:700;margin-bottom:4px;padding-right:36px;}
+.card .cdesc{font-size:14px;color:var(--text-dim);font-weight:300;margin-bottom:12px;}
+.card .price{font-family:'Teko',sans-serif;font-size:50px;font-weight:700;line-height:1;}
+.card .price small{font-size:16px;color:var(--text-mut);font-family:'Roboto Condensed',sans-serif;font-weight:300;}
+.card .rate-detail{margin-top:8px;font-size:14px;color:var(--text-dim);}
+.card .rate-detail b{color:#fff;}
+.card .deadline{font-size:13px;color:var(--text-mut);margin-top:10px;}
+.card .deadline b{color:var(--accent-hi);}
+
+/* form fields */
+.grid{display:grid;gap:14px;}
+@media(min-width:560px){.grid.two{grid-template-columns:1fr 1fr;}}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);font-weight:700;}
+.field label .req{color:var(--accent-hi);}
+.field input,.field select{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:13px 14px;color:#fff;font-family:'Roboto Condensed',sans-serif;font-size:16px;transition:border-color .2s;width:100%;}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);}
+.field input::placeholder{color:#6a6a6a;}
+.field.invalid input,.field.invalid select{border-color:var(--err);}
+.field .ferr{font-size:12.5px;color:var(--err);display:none;}
+.field.invalid .ferr{display:block;}
+
+/* phone prefix + number */
+.phone-wrap{display:flex;gap:8px;}
+.field .phone-prefix{width:110px;flex:0 0 110px;}
+.phone-num{flex:1;min-width:0;}
+
+/* minor warning banner */
+.minor-banner{background:rgba(196,0,66,.12);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:14px;color:#ffd0df;line-height:1.5;}
+
+/* payment method cards (smaller variant) */
+.pm-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px;}
+@media(max-width:420px){.pm-cards{grid-template-columns:1fr;}}
+.pm-card{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:16px 14px;cursor:pointer;transition:border-color .2s,background .2s;}
+.pm-card:hover{border-color:#555;}
+.pm-card.sel{border-color:var(--accent);background:linear-gradient(180deg,rgba(196,0,66,.14),rgba(196,0,66,.04));}
+.pm-card .check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.2s;}
+.pm-card.sel .check{background:var(--accent);border-color:var(--accent);}
+.pm-card .check svg{width:11px;height:11px;opacity:0;transition:.2s;}
+.pm-card.sel .check svg{opacity:1;}
+.pm-card .pm-ico{font-size:24px;margin-bottom:6px;}
+.pm-card h4{font-family:'Teko',sans-serif;font-size:20px;text-transform:uppercase;font-weight:700;margin-bottom:2px;padding-right:28px;}
+.pm-card .pm-desc{font-size:13px;color:var(--text-dim);font-weight:300;}
+.pay-info{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--text-mut);line-height:1.5;margin-bottom:4px;}
+.pay-info b{color:var(--text-dim);}
+.pay-info a{color:var(--accent-hi);}
+
+/* geo */
+.addr-wrap{position:relative;}
+.geo-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(196,0,66,.18);border:1px solid rgba(196,0,66,.35);border-radius:8px;color:var(--accent-hi);padding:5px 10px;cursor:pointer;font-size:12px;font-family:'Roboto Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;transition:background .2s;}
+.geo-btn:hover{background:rgba(196,0,66,.32);}
+.geo-btn:disabled{opacity:.5;cursor:not-allowed;}
+.addr-input{padding-right:124px!important;}
+
+/* consents */
+.consent-box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:border-color .2s;}
+.consent-box:hover{border-color:#505050;}
+.consent-box input[type=checkbox]{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer;}
+.consent-box .ctext{font-size:14px;color:var(--text-dim);line-height:1.5;}
+.consent-box .ctext a{color:var(--accent-hi);}
+.consent-box .ctext b{color:var(--text);}
+.consent-box.invalid-c{border-color:var(--err);}
+
+.section-label{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:19px;color:var(--accent-hi);margin:22px 0 12px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--line);}
+
+/* firma area */
+.sig-trigger{background:#ffffff;border:2px dashed #ccc;border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;}
+.sig-trigger:hover{border-color:#999;}
+.sig-trigger.signed{border-style:solid;border-color:var(--ok);}
+.sig-hint-txt{color:#999;}
+.sig-hint-txt svg{stroke:#bbb;}
+.sig-hint-txt{color:var(--text-mut);font-size:14px;text-align:center;pointer-events:none;padding:10px;}
+.sig-hint-txt svg{display:block;margin:0 auto 8px;width:26px;height:26px;stroke:var(--text-mut);fill:none;stroke-width:1.5;}
+.sig-preview-img{max-width:100%;max-height:110px;display:block;margin:0 auto;pointer-events:none;}
+
+/* top-right back button */
+.step-nav{display:flex;align-items:center;justify-content:flex-end;min-height:28px;margin-bottom:14px;}
+.btn-back-top{background:transparent;border:none;color:var(--text-mut);font-size:13px;font-weight:600;font-family:'Roboto Condensed',sans-serif;cursor:pointer;padding:4px 2px;display:flex;align-items:center;gap:4px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;transition:color .18s;}
+.btn-back-top:hover{color:var(--text);}
+
+/* buttons */
+.nav{display:flex;gap:12px;margin-top:28px;}
+.btn{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:20px;font-weight:600;border:none;border-radius:10px;padding:14px 26px;cursor:pointer;transition:transform .12s,filter .2s,background .2s;}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--accent);color:#fff;flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;}
+.btn-primary:hover{filter:brightness(1.12);}
+.btn-primary:disabled{background:var(--gray);color:var(--text-mut);cursor:not-allowed;filter:none;}
+
+/* done */
+.done{text-align:center;padding:40px 0 20px;}
+.done-circle{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-hi));display:grid;place-items:center;margin:0 auto 22px;}
+.done h1{font-family:'Teko',sans-serif;font-size:52px;text-transform:uppercase;margin-bottom:10px;}
+.done p{color:var(--text-dim);font-size:16px;max-width:460px;margin:0 auto;line-height:1.65;}
+
+/* spinner */
+.spin{display:inline-block;width:17px;height:17px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px;margin-right:7px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+.alert{background:rgba(255,82,82,.12);border:1px solid var(--err);color:#ffb4b4;padding:12px 14px;border-radius:10px;font-size:14px;margin-top:10px;display:none;}
+.alert.show{display:block;}
+
+/* ============ CONTRACT MODAL ============ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.84);z-index:400;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+@media(min-width:600px){.modal-overlay{align-items:center;}}
+.modal-box{background:var(--surface);border-radius:18px 18px 0 0;width:100%;max-width:680px;max-height:92dvh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -20px 60px rgba(0,0,0,.5);}
+@media(min-width:600px){.modal-box{border-radius:18px;max-height:88dvh;}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line);flex-shrink:0;}
+.modal-head h2{font-family:'Teko',sans-serif;font-size:26px;text-transform:uppercase;font-weight:700;}
+.modal-close-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer;display:grid;place-items:center;line-height:1;transition:background .2s;}
+.modal-close-btn:hover{background:rgba(196,0,66,.45);}
+.modal-body{flex:1;overflow-y:auto;padding:20px;}
+.modal-foot{padding:16px 20px;border-top:1px solid var(--line);display:flex;gap:10px;flex-shrink:0;}
+
+/* contract preview inside modal */
+.contract-doc{background:#fff;color:#111;border-radius:10px;padding:22px 18px;font-size:13px;line-height:1.7;margin-bottom:20px;}
+.contract-doc h3{font-family:'Teko',sans-serif;font-size:22px;text-transform:uppercase;margin-bottom:14px;text-align:center;}
+.contract-doc hr{border:none;border-top:1px solid #ddd;margin:14px 0;}
+.contract-doc table{width:100%;border-collapse:collapse;margin:10px 0;}
+.contract-doc td{padding:5px 8px;border-bottom:1px solid #eee;font-size:13px;}
+.contract-doc td:first-child{color:#666;font-weight:600;width:42%;}
+.contract-doc .clause{font-size:12px;color:#444;margin-top:10px;line-height:1.6;}
+.contract-doc .clause b{color:#111;}
+
+/* modal sig canvas */
+.modal-sig-wrap{background:#f5f5f5;border:2px dashed #aaa;border-radius:10px;overflow:hidden;position:relative;}
+.modal-sig-canvas{display:block;width:100%;height:160px;touch-action:none;cursor:crosshair;}
+.modal-sig-hint{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#aaa;font-size:14px;pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" alt="Lume Fitness Club" />
+    <span class="tag">Prevendita</span>
+  </div>
+
+  <div class="progress">
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="pmeta"><span id="stepName">La sede</span><span>Step <b id="stepNum">1</b> / 3</span></div>
+  </div>
+
+  <!-- ========== STEP 1: STRUTTURA ========== -->
+  <section class="step active" data-step="1">
+
+    <div class="step-nav">
+      <a href="index.html" class="btn-back-top">← Indietro</a>
+    </div>
+
+    <div class="struttura-banner">
+      <div class="opening-badge">◎ Apertura Settembre 2026</div>
+      <h2>Lume Urban</h2>
+      <p style="font-family:'Teko',sans-serif;font-size:22px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-hi);margin-bottom:12px;font-weight:600">Allenati forte. Senza complicazioni.</p>
+      <p class="addr-line">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+        Viale Giacomo Leopardi 91 — Macerata Centro Storico
+      </p>
+      <div class="activity-pills">
+        <span class="pill">Sala Pesi Panatta</span>
+        <span class="pill">Calisthenics</span>
+        <span class="pill">Functional</span>
+        <span class="pill">Corsi Live</span>
+        <span class="pill">Corsi On Demand</span>
+        <span class="pill">Spogliatoi Premium</span>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <div class="ico">🏋️</div>
+        <h4>Sala Pesi Panatta</h4>
+        <p>Oltre 520 mq di area gym su tre zone dedicate, attrezzati con la linea Panatta Monolith. Più ghisa, meno tecnologia — per scelta.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🤸</div>
+        <h4>Calisthenics & Functional</h4>
+        <p>Area functional con rig, pesi liberi, rack e tutto il necessario per un allenamento completo e libero.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🎯</div>
+        <h4>Corsi Live & On Demand</h4>
+        <p>Sala corsi da ~56 mq con programma live. In più, accesso ai corsi on demand per allenarti quando vuoi.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">✨</div>
+        <h4>Spogliatoi Premium</h4>
+        <p>Spogliatoi separati uomo/donna con docce e wc. Finiture di qualità, ambiente curato e lounge con parete verde all'ingresso.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🏙️</div>
+        <h4>Centro Storico</h4>
+        <p>Nel cuore di Macerata, su due livelli per oltre 900 mq totali. Pensato per under 30 e giovani adulti.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🅿️</div>
+        <h4>Parcheggio</h4>
+        <p>Parcheggio accessibile dalla struttura disponibile dopo le ore 19:00.</p>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-chip">📐 <span><b>&gt; 900 mq</b> su 2 livelli</span></div>
+      <div class="info-chip">📅 <span>Opening <b>Settembre 2026</b></span></div>
+    </div>
+
+    <div class="nav" style="margin-top:24px">
+      <button class="btn btn-primary" id="step1Next">Avanti →</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 2: ABBONAMENTO ========== -->
+  <section class="step" data-step="2">
+    <div class="step-nav">
+      <button class="btn-back-top" id="step2Back">← Indietro</button>
+    </div>
+    <h1 class="title">Abbonamento</h1>
+    <p class="sub">Prevendita Early Bird — valida entro il <b style="color:var(--accent-hi)">31 Luglio 2026</b></p>
+
+    <div class="cards" id="planCards">
+
+      <div class="card" id="card-unica" onclick="selectPlan('unica')">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="badge-best">Miglior Prezzo</span><br>
+        <span class="badge-early">⚡ Early Bird</span>
+        <h3>Annuale — Soluzione Unica</h3>
+        <div class="cdesc">Pagamento in un'unica soluzione. Massimo risparmio garantito.</div>
+        <div class="price">360<small> € / anno</small></div>
+        <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
+      </div>
+
+      <div class="card" id="card-rate3" onclick="selectPlan('rate3')">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="badge-early">⚡ Early Bird</span>
+        <h3>Annuale — 3 Rate</h3>
+        <div class="cdesc">Tre comode rate mensili a distanza di 30 giorni l'una dall'altra.</div>
+        <div class="price">130<small> € / rata</small></div>
+        <div class="rate-detail"><b>3 rate × €130</b> ogni 30 giorni — totale €390</div>
+        <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
+      </div>
+
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-primary" id="step2Next" disabled>Continua</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 3: CONTRATTO ========== -->
+  <section class="step" data-step="3">
+    <div class="step-nav">
+      <button class="btn-back-top" id="step3Back">← Indietro</button>
+    </div>
+    <h1 class="title">Contratto</h1>
+    <p class="sub">Compila i tuoi dati per attivare la prevendita.</p>
+
+    <div class="section-label">Dati Personali</div>
+    <div class="grid two" style="margin-bottom:14px">
+      <div class="field" id="f-nome">
+        <label>Nome <span class="req">*</span></label>
+        <input type="text" id="inp-nome" autocomplete="given-name" placeholder="Mario" />
+        <span class="ferr">Campo obbligatorio</span>
+      </div>
+      <div class="field" id="f-cognome">
+        <label>Cognome <span class="req">*</span></label>
+        <input type="text" id="inp-cognome" autocomplete="family-name" placeholder="Rossi" />
+        <span class="ferr">Campo obbligatorio</span>
+      </div>
+      <div class="field" id="f-email">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="inp-email" autocomplete="email" placeholder="mario@esempio.it" />
+        <span class="ferr">Email non valida</span>
+      </div>
+      <div class="field" id="f-tel">
+        <label>Cellulare <span class="req">*</span></label>
+        <div class="phone-wrap">
+          <select id="tel-prefix" class="phone-prefix"></select>
+          <input type="tel" id="inp-tel" class="phone-num" inputmode="tel" autocomplete="tel" placeholder="333 1234567" />
+        </div>
+        <span class="ferr">Numero non valido</span>
+      </div>
+      <div class="field" id="f-ddn">
+        <label>Data di nascita <span class="req">*</span></label>
+        <input type="date" id="inp-ddn" />
+        <span class="ferr">Devi avere almeno 12 anni</span>
+      </div>
+      <div class="field" id="f-cf">
+        <label>Codice fiscale <span class="req">*</span></label>
+        <input type="text" id="inp-cf" maxlength="16" placeholder="RSSMRA80A01D612X" style="text-transform:uppercase" />
+        <span class="ferr">16 caratteri alfanumerici</span>
+      </div>
+    </div>
+
+    <div class="field" id="f-addr" style="margin-bottom:6px">
+      <label>Indirizzo <span class="req">*</span></label>
+      <div class="addr-wrap">
+        <input type="text" id="inp-addr" class="addr-input" autocomplete="street-address" placeholder="Via Roma 1, 62100 Macerata MC" />
+        <button class="geo-btn" id="geoBtn" type="button">📍 Usa posizione</button>
+      </div>
+      <span class="ferr">Indirizzo obbligatorio</span>
+    </div>
+
+    <!-- Sezione genitore/tutore — visibile solo se minorenne -->
+    <div id="parentSection" style="display:none;margin-bottom:6px">
+      <div class="minor-banner">
+        L'intestatario è <b>minorenne</b>: inserisci i dati del <b>genitore/tutore legale</b> che sottoscriverà il contratto.
+      </div>
+      <div class="section-label" style="margin-top:0">Dati Genitore / Tutore</div>
+      <div class="grid two" style="margin-bottom:14px">
+        <div class="field" id="pf-nome">
+          <label>Nome genitore <span class="req">*</span></label>
+          <input type="text" id="inp-pnome" autocomplete="given-name" placeholder="Laura" />
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+        <div class="field" id="pf-cognome">
+          <label>Cognome genitore <span class="req">*</span></label>
+          <input type="text" id="inp-pcognome" autocomplete="family-name" placeholder="Bianchi" />
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+        <div class="field" id="pf-ddn">
+          <label>Data di nascita <span class="req">*</span></label>
+          <input type="date" id="inp-pddn" />
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+        <div class="field" id="pf-tel">
+          <label>Cellulare genitore <span class="req">*</span></label>
+          <div class="phone-wrap">
+            <select id="ptel-prefix" class="phone-prefix"></select>
+            <input type="tel" id="inp-ptel" class="phone-num" inputmode="tel" placeholder="333 1234567" />
+          </div>
+          <span class="ferr">Numero non valido</span>
+        </div>
+        <div class="field" id="pf-cf">
+          <label>Codice fiscale genitore <span class="req">*</span></label>
+          <input type="text" id="inp-pcf" maxlength="16" placeholder="BNCLRA75B41..." style="text-transform:uppercase" />
+          <span class="ferr">16 caratteri alfanumerici</span>
+        </div>
+        <div class="field" id="pf-email" style="grid-column:1/-1">
+          <label>Email genitore <span class="req">*</span></label>
+          <input type="email" id="inp-pemail" autocomplete="email" placeholder="laura@esempio.it" />
+          <span class="ferr">Email non valida</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Modalità di Pagamento</div>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">Il pagamento avviene tramite <b style="color:var(--text)">addebito ricorrente automatico</b>. Scegli il metodo preferito: <span style="color:var(--accent-hi)">*</span></p>
+
+    <div class="pm-cards" id="pmCards">
+      <div class="pm-card" id="pm-carta" onclick="selectPayMethod('carta')">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="pm-ico">💳</div>
+        <h4>Carta di Pagamento</h4>
+        <div class="pm-desc">Credito o Debito</div>
+        <div class="pm-desc" style="margin-top:6px;color:var(--text-mut);font-size:12px">via <b style="color:var(--text-dim)">Stripe</b></div>
+      </div>
+      <div class="pm-card" id="pm-conto" onclick="selectPayMethod('conto')">
+        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="pm-ico">🏦</div>
+        <h4>Addebito C/C</h4>
+        <div class="pm-desc">Conto Corrente Bancario</div>
+        <div class="pm-desc" style="margin-top:6px;color:var(--text-mut);font-size:12px">via <b style="color:var(--text-dim)">GoCardless</b></div>
+      </div>
+    </div>
+    <div class="pay-info">
+      Dopo l'invio sarai <b>reindirizzato al provider di pagamento</b> per inserire i dati in modo sicuro. Il pagamento della prima rata (o unica soluzione) avviene subito; per le rate successive l'addebito è automatico ogni 30 giorni. L'abbonamento si <b>rinnova automaticamente</b> ogni 12 mesi, salvo disdetta a <b>disdetta@lumefitness.it</b> almeno 10 giorni prima della scadenza.
+    </div>
+    <div id="payMethodErr" style="display:none;font-size:12.5px;color:var(--err);margin-bottom:10px">Seleziona una modalità di pagamento per proseguire.</div>
+
+    <div class="section-label">Condizioni Contrattuali</div>
+
+    <label class="consent-box" id="cbox-termini">
+      <input type="checkbox" id="chk-termini" />
+      <div class="ctext">
+        Ho letto e accetto i <b>Termini e Condizioni Generali di Contratto</b> di Super Gym 2.0 srl Sportiva Dilettantistica (Lume Fitness Club), incluse le condizioni di prevendita Early Bird e il rinnovo automatico annuale. <a href="/termini-e-condizioni" target="_blank" rel="noopener" onclick="event.stopPropagation()">Leggi i T&C completi →</a> <span style="color:var(--accent-hi)">*</span>
+      </div>
+    </label>
+
+    <label class="consent-box" id="cbox-vessat">
+      <input type="checkbox" id="chk-vessat" />
+      <div class="ctext">
+        Ai sensi degli <b>artt. 1341–1342 c.c.</b>, dichiaro di aver letto e di approvare specificamente le seguenti <b>clausole vessatorie</b>: recesso con costi amministrativi €10 (art. 1.3); responsabilità pagamenti e indennizzo (art. 2.1.1); sospensione servizi e penale €10 per ritardo (art. 2.1.2); penale €100 per cessione badge (art. 2.3); esonero responsabilità infortuni (art. 2.7); modifica unilaterale programmi senza preavviso (art. 6.5); rinnovo automatico e disdetta con 10 giorni di preavviso (artt. 6.9–6.10); modifica unilaterale dei T&C (art. 10.6). <span style="color:var(--accent-hi)">*</span>
+      </div>
+    </label>
+
+    <label class="consent-box" id="cbox-privacy">
+      <input type="checkbox" id="chk-privacy" />
+      <div class="ctext">
+        Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> di Lume Fitness Club S.r.l. e acconsento al trattamento dei miei dati personali per la gestione del contratto di abbonamento. <span style="color:var(--accent-hi)">*</span>
+      </div>
+    </label>
+
+    <label class="consent-box">
+      <input type="checkbox" id="chk-mkt" />
+      <div class="ctext">Acconsento a ricevere comunicazioni promozionali, newsletter e offerte da Lume Fitness Club (facoltativo).</div>
+    </label>
+
+    <div id="consentErr" class="alert" style="margin-top:4px">Accetta tutti i consensi obbligatori contrassegnati con * per proseguire.</div>
+
+    <div class="section-label">Firma del Contratto</div>
+
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:12px;line-height:1.5">
+      Clicca sul riquadro per aprire l'<b style="color:var(--text)">anteprima del contratto</b> con i tuoi dati e le condizioni di pagamento, dove potrai apporre la tua firma digitale.
+    </p>
+
+    <div class="sig-trigger" id="sigTrigger">
+      <div class="sig-hint-txt" id="sigHintTxt">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 113 3L8.5 17.854l-4.5 1 1-4.5 11.862-10.867z"/></svg>
+        Clicca per aprire il contratto e firmare
+      </div>
+      <img id="sigPreviewImg" class="sig-preview-img" src="" alt="Firma" style="display:none" />
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+      <span style="font-size:12px;color:var(--text-mut)">La firma verrà applicata al contratto PDF.</span>
+      <button type="button" id="sigClearBtn" style="display:none;background:transparent;border:1px solid var(--line);color:var(--text-dim);border-radius:8px;padding:4px 12px;font-size:13px;cursor:pointer;font-family:'Roboto Condensed',sans-serif">Cancella firma</button>
+    </div>
+    <div id="sigErr" style="display:none;font-size:12.5px;color:var(--err);margin-top:6px">La firma è obbligatoria per procedere.</div>
+
+    <div class="nav">
+      <button class="btn btn-primary" id="step3Next">Invia iscrizione</button>
+    </div>
+  </section>
+
+  <!-- ========== STEP 4: DONE ========== -->
+  <section class="step" data-step="4">
+    <div class="done">
+      <div class="done-circle">
+        <svg viewBox="0 0 24 24" fill="none" width="44" height="44"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Ci sei!</h1>
+      <p id="doneMsg">La tua prevendita Early Bird per <b>Lume Urban</b> è confermata. Ti abbiamo inviato un'email di riepilogo all'indirizzo indicato.<br><br>Ci vediamo a settembre 2026!</p>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- ========== MODAL CONTRATTO + FIRMA ========== -->
+<div class="modal-overlay" id="contractModal" role="dialog" aria-modal="true" aria-label="Anteprima contratto">
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2>Anteprima Contratto</h2>
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Chiudi">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="contract-doc" id="contractDoc"><!-- generato da JS --></div>
+
+      <div class="section-label" style="color:var(--text-dim);font-size:16px">Firma Digitale</div>
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:10px;line-height:1.5">Firma nel riquadro qui sotto con dito o mouse per accettare il contratto.</p>
+      <div class="modal-sig-wrap">
+        <canvas id="modalSigCanvas" class="modal-sig-canvas"></canvas>
+        <span id="modalSigHint" class="modal-sig-hint">Firma qui con dito o mouse</span>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button type="button" id="modalSigClear" style="background:transparent;border:1px solid var(--line);color:var(--text-dim);border-radius:8px;padding:4px 14px;font-size:13px;cursor:pointer;font-family:'Roboto Condensed',sans-serif">Cancella</button>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="modalCancelBtn" style="flex:0 0 auto">Annulla</button>
+      <button class="btn btn-primary" id="modalConfirmBtn" disabled>Conferma firma</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ========================================================
+   STATE
+   ======================================================== */
+const state = { step: 1, plan: null, paymentMethod: null, signature: null };
+
+const PLANS = {
+  unica: {
+    id: 'urb-unica', name: 'Annuale — Soluzione Unica',
+    total: 360, installments: 1,
+    desc: '€360 in un\'unica soluzione anticipata.',
+    paymentLabel: '€360 in unica soluzione'
+  },
+  rate3: {
+    id: 'urb-rate3', name: 'Annuale — 3 Rate',
+    total: 390, installments: 3,
+    desc: '3 rate da €130 ogni 30 giorni.',
+    paymentLabel: '3 rate da €130 ogni 30 giorni (totale €390)'
+  }
+};
+
+/* ========================================================
+   NAVIGATION
+   ======================================================== */
+const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Contratto', 4:'Iscritto!' };
+
+function goto(n) {
+  state.step = n;
+  document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+  const pct = n <= 3 ? ((n - 1) / 3 * 100) : 100;
+  document.getElementById('fill').style.width = pct + '%';
+  document.getElementById('stepNum').textContent = Math.min(n, 3);
+  document.getElementById('stepName').textContent = stepNames[n] || '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('step1Next').addEventListener('click', () => goto(2));
+document.getElementById('step2Back').addEventListener('click', () => goto(1));
+document.getElementById('step2Next').addEventListener('click', () => goto(3));
+document.getElementById('step3Back').addEventListener('click', () => goto(2));
+document.getElementById('step3Next').addEventListener('click', submitForm);
+
+/* ========================================================
+   PLAN SELECTION
+   ======================================================== */
+function selectPlan(key) {
+  state.plan = PLANS[key];
+  document.querySelectorAll('#planCards .card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('card-' + key).classList.add('sel');
+  document.getElementById('step2Next').disabled = false;
+}
+
+/* ========================================================
+   GEOLOCATION
+   ======================================================== */
+document.getElementById('geoBtn').addEventListener('click', function () {
+  if (!navigator.geolocation) { alert('Geolocalizzazione non supportata dal browser.'); return; }
+  const btn = this;
+  btn.disabled = true; btn.textContent = '⏳ Ricerca…';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=json', {
+        headers: { Accept: 'application/json' }
+      })
+        .then(r => r.json())
+        .then(data => {
+          const a = data.address || {};
+          const road = a.road ? (a.road + (a.house_number ? ' ' + a.house_number : '')) : '';
+          const parts = [road, a.postcode, a.city || a.town || a.village, a.state].filter(Boolean);
+          document.getElementById('inp-addr').value = parts.join(', ');
+          btn.textContent = '✓ Trovato';
+          setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Usa posizione'; }, 2500);
+        })
+        .catch(() => { btn.disabled = false; btn.textContent = '📍 Usa posizione'; });
+    },
+    () => { btn.disabled = false; btn.textContent = '📍 Usa posizione'; }
+  );
+});
+
+/* ========================================================
+   PAYMENT METHOD SELECTION
+   ======================================================== */
+function selectPayMethod(key) {
+  state.paymentMethod = key;
+  document.querySelectorAll('.pm-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('pm-' + key).classList.add('sel');
+  document.getElementById('payMethodErr').style.display = 'none';
+}
+
+/* ========================================================
+   PHONE PREFIXES
+   ======================================================== */
+const PREFIXES = [
+  ['+39','🇮🇹 +39'],['+1','🇺🇸 +1'],['+44','🇬🇧 +44'],['+33','🇫🇷 +33'],['+49','🇩🇪 +49'],
+  ['+34','🇪🇸 +34'],['+41','🇨🇭 +41'],['+43','🇦🇹 +43'],['+32','🇧🇪 +32'],['+31','🇳🇱 +31'],
+  ['+351','🇵🇹 +351'],['+30','🇬🇷 +30'],['+40','🇷🇴 +40'],['+48','🇵🇱 +48'],['+359','🇧🇬 +359'],
+  ['+385','🇭🇷 +385'],['+386','🇸🇮 +386'],['+420','🇨🇿 +420'],['+36','🇭🇺 +36'],['+352','🇱🇺 +352'],
+  ['+212','🇲🇦 +212'],['+216','🇹🇳 +216'],['+355','🇦🇱 +355'],['+380','🇺🇦 +380'],['+7','🇷🇺 +7'],
+  ['+86','🇨🇳 +86'],['+91','🇮🇳 +91'],['+55','🇧🇷 +55'],['+61','🇦🇺 +61'],['+81','🇯🇵 +81'],
+  ['+82','🇰🇷 +82'],['+971','🇦🇪 +971'],['+966','🇸🇦 +966'],['+20','🇪🇬 +20'],['+27','🇿🇦 +27']
+];
+function fillPrefixes(sel) {
+  if (!sel) return;
+  sel.innerHTML = PREFIXES.map(([v,l]) => `<option value="${v}"${v==='+39'?' selected':''}>${l}</option>`).join('');
+}
+fillPrefixes(document.getElementById('tel-prefix'));
+fillPrefixes(document.getElementById('ptel-prefix'));
+
+/* ========================================================
+   CF UPPERCASE
+   ======================================================== */
+document.getElementById('inp-cf').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+document.getElementById('inp-pcf').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+
+/* ========================================================
+   AGE / MINOR DETECTION
+   ======================================================== */
+function calcAge(d) {
+  if (!d) return null;
+  const b = new Date(d); if (isNaN(b)) return null;
+  const t = new Date(); let a = t.getFullYear() - b.getFullYear();
+  const m = t.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && t.getDate() < b.getDate())) a--;
+  return a;
+}
+
+/* set max date = 12 years ago */
+(function() {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 12);
+  document.getElementById('inp-ddn').max = d.toISOString().split('T')[0];
+})();
+
+document.getElementById('inp-ddn').addEventListener('change', function() {
+  const age = calcAge(this.value);
+  const minor = age !== null && age < 18;
+  document.getElementById('parentSection').style.display = minor ? 'block' : 'none';
+  if (!minor) {
+    ['pf-nome','pf-cognome','pf-ddn','pf-tel','pf-email'].forEach(id => {
+      document.getElementById(id).classList.remove('invalid');
+    });
+  }
+});
+
+/* ========================================================
+   VALIDATION
+   ======================================================== */
+function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isCF(v)    { return /^[A-Z0-9]{16}$/.test(v.toUpperCase()); }
+function isPhone(v) { return v.replace(/[\s\-().+]/g, '').length >= 6; }
+function fullPhone(prefixId, numId) {
+  const p = (document.getElementById(prefixId).value || '').trim();
+  const n = (document.getElementById(numId).value || '').trim();
+  return n ? p + ' ' + n : '';
+}
+
+function validateForm() {
+  let ok = true;
+
+  /* — dati intestatario — */
+  const ddnVal = document.getElementById('inp-ddn').value;
+  const age = calcAge(ddnVal);
+  const ddnOk = ddnVal.length > 0 && age !== null && age >= 12;
+
+  const rows = [
+    ['f-nome',    () => document.getElementById('inp-nome').value.trim().length > 0],
+    ['f-cognome', () => document.getElementById('inp-cognome').value.trim().length > 0],
+    ['f-email',   () => isEmail(document.getElementById('inp-email').value.trim())],
+    ['f-tel',     () => isPhone(document.getElementById('inp-tel').value.trim())],
+    ['f-ddn',     () => ddnOk],
+    ['f-cf',      () => isCF(document.getElementById('inp-cf').value.trim())],
+    ['f-addr',    () => document.getElementById('inp-addr').value.trim().length > 0],
+  ];
+  rows.forEach(([id, fn]) => {
+    const field = document.getElementById(id); const valid = fn();
+    field.classList.toggle('invalid', !valid);
+    if (!valid) ok = false;
+  });
+
+  /* — dati genitore (solo se minorenne) — */
+  const minor = age !== null && age < 18;
+  if (minor) {
+    const pRows = [
+      ['pf-nome',    () => document.getElementById('inp-pnome').value.trim().length > 0],
+      ['pf-cognome', () => document.getElementById('inp-pcognome').value.trim().length > 0],
+      ['pf-ddn',     () => document.getElementById('inp-pddn').value.length > 0],
+      ['pf-tel',     () => isPhone(document.getElementById('inp-ptel').value.trim())],
+      ['pf-cf',      () => isCF(document.getElementById('inp-pcf').value.trim())],
+      ['pf-email',   () => isEmail(document.getElementById('inp-pemail').value.trim())],
+    ];
+    pRows.forEach(([id, fn]) => {
+      const field = document.getElementById(id); const valid = fn();
+      field.classList.toggle('invalid', !valid);
+      if (!valid) ok = false;
+    });
+  }
+
+  const pmOk = !!state.paymentMethod;
+  document.getElementById('payMethodErr').style.display = pmOk ? 'none' : 'block';
+
+  const terminiOk = document.getElementById('chk-termini').checked;
+  const vessatOk  = document.getElementById('chk-vessat').checked;
+  const privacyOk = document.getElementById('chk-privacy').checked;
+  const consentOk = terminiOk && vessatOk && privacyOk;
+  ['cbox-termini','cbox-vessat','cbox-privacy'].forEach((id, i) => {
+    const checked = [terminiOk, vessatOk, privacyOk][i];
+    document.getElementById(id).classList.toggle('invalid-c', !checked);
+  });
+  document.getElementById('consentErr').classList.toggle('show', !consentOk);
+
+  const sigOk = !!state.signature;
+  document.getElementById('sigErr').style.display = sigOk ? 'none' : 'block';
+
+  return ok && pmOk && consentOk && sigOk;
+}
+
+/* ========================================================
+   SUBMIT
+   ======================================================== */
+async function submitForm() {
+  if (!validateForm()) {
+    // scroll to first error
+    const first = document.querySelector('.step.active .invalid, .step.active .invalid-c');
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const btn = document.getElementById('step3Next');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Invio…';
+  // TODO: collega backend /api/register
+  await new Promise(r => setTimeout(r, 900));
+  goto(4);
+}
+
+/* ========================================================
+   CONTRACT MODAL
+   ======================================================== */
+const modal      = document.getElementById('contractModal');
+const mCanvas    = document.getElementById('modalSigCanvas');
+const mCtx       = mCanvas.getContext('2d');
+const mHint      = document.getElementById('modalSigHint');
+const confirmBtn = document.getElementById('modalConfirmBtn');
+let mDrawing = false, mLast = null, mPresent = false;
+
+function buildContractHTML() {
+  const n  = document.getElementById('inp-nome').value.trim();
+  const co = document.getElementById('inp-cognome').value.trim();
+  const e  = document.getElementById('inp-email').value.trim();
+  const tel = fullPhone('tel-prefix', 'inp-tel');
+  const d  = document.getElementById('inp-ddn').value;
+  const f  = document.getElementById('inp-cf').value.trim();
+  const a  = document.getElementById('inp-addr').value.trim();
+  const p  = state.plan;
+  const age = calcAge(d);
+  const minor = age !== null && age < 18;
+  const today = new Date().toLocaleDateString('it-IT');
+  const fmtDate = d => d.toLocaleDateString('it-IT');
+  const d1 = new Date();
+  const d2 = new Date(); d2.setDate(d2.getDate() + 30);
+  const d3 = new Date(); d3.setDate(d3.getDate() + 60);
+
+  let payScheduleRows;
+  if (p && p.installments === 1) {
+    payScheduleRows = `<tr><td>Pagamento</td><td><b>${fmtDate(d1)} — €360</b></td></tr>`;
+  } else if (p && p.installments === 3) {
+    payScheduleRows = `
+      <tr><td>1ª rata</td><td>${fmtDate(d1)} — €130</td></tr>
+      <tr><td>2ª rata</td><td>${fmtDate(d2)} — €130</td></tr>
+      <tr><td>3ª rata</td><td>${fmtDate(d3)} — €130</td></tr>
+      <tr><td>Totale</td><td><b>€390</b></td></tr>`;
+  } else {
+    payScheduleRows = `<tr><td>Piano di pagamento</td><td>${p ? p.paymentLabel : '—'}</td></tr>`;
+  }
+
+  const parentRows = minor ? `
+    <hr>
+    <p><b>Dati Genitore / Tutore Legale</b></p>
+    <table>
+      <tr><td>Nome e Cognome</td><td><b>${document.getElementById('inp-pnome').value.trim() || '—'} ${document.getElementById('inp-pcognome').value.trim() || '—'}</b></td></tr>
+      <tr><td>Data di nascita</td><td>${document.getElementById('inp-pddn').value ? new Date(document.getElementById('inp-pddn').value).toLocaleDateString('it-IT') : '—'}</td></tr>
+      <tr><td>Codice Fiscale</td><td>${document.getElementById('inp-pcf').value.trim() || '—'}</td></tr>
+      <tr><td>Cellulare</td><td>${fullPhone('ptel-prefix','inp-ptel') || '—'}</td></tr>
+      <tr><td>Email</td><td>${document.getElementById('inp-pemail').value.trim() || '—'}</td></tr>
+    </table>` : '';
+
+  const pmLabel = state.paymentMethod === 'carta' ? 'Addebito su Carta di Pagamento (Credito/Debito)' : state.paymentMethod === 'conto' ? 'Addebito su Conto Corrente Bancario' : '—';
+
+  return `
+    <h3>Contratto di Abbonamento<br>Lume Urban — Prevendita Early Bird</h3>
+    <hr>
+    <p style="font-size:11px;color:#666;margin-bottom:6px"><b>Super Gym 2.0 srl Sportiva Dilettantistica</b> — P.IVA 01890840430<br>Piazzale Fattorini 1, 62100 Macerata (MC) — PEC: supergymsrl@pec.it</p>
+    <hr>
+    <p><b>Dati dell'Intestatario</b></p>
+    <table>
+      <tr><td>Nome e Cognome</td><td><b>${n || '—'} ${co || '—'}</b></td></tr>
+      <tr><td>Email</td><td>${e || '—'}</td></tr>
+      <tr><td>Cellulare</td><td>${tel || '—'}</td></tr>
+      <tr><td>Data di nascita</td><td>${d ? new Date(d).toLocaleDateString('it-IT') : '—'}</td></tr>
+      <tr><td>Codice Fiscale</td><td>${f || '—'}</td></tr>
+      <tr><td>Indirizzo</td><td>${a || '—'}</td></tr>
+    </table>
+    ${parentRows}
+    <hr>
+    <p><b>Abbonamento Selezionato</b></p>
+    <table>
+      <tr><td>Tipologia</td><td><b>${p ? p.name : '—'}</b></td></tr>
+      <tr><td>Sede</td><td>Lume Urban — Viale G. Leopardi 91, 62100 Macerata</td></tr>
+      <tr><td>Apertura prevista</td><td>Settembre 2026</td></tr>
+      <tr><td>Durata</td><td>12 mesi dall'attivazione</td></tr>
+      ${payScheduleRows}
+      <tr><td>Modalità di pagamento</td><td>${pmLabel}</td></tr>
+    </table>
+    <hr>
+    <p><b>Rinnovo Automatico e Disdetta (art. 6.9–6.10)</b></p>
+    <p class="clause">L'abbonamento annuale si <b>rinnova automaticamente</b> ogni 12 mesi, salvo disdetta inviata via email a <b>disdetta@lumefitness.it</b> almeno <b>10 giorni prima</b> della scadenza. In caso di disdetta e successiva nuova iscrizione sarà dovuta una nuova quota di attivazione.</p>
+    <hr>
+    <p><b>Condizioni Generali (estratto)</b></p>
+    <p class="clause"><b>Art. 1.3 — Recesso.</b> L'Abbonato può recedere senza obbligo di motivazione entro 14 giorni dalla sottoscrizione inviando comunicazione via PEC a supergymsrl@pec.it. Non verranno rimborsate le quote fruite fino all'esercizio del recesso e saranno trattenuti €10 a titolo di costi amministrativi.</p>
+    <p class="clause"><b>Art. 2.1.1–2.1.2 — Pagamenti.</b> Il pagamento avviene tramite addebito automatico (${pmLabel}), gestito da GoCardless. Il ritardo determina: sospensione immediata dei servizi (art. 1460 c.c.); penale di €10,00 dopo 15 giorni; risoluzione di diritto del contratto dal 16° giorno (art. 1456 c.c.).</p>
+    <p class="clause"><b>Art. 2.3 — Cessione badge.</b> Il badge è strettamente personale. La cessione a terzi comporta una penale di €100,00 oltre al risarcimento del danno ulteriore.</p>
+    <p class="clause"><b>Art. 2.7 — Idoneità fisica.</b> L'Abbonato dichiara di essere in buona salute e idoneo alla pratica sportiva. Super Gym 2.0 è esonerata da responsabilità per infortuni derivanti da utilizzo improprio delle attrezzature o da condizioni fisiche dell'Abbonato.</p>
+    <p class="clause"><b>Art. 6.5 — Programmi.</b> La Direzione si riserva il diritto di modificare programmi e orari anche senza preavviso, senza oneri nei confronti degli iscritti.</p>
+    <p class="clause"><b>Art. 10.6 — Modifiche T&C.</b> La Direzione si riserva il diritto di aggiornare i presenti Termini e Condizioni in qualsiasi momento, con comunicazione via canali ufficiali.</p>
+    <hr>
+    <p style="font-size:11px;color:#888">Data di sottoscrizione: ${today} — Super Gym 2.0 srl Sportiva Dilettantistica (Lume Fitness Club) — P.IVA 01890840430</p>
+  `;
+}
+
+function initModalCanvas() {
+  const r = mCanvas.getBoundingClientRect();
+  if (r.width === 0) return;
+  const dpr = window.devicePixelRatio || 1;
+  mCanvas.width = Math.round(r.width * dpr);
+  mCanvas.height = Math.round(r.height * dpr);
+  mCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  mCtx.lineWidth = 2.4; mCtx.lineCap = 'round'; mCtx.lineJoin = 'round'; mCtx.strokeStyle = '#141414';
+}
+
+function openModal() {
+  document.getElementById('contractDoc').innerHTML = buildContractHTML();
+  mPresent = false; confirmBtn.disabled = true; mHint.style.display = '';
+  mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
+  modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  setTimeout(initModalCanvas, 80);
+}
+
+function closeModal() {
+  modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('sigTrigger').addEventListener('click', openModal);
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+document.getElementById('modalCancelBtn').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* canvas drawing */
+function mPos(e) {
+  const r = mCanvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+mCanvas.addEventListener('pointerdown', e => { e.preventDefault(); mDrawing = true; mLast = mPos(e); });
+mCanvas.addEventListener('pointermove', e => {
+  if (!mDrawing) return; e.preventDefault();
+  const p = mPos(e); mCtx.beginPath(); mCtx.moveTo(mLast.x, mLast.y); mCtx.lineTo(p.x, p.y); mCtx.stroke(); mLast = p;
+  if (!mPresent) { mPresent = true; mHint.style.display = 'none'; confirmBtn.disabled = false; }
+});
+window.addEventListener('pointerup', () => { mDrawing = false; });
+mCanvas.addEventListener('touchstart', e => { e.preventDefault(); mDrawing = true; mLast = mPos(e); }, { passive: false });
+mCanvas.addEventListener('touchmove', e => {
+  if (!mDrawing) return; e.preventDefault();
+  const p = mPos(e); mCtx.beginPath(); mCtx.moveTo(mLast.x, mLast.y); mCtx.lineTo(p.x, p.y); mCtx.stroke(); mLast = p;
+  if (!mPresent) { mPresent = true; mHint.style.display = 'none'; confirmBtn.disabled = false; }
+}, { passive: false });
+window.addEventListener('touchend', () => { mDrawing = false; });
+document.getElementById('modalSigClear').addEventListener('click', () => {
+  mCtx.clearRect(0, 0, mCanvas.width, mCanvas.height);
+  mPresent = false; confirmBtn.disabled = true; mHint.style.display = '';
+});
+
+/* confirm signature */
+confirmBtn.addEventListener('click', () => {
+  state.signature = mCanvas.toDataURL('image/png');
+  const prev = document.getElementById('sigPreviewImg');
+  prev.src = state.signature; prev.style.display = 'block';
+  document.getElementById('sigHintTxt').style.display = 'none';
+  document.getElementById('sigTrigger').classList.add('signed');
+  document.getElementById('sigClearBtn').style.display = '';
+  document.getElementById('sigErr').style.display = 'none';
+  closeModal();
+});
+
+document.getElementById('sigClearBtn').addEventListener('click', () => {
+  state.signature = null;
+  const prev = document.getElementById('sigPreviewImg');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('sigHintTxt').style.display = '';
+  document.getElementById('sigTrigger').classList.remove('signed');
+  document.getElementById('sigClearBtn').style.display = 'none';
+});
+
+/* init */
+goto(1);
+</script>
+</body>
+</html>
