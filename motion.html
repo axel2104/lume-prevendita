@@ -1109,7 +1109,8 @@ function buildContractHTML() {
       <tr><td>Email</td><td>${document.getElementById('inp-pemail').value.trim() || '—'}</td></tr>
     </table>` : '';
 
-  const pmLabel = state.paymentMethod === 'carta' ? 'Addebito su Carta di Pagamento (Credito/Debito)' : state.paymentMethod === 'conto' ? 'Addebito su Conto Corrente Bancario' : '—';
+  const terminiAccettati = document.getElementById('chk-termini').checked ? 'Sì' : 'No';
+  const vessatAccettati  = document.getElementById('chk-vessat').checked  ? 'Sì' : 'No';
 
   return `
     <h3>Contratto di Abbonamento<br>Lume Motion — Prevendita Early Bird</h3>
@@ -1132,9 +1133,14 @@ function buildContractHTML() {
       <tr><td>Tipologia</td><td><b>${p ? p.name : '—'}</b></td></tr>
       <tr><td>Sede</td><td>Lume Motion — Viale G. Leopardi 91, 62100 Macerata</td></tr>
       <tr><td>Apertura prevista</td><td>Settembre 2026</td></tr>
-      <tr><td>Durata</td><td>12 mesi dall'attivazione</td></tr>
+      <tr><td>Durata</td><td>12 mesi dall'apertura</td></tr>
       ${payScheduleRows}
-      <tr><td>Modalità di pagamento</td><td>${pmLabel}</td></tr>
+    </table>
+    <hr>
+    <p><b>Consensi obbligatori</b></p>
+    <table>
+      <tr><td>T&C Generali di Contratto accettati</td><td><b>✓ ${terminiAccettati}</b></td></tr>
+      <tr><td>Clausole Vessatorie (artt. 1341–1342 c.c.) accettate</td><td><b>✓ ${vessatAccettati}</b></td></tr>
     </table>
     <hr>
     <p><b>Rinnovo Automatico e Disdetta (art. 6.9–6.10)</b></p>
@@ -1142,7 +1148,7 @@ function buildContractHTML() {
     <hr>
     <p><b>Condizioni Generali (estratto)</b></p>
     <p class="clause"><b>Art. 1.3 — Recesso.</b> L'Abbonato può recedere senza obbligo di motivazione entro 14 giorni dalla sottoscrizione inviando comunicazione via PEC a supergymsrl@pec.it. Non verranno rimborsate le quote fruite fino all'esercizio del recesso e saranno trattenuti €10 a titolo di costi amministrativi.</p>
-    <p class="clause"><b>Art. 2.1.1–2.1.2 — Pagamenti.</b> Il pagamento avviene tramite addebito automatico (${pmLabel}), gestito da GoCardless. Il ritardo determina: sospensione immediata dei servizi (art. 1460 c.c.); penale di €10,00 dopo 15 giorni; risoluzione di diritto del contratto dal 16° giorno (art. 1456 c.c.).</p>
+    <p class="clause"><b>Art. 2.1.1–2.1.2 — Pagamenti.</b> Il pagamento avviene tramite addebito automatico su carta di pagamento, gestito da Stripe. Il ritardo determina: sospensione immediata dei servizi (art. 1460 c.c.); penale di €10,00 dopo 15 giorni; risoluzione di diritto del contratto dal 16° giorno (art. 1456 c.c.).</p>
     <p class="clause"><b>Art. 2.3 — Cessione badge.</b> Il badge è strettamente personale. La cessione a terzi comporta una penale di €100,00 oltre al risarcimento del danno ulteriore.</p>
     <p class="clause"><b>Art. 2.7 — Idoneità fisica.</b> L'Abbonato dichiara di essere in buona salute e idoneo alla pratica sportiva. Super Gym 2.0 è esonerata da responsabilità per infortuni derivanti da utilizzo improprio delle attrezzature o da condizioni fisiche dell'Abbonato.</p>
     <p class="clause"><b>Art. 6.5 — Programmi.</b> La Direzione si riserva il diritto di modificare programmi e orari anche senza preavviso, senza oneri nei confronti degli iscritti.</p>
