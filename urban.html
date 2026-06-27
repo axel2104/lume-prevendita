@@ -967,8 +967,8 @@ async function submitContract() {
     firma: state.signature
   };
 
-  // Notifica n8n (fire & forget — non blocca il flusso)
-  fetch('https://n8n.lumeflow.it/webhook-test/contratto', {
+  // Webhook firma contratto (fire & forget)
+  fetch('https://n8n.lumeflow.it/webhook-test/FIRMA-CONTRATTO', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
@@ -991,6 +991,7 @@ async function submitContract() {
     });
     const data = await res.json();
     if (data.ok && data.url) {
+      sessionStorage.setItem('lume_checkout_payload', JSON.stringify(payload));
       window.location.href = data.url;
       return;
     }
@@ -1179,6 +1180,14 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
   const payment = params.get('payment');
   if (payment === 'success') {
     history.replaceState(null, '', window.location.pathname);
+    const sessionId = params.get('session_id');
+    const savedPayload = JSON.parse(sessionStorage.getItem('lume_checkout_payload') || '{}');
+    sessionStorage.removeItem('lume_checkout_payload');
+    fetch('https://n8n.lumeflow.it/webhook-test/conferma-stripe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, sede: 'Lume Urban', ...savedPayload })
+    }).catch(() => {});
     goto(5);
   } else if (payment === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
