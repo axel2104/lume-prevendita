@@ -955,6 +955,27 @@ async function submitContract() {
   const btn = document.getElementById('step4Next');
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Invio…';
 
+  const today = new Date().toLocaleDateString('it-IT');
+  const signedContractHTML = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">
+<style>
+  body{font-family:Arial,sans-serif;font-size:13px;line-height:1.7;color:#111;max-width:700px;margin:0 auto;padding:24px}
+  h3{font-size:20px;text-transform:uppercase;text-align:center;margin-bottom:14px}
+  hr{border:none;border-top:1px solid #ddd;margin:14px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0}
+  td{padding:5px 8px;border-bottom:1px solid #eee;font-size:13px}
+  td:first-child{color:#666;font-weight:600;width:42%}
+  .clause{font-size:12px;color:#444;margin-top:10px}
+  .sig-block{margin-top:30px;border-top:2px solid #111;padding-top:16px}
+  .sig-block img{max-width:280px;border:1px solid #ddd;border-radius:6px;display:block;margin-top:8px}
+</style></head><body>
+${buildContractHTML()}
+<div class="sig-block">
+  <p><b>Firma Digitale dell'Abbonato</b></p>
+  <img src="${state.signature}" alt="Firma digitale" />
+  <p style="font-size:11px;color:#888;margin-top:8px">Firmato digitalmente il ${today}</p>
+</div>
+</body></html>`;
+
   const payload = {
     email: document.getElementById('inp-email').value.trim(),
     nome: document.getElementById('inp-nome').value.trim(),
@@ -964,7 +985,8 @@ async function submitContract() {
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
     rate: state.plan ? state.plan.installments : null,
-    firma: state.signature
+    firma: state.signature,
+    contratto_html: signedContractHTML
   };
 
   // Webhook firma contratto (fire & forget)
