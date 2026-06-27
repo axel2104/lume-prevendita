@@ -473,13 +473,13 @@
 /* Propaga i parametri UTM di Google Ads / Facebook su tutti i link CTA */
 (function(){
   var p = new URLSearchParams(window.location.search);
-  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
-  var hasUtm = UTM_KEYS.some(function(k){ return !!p.get(k); });
-  if(!hasUtm) return;
+  var PASS_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','canale'];
+  var hasParams = PASS_KEYS.some(function(k){ return !!p.get(k); });
+  if(!hasParams) return;
   document.querySelectorAll('a.cta').forEach(function(a){
     try {
       var url = new URL(a.href, location.origin);
-      UTM_KEYS.forEach(function(k){ if(p.get(k)) url.searchParams.set(k, p.get(k)); });
+      PASS_KEYS.forEach(function(k){ if(p.get(k)) url.searchParams.set(k, p.get(k)); });
       a.href = url.toString();
     } catch(e){}
   });

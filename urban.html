@@ -542,6 +542,27 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     </div>
     <div id="sigErr" style="display:none;font-size:12.5px;color:var(--err);margin-top:6px">La firma è obbligatoria per procedere.</div>
 
+    <!-- Selezione metodo pagamento — visibile solo se canale=sede + piano unico -->
+    <div id="metodoPagBox" style="display:none;margin-top:20px;border:1px solid var(--line);border-radius:12px;padding:18px">
+      <p style="font-size:13px;font-weight:700;color:var(--text);margin:0 0 12px">Modalità di pagamento</p>
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid var(--line)" id="lbl-stripe">
+        <input type="radio" name="metodo_pag" value="stripe" checked style="accent-color:var(--acc)">
+        <span style="font-size:13px">💳 Carta di credito / debito (Stripe)</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid var(--line)">
+        <input type="radio" name="metodo_pag" value="contanti" style="accent-color:var(--acc)">
+        <span style="font-size:13px">💵 Contanti in sede</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid var(--line)">
+        <input type="radio" name="metodo_pag" value="pos" style="accent-color:var(--acc)">
+        <span style="font-size:13px">🖥 POS in sede</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;border:1px solid var(--line)">
+        <input type="radio" name="metodo_pag" value="bonifico" style="accent-color:var(--acc)">
+        <span style="font-size:13px">🏦 Bonifico bancario</span>
+      </label>
+    </div>
+
     <div class="nav">
       <button class="btn btn-primary" id="step4Next">Invia iscrizione</button>
     </div>
@@ -611,6 +632,28 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
    ======================================================== */
 const state = { step: 1, plan: null, signature: null };
 
+/* canale=sede → abilita metodi di pagamento alternativi per piani unici */
+const CANALE_SEDE = new URLSearchParams(window.location.search).get('canale') === 'sede';
+
+/* ========================================================
+   UTM CAPTURE — legge parametri UTM dall'URL e li persiste
+   in sessionStorage così sopravvivono al redirect Stripe
+   ======================================================== */
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  const keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  const utms = {};
+  keys.forEach(k => { if (p.get(k)) utms[k] = p.get(k); });
+  if (Object.keys(utms).length) {
+    sessionStorage.setItem('lume_utm', JSON.stringify(utms));
+  }
+})();
+
+function getUtms() {
+  try { return JSON.parse(sessionStorage.getItem('lume_utm') || '{}'); }
+  catch(e) { return {}; }
+}
+
 const PLANS = {
   unica: {
     id: 'urb-unica', name: 'Annuale — Soluzione Unica',
@@ -658,6 +701,9 @@ function selectPlan(key) {
   document.querySelectorAll('#planCards .card').forEach(c => c.classList.remove('sel'));
   document.getElementById('card-' + key).classList.add('sel');
   document.getElementById('step2Next').disabled = false;
+  // Mostra selettore metodo pagamento solo per piano unico + canale=sede
+  const box = document.getElementById('metodoPagBox');
+  if (box) box.style.display = (CANALE_SEDE && state.plan.installments === 1) ? 'block' : 'none';
 }
 
 /* ========================================================
@@ -915,7 +961,8 @@ async function submitAnag() {
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
     rate: state.plan ? state.plan.installments : null,
-    marketing: document.getElementById('chk-mkt').checked
+    marketing: document.getElementById('chk-mkt').checked,
+    ...getUtms()
   };
   if (minor) {
     payload.genitore = {
@@ -1003,17 +1050,58 @@ ${buildContractHTML()}
     rate: state.plan ? state.plan.installments : null,
     firma: state.signature,
     firma_base64: state.signature ? state.signature.replace(/^data:image\/png;base64,/, '') : null,
-    contratto_html: signedContractHTML
+    contratto_html: signedContractHTML,
+    ...getUtms()
   };
+
+  // Rileva metodo pagamento scelto (solo se box visibile)
+  const metodoPagBox = document.getElementById('metodoPagBox');
+  const metodoPagSelezionato = metodoPagBox && metodoPagBox.style.display !== 'none'
+    ? (document.querySelector('input[name="metodo_pag"]:checked') || {}).value || 'stripe'
+    : 'stripe';
 
   // Webhook firma contratto (fire & forget)
   fetch('https://n8n.lumeflow.it/webhook/FIRMA-CONTRATTO', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ ...payload, metodo_pagamento: metodoPagSelezionato })
   }).catch(() => {});
 
-  // Crea Checkout Session Stripe via Netlify Function
+  // ── Pagamento in sede (contanti / POS / bonifico) ──────────────────────────
+  if (metodoPagSelezionato !== 'stripe') {
+    fetch('https://n8n.lumeflow.it/webhook/conferma-stripe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email:          payload.email,
+        nome:           payload.nome,
+        cognome:        payload.cognome,
+        codice_fiscale: payload.codice_fiscale,
+        piano_id:       payload.piano_id,
+        piano_nome:     payload.piano_nome,
+        importo:        payload.importo,
+        rate:           payload.rate,
+        firma_base64:   payload.firma_base64,
+        sede:           'Lume Urban',
+        metodo_pagamento: metodoPagSelezionato,
+        canale:         'sede',
+        ...getUtms()
+      })
+    }).catch(() => {});
+    const msgMap = {
+      contanti: 'Presentati in sede con questo documento e paga in contanti alla reception.',
+      pos: 'Presentati in sede con questo documento e paga con il POS alla reception.',
+      bonifico: 'Riceverai via email le coordinate bancarie per completare il bonifico.'
+    };
+    const doneMsg = document.getElementById('doneMsg');
+    if (doneMsg) doneMsg.innerHTML = `Il tuo posto per <b>Lume Urban</b> è prenotato!<br><br>${msgMap[metodoPagSelezionato] || ''}<br><br>Ci vediamo a settembre 2026!`;
+    btn.disabled = false;
+    sessionStorage.removeItem('lume_utm');
+    goto(5);
+    return;
+  }
+
+  // ── Pagamento Stripe ───────────────────────────────────────────────────────
   try {
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
@@ -1042,7 +1130,8 @@ ${buildContractHTML()}
         importo:       payload.importo,
         rate:          payload.rate,
         firma_base64:  payload.firma_base64,
-        sede:          'Lume Urban'
+        sede:          'Lume Urban',
+        ...getUtms()
       };
       sessionStorage.setItem('lume_checkout_payload', JSON.stringify(sessionPayload));
       window.location.href = data.url;
@@ -1242,6 +1331,7 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
     const sessionId = params.get('session_id');
     const savedPayload = JSON.parse(sessionStorage.getItem('lume_checkout_payload') || '{}');
     sessionStorage.removeItem('lume_checkout_payload');
+    sessionStorage.removeItem('lume_utm');
     fetch('https://n8n.lumeflow.it/webhook/conferma-stripe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
