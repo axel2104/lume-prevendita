@@ -986,6 +986,7 @@ ${buildContractHTML()}
     importo: state.plan ? state.plan.total : null,
     rate: state.plan ? state.plan.installments : null,
     firma: state.signature,
+    firma_base64: state.signature ? state.signature.replace(/^data:image\/png;base64,/, '') : null,
     contratto_html: signedContractHTML
   };
 
