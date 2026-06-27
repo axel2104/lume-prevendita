@@ -2,9 +2,12 @@
   "name": "lume-prevendita-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "Backend serverless per il form di prevendita Lume Fitness (PerfectGym v2.2)",
+  "description": "Backend serverless per il form di prevendita Lume Fitness",
   "engines": { "node": ">=18" },
   "scripts": {
     "test": "node test/test-mapper.js"
+  },
+  "dependencies": {
+    "stripe": "^16.0.0"
   }
 }

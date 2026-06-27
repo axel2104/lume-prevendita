@@ -6,16 +6,25 @@
  */
 const pg = require('../lib/perfectgym');
 
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGIN || '*');
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || '*',
+  'Content-Type': 'application/json',
+};
+
+exports.handler = async function(event) {
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS_HEADERS, body: '' };
+  }
+
   try {
-    if (process.env.ADMIN_KEY && (req.query.key !== process.env.ADMIN_KEY)) {
-      res.status(401).json({ ok: false, error: 'unauthorized' }); return;
+    const params = event.queryStringParameters || {};
+    if (process.env.ADMIN_KEY && params.key !== process.env.ADMIN_KEY) {
+      return { statusCode: 401, headers: CORS_HEADERS, body: JSON.stringify({ ok: false, error: 'unauthorized' }) };
     }
-    const clubId = req.query.clubId != null ? Number(req.query.clubId) : undefined;
+    const clubId = params.clubId != null ? Number(params.clubId) : undefined;
     const plans = await pg.listPaymentPlans(clubId);
-    res.status(200).json({ ok: true, count: plans.length, plans });
+    return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify({ ok: true, count: plans.length, plans }) };
   } catch (err) {
-    res.status(err.status || 500).json({ ok: false, error: err.message });
+    return { statusCode: err.status || 500, headers: CORS_HEADERS, body: JSON.stringify({ ok: false, error: err.message }) };
   }
 };

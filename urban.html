@@ -252,7 +252,6 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
         <span class="pill">Functional</span>
         <span class="pill">Corsi Live</span>
         <span class="pill">Corsi On Demand</span>
-        <span class="pill">Spogliatoi Premium</span>
       </div>
     </div>
 
@@ -273,19 +272,9 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
         <p>Sala corsi da ~56 mq con programma live. In più, accesso ai corsi on demand per allenarti quando vuoi.</p>
       </div>
       <div class="feat">
-        <div class="ico">✨</div>
-        <h4>Spogliatoi Premium</h4>
-        <p>Spogliatoi separati uomo/donna con docce e wc. Finiture di qualità, ambiente curato e lounge con parete verde all'ingresso.</p>
-      </div>
-      <div class="feat">
         <div class="ico">🏙️</div>
         <h4>Centro Storico</h4>
         <p>Nel cuore di Macerata, su due livelli per oltre 900 mq totali. Pensato per under 30 e giovani adulti.</p>
-      </div>
-      <div class="feat">
-        <div class="ico">🅿️</div>
-        <h4>Parcheggio</h4>
-        <p>Parcheggio accessibile dalla struttura disponibile dopo le ore 19:00.</p>
       </div>
     </div>
 
@@ -406,7 +395,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     </div>
     <div class="field" id="f-comune" style="margin-bottom:6px">
       <label>Comune <span class="req">*</span></label>
-      <input type="text" id="inp-comune" autocomplete="address-level2" placeholder="62100 Macerata" />
+      <input type="text" id="inp-comune" autocomplete="address-level2" placeholder="Macerata" />
       <span class="ferr">Comune obbligatorio</span>
     </div>
 
@@ -458,16 +447,18 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
     <label class="consent-box" id="cbox-privacy">
       <input type="checkbox" id="chk-privacy" />
       <div class="ctext">
-        Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> di Lume Fitness Club S.r.l. e acconsento al trattamento dei miei dati personali per la gestione del contratto di abbonamento. <span style="color:var(--accent-hi)">*</span>
+        Ho letto e accetto la <a href="https://www.lumefitness.it/privacy" target="_blank" rel="noopener">Privacy Policy</a> di Super Gym 2.0 srl Sportiva Dilettantistica e acconsento al trattamento dei miei dati personali per la gestione del contratto di abbonamento. <span style="color:var(--accent-hi)">*</span>
       </div>
     </label>
 
     <label class="consent-box">
       <input type="checkbox" id="chk-mkt" />
-      <div class="ctext">Acconsento a ricevere comunicazioni promozionali, newsletter e offerte da Lume Fitness Club (facoltativo).</div>
+      <div class="ctext">Acconsento a ricevere comunicazioni promozionali, newsletter e offerte da Super Gym 2.0 srl Sportiva Dilettantistica (facoltativo).</div>
     </label>
 
     <div id="privacyErr" class="alert" style="margin-top:4px">Accetta il consenso privacy per proseguire.</div>
+
+    <div id="verificaErr" class="alert" style="margin-top:12px"></div>
 
     <div class="nav">
       <button class="btn btn-primary" id="step3Next">Continua</button>
@@ -541,6 +532,20 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
   </section>
 
   <!-- ========== STEP 5: DONE ========== -->
+  <!-- ========== STEP 6: BLOCCATO ========== -->
+  <section class="step" data-step="6">
+    <div class="done">
+      <div class="done-circle" style="background:var(--err)">
+        <svg viewBox="0 0 24 24" fill="none" width="44" height="44"><path d="M18 6L6 18M6 6l12 12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Non puoi procedere online</h1>
+      <p id="blockMsg" style="color:var(--text-dim);line-height:1.6">Per completare o gestire la tua iscrizione a <b style="color:#fff">Lume Urban</b>, contatta direttamente la nostra sede di Macerata.</p>
+      <a href="mailto:macerata@lumefitness.it" class="btn btn-primary" style="display:inline-block;margin-top:24px;text-decoration:none;text-align:center">✉ macerata@lumefitness.it</a>
+      <p style="font-size:13px;color:var(--text-dim);margin-top:16px">Ti risponderemo il prima possibile.</p>
+    </div>
+  </section>
+
+  <!-- ========== STEP 5: DONE ========== -->
   <section class="step" data-step="5">
     <div class="done">
       <div class="done-circle">
@@ -608,7 +613,7 @@ const PLANS = {
 /* ========================================================
    NAVIGATION
    ======================================================== */
-const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contratto', 5:'Iscritto!' };
+const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contratto', 5:'Iscritto!', 6:'' };
 
 function goto(n) {
   state.step = n;
@@ -617,6 +622,7 @@ function goto(n) {
   document.getElementById('fill').style.width = pct + '%';
   document.getElementById('stepNum').textContent = Math.min(n, 4);
   document.getElementById('stepName').textContent = stepNames[n] || '';
+  document.querySelector('.progress').style.display = n === 6 ? 'none' : '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -657,7 +663,7 @@ document.getElementById('geoBtn').addEventListener('click', function () {
           const road = a.road ? (a.road + (a.house_number ? ' ' + a.house_number : '')) : '';
           const city = a.city || a.town || a.village || '';
           document.getElementById('inp-via').value = road;
-          document.getElementById('inp-comune').value = [a.postcode, city].filter(Boolean).join(' ');
+          document.getElementById('inp-comune').value = city;
           btn.textContent = '✓ Trovato';
           setTimeout(() => { btn.disabled = false; btn.textContent = '📍 Usa posizione'; }, 2500);
         })
@@ -672,13 +678,81 @@ document.getElementById('geoBtn').addEventListener('click', function () {
    PHONE PREFIXES
    ======================================================== */
 const PREFIXES = [
-  ['+39','🇮🇹 +39'],['+1','🇺🇸 +1'],['+44','🇬🇧 +44'],['+33','🇫🇷 +33'],['+49','🇩🇪 +49'],
-  ['+34','🇪🇸 +34'],['+41','🇨🇭 +41'],['+43','🇦🇹 +43'],['+32','🇧🇪 +32'],['+31','🇳🇱 +31'],
-  ['+351','🇵🇹 +351'],['+30','🇬🇷 +30'],['+40','🇷🇴 +40'],['+48','🇵🇱 +48'],['+359','🇧🇬 +359'],
-  ['+385','🇭🇷 +385'],['+386','🇸🇮 +386'],['+420','🇨🇿 +420'],['+36','🇭🇺 +36'],['+352','🇱🇺 +352'],
-  ['+212','🇲🇦 +212'],['+216','🇹🇳 +216'],['+355','🇦🇱 +355'],['+380','🇺🇦 +380'],['+7','🇷🇺 +7'],
-  ['+86','🇨🇳 +86'],['+91','🇮🇳 +91'],['+55','🇧🇷 +55'],['+61','🇦🇺 +61'],['+81','🇯🇵 +81'],
-  ['+82','🇰🇷 +82'],['+971','🇦🇪 +971'],['+966','🇸🇦 +966'],['+20','🇪🇬 +20'],['+27','🇿🇦 +27']
+  ['+39','🇮🇹 +39 Italia'],
+  // Europa
+  ['+355','🇦🇱 +355 Albania'],['+376','🇦🇩 +376 Andorra'],['+43','🇦🇹 +43 Austria'],
+  ['+32','🇧🇪 +32 Belgio'],['+387','🇧🇦 +387 Bosnia-Erzegovina'],['+359','🇧🇬 +359 Bulgaria'],
+  ['+357','🇨🇾 +357 Cipro'],['+385','🇭🇷 +385 Croazia'],['+420','🇨🇿 +420 Rep. Ceca'],
+  ['+45','🇩🇰 +45 Danimarca'],['+372','🇪🇪 +372 Estonia'],['+358','🇫🇮 +358 Finlandia'],
+  ['+33','🇫🇷 +33 Francia'],['+49','🇩🇪 +49 Germania'],['+30','🇬🇷 +30 Grecia'],
+  ['+36','🇭🇺 +36 Ungheria'],['+354','🇮🇸 +354 Islanda'],['+353','🇮🇪 +353 Irlanda'],
+  ['+371','🇱🇻 +371 Lettonia'],['+423','🇱🇮 +423 Liechtenstein'],['+370','🇱🇹 +370 Lituania'],
+  ['+352','🇱🇺 +352 Lussemburgo'],['+389','🇲🇰 +389 Macedonia del Nord'],['+356','🇲🇹 +356 Malta'],
+  ['+373','🇲🇩 +373 Moldova'],['+377','🇲🇨 +377 Monaco'],['+382','🇲🇪 +382 Montenegro'],
+  ['+31','🇳🇱 +31 Paesi Bassi'],['+47','🇳🇴 +47 Norvegia'],['+48','🇵🇱 +48 Polonia'],
+  ['+351','🇵🇹 +351 Portogallo'],['+40','🇷🇴 +40 Romania'],['+7','🇷🇺 +7 Russia'],
+  ['+378','🇸🇲 +378 San Marino'],['+381','🇷🇸 +381 Serbia'],['+421','🇸🇰 +421 Slovacchia'],
+  ['+386','🇸🇮 +386 Slovenia'],['+34','🇪🇸 +34 Spagna'],['+46','🇸🇪 +46 Svezia'],
+  ['+41','🇨🇭 +41 Svizzera'],['+380','🇺🇦 +380 Ucraina'],['+44','🇬🇧 +44 UK'],
+  // Nord America
+  ['+1','🇺🇸 +1 USA'],['+1','🇨🇦 +1 Canada'],['+52','🇲🇽 +52 Messico'],
+  // Centro America e Caraibi
+  ['+1268','🇦🇬 +1268 Antigua'],['+1242','🇧🇸 +1242 Bahamas'],['+1246','🇧🇧 +1246 Barbados'],
+  ['+501','🇧🇿 +501 Belize'],['+1345','🇰🇾 +1345 Cayman Is.'],['+506','🇨🇷 +506 Costa Rica'],
+  ['+53','🇨🇺 +53 Cuba'],['+1767','🇩🇲 +1767 Dominica'],['+1809','🇩🇴 +1809 Dom. Rep.'],
+  ['+503','🇸🇻 +503 El Salvador'],['+1473','🇬🇩 +1473 Grenada'],['+502','🇬🇹 +502 Guatemala'],
+  ['+509','🇭🇹 +509 Haiti'],['+504','🇭🇳 +504 Honduras'],['+1876','🇯🇲 +1876 Jamaica'],
+  ['+505','🇳🇮 +505 Nicaragua'],['+507','🇵🇦 +507 Panama'],['+1787','🇵🇷 +1787 Puerto Rico'],
+  ['+1869','🇰🇳 +1869 S. Kitts e Nevis'],['+1758','🇱🇨 +1758 Saint Lucia'],['+1784','🇻🇨 +1784 S. Vincent'],
+  ['+1868','🇹🇹 +1868 Trinidad e Tobago'],
+  // Sud America
+  ['+54','🇦🇷 +54 Argentina'],['+591','🇧🇴 +591 Bolivia'],['+55','🇧🇷 +55 Brasile'],
+  ['+56','🇨🇱 +56 Cile'],['+57','🇨🇴 +57 Colombia'],['+593','🇪🇨 +593 Ecuador'],
+  ['+592','🇬🇾 +592 Guyana'],['+595','🇵🇾 +595 Paraguay'],['+51','🇵🇪 +51 Perù'],
+  ['+597','🇸🇷 +597 Suriname'],['+598','🇺🇾 +598 Uruguay'],['+58','🇻🇪 +58 Venezuela'],
+  // Africa
+  ['+213','🇩🇿 +213 Algeria'],['+244','🇦🇴 +244 Angola'],['+229','🇧🇯 +229 Benin'],
+  ['+267','🇧🇼 +267 Botswana'],['+226','🇧🇫 +226 Burkina Faso'],['+257','🇧🇮 +257 Burundi'],
+  ['+238','🇨🇻 +238 Capo Verde'],['+237','🇨🇲 +237 Camerun'],['+236','🇨🇫 +236 Centrafrica'],
+  ['+269','🇰🇲 +269 Comore'],['+242','🇨🇬 +242 Congo (Rep.)'],['+243','🇨🇩 +243 Congo (RDC)'],
+  ['+253','🇩🇯 +253 Gibuti'],['+20','🇪🇬 +20 Egitto'],['+291','🇪🇷 +291 Eritrea'],
+  ['+251','🇪🇹 +251 Etiopia'],['+241','🇬🇦 +241 Gabon'],['+220','🇬🇲 +220 Gambia'],
+  ['+233','🇬🇭 +233 Ghana'],['+224','🇬🇳 +224 Guinea'],['+245','🇬🇼 +245 Guinea-Bissau'],
+  ['+240','🇬🇶 +240 Guinea Eq.'],['+254','🇰🇪 +254 Kenya'],['+266','🇱🇸 +266 Lesotho'],
+  ['+231','🇱🇷 +231 Liberia'],['+218','🇱🇾 +218 Libia'],['+261','🇲🇬 +261 Madagascar'],
+  ['+265','🇲🇼 +265 Malawi'],['+223','🇲🇱 +223 Mali'],['+212','🇲🇦 +212 Marocco'],
+  ['+222','🇲🇷 +222 Mauritania'],['+230','🇲🇺 +230 Mauritius'],['+258','🇲🇿 +258 Mozambico'],
+  ['+264','🇳🇦 +264 Namibia'],['+227','🇳🇪 +227 Niger'],['+234','🇳🇬 +234 Nigeria'],
+  ['+250','🇷🇼 +250 Ruanda'],['+239','🇸🇹 +239 São Tomé'],['+221','🇸🇳 +221 Senegal'],
+  ['+248','🇸🇨 +248 Seychelles'],['+232','🇸🇱 +232 Sierra Leone'],['+252','🇸🇴 +252 Somalia'],
+  ['+27','🇿🇦 +27 Sud Africa'],['+249','🇸🇩 +249 Sudan'],['+211','🇸🇸 +211 Sudan del Sud'],
+  ['+268','🇸🇿 +268 Eswatini'],['+255','🇹🇿 +255 Tanzania'],['+228','🇹🇬 +228 Togo'],
+  ['+216','🇹🇳 +216 Tunisia'],['+256','🇺🇬 +256 Uganda'],['+260','🇿🇲 +260 Zambia'],
+  ['+263','🇿🇼 +263 Zimbabwe'],
+  // Asia
+  ['+93','🇦🇫 +93 Afghanistan'],['+374','🇦🇲 +374 Armenia'],['+994','🇦🇿 +994 Azerbaijan'],
+  ['+973','🇧🇭 +973 Bahrain'],['+880','🇧🇩 +880 Bangladesh'],['+975','🇧🇹 +975 Bhutan'],
+  ['+673','🇧🇳 +673 Brunei'],['+855','🇰🇭 +855 Cambogia'],['+86','🇨🇳 +86 Cina'],
+  ['+850','🇰🇵 +850 Corea del Nord'],['+82','🇰🇷 +82 Corea del Sud'],['+63','🇵🇭 +63 Filippine'],
+  ['+995','🇬🇪 +995 Georgia'],['+81','🇯🇵 +81 Giappone'],['+962','🇯🇴 +962 Giordania'],
+  ['+852','🇭🇰 +852 Hong Kong'],['+91','🇮🇳 +91 India'],['+62','🇮🇩 +62 Indonesia'],
+  ['+98','🇮🇷 +98 Iran'],['+964','🇮🇶 +964 Iraq'],['+972','🇮🇱 +972 Israele'],
+  ['+7','🇰🇿 +7 Kazakhstan'],['+965','🇰🇼 +965 Kuwait'],['+996','🇰🇬 +996 Kirghizistan'],
+  ['+856','🇱🇦 +856 Laos'],['+961','🇱🇧 +961 Libano'],['+853','🇲🇴 +853 Macao'],
+  ['+60','🇲🇾 +60 Malaysia'],['+960','🇲🇻 +960 Maldive'],['+976','🇲🇳 +976 Mongolia'],
+  ['+95','🇲🇲 +95 Myanmar'],['+977','🇳🇵 +977 Nepal'],['+968','🇴🇲 +968 Oman'],
+  ['+92','🇵🇰 +92 Pakistan'],['+970','🇵🇸 +970 Palestina'],['+974','🇶🇦 +974 Qatar'],
+  ['+966','🇸🇦 +966 Arabia Saudita'],['+65','🇸🇬 +65 Singapore'],['+94','🇱🇰 +94 Sri Lanka'],
+  ['+963','🇸🇾 +963 Siria'],['+886','🇹🇼 +886 Taiwan'],['+992','🇹🇯 +992 Tagikistan'],
+  ['+66','🇹🇭 +66 Tailandia'],['+670','🇹🇱 +670 Timor Est'],['+90','🇹🇷 +90 Turchia'],
+  ['+993','🇹🇲 +993 Turkmenistan'],['+971','🇦🇪 +971 Emirati Arabi'],['+998','🇺🇿 +998 Uzbekistan'],
+  ['+84','🇻🇳 +84 Vietnam'],['+967','🇾🇪 +967 Yemen'],
+  // Oceania
+  ['+61','🇦🇺 +61 Australia'],['+679','🇫🇯 +679 Fiji'],['+686','🇰🇮 +686 Kiribati'],
+  ['+692','🇲🇭 +692 Marshall Is.'],['+691','🇫🇲 +691 Micronesia'],['+674','🇳🇷 +674 Nauru'],
+  ['+64','🇳🇿 +64 Nuova Zelanda'],['+680','🇵🇼 +680 Palau'],['+675','🇵🇬 +675 Papua NG'],
+  ['+685','🇼🇸 +685 Samoa'],['+677','🇸🇧 +677 Is. Salomone'],['+676','🇹🇴 +676 Tonga'],
+  ['+688','🇹🇻 +688 Tuvalu'],['+678','🇻🇺 +678 Vanuatu'],
 ];
 function fillPrefixes(sel) {
   if (!sel) return;
@@ -820,6 +894,7 @@ async function submitAnag() {
     codice_fiscale: document.getElementById('inp-cf').value.trim(),
     via: document.getElementById('inp-via').value.trim(),
     comune: document.getElementById('inp-comune').value.trim(),
+    sede: 'Lume Urban',
     piano_id: state.plan ? state.plan.id : null,
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
@@ -836,6 +911,25 @@ async function submitAnag() {
       email: document.getElementById('inp-pemail').value.trim()
     };
   }
+
+  // Verifica iscritto
+  const errBox = document.getElementById('verificaErr');
+  errBox.classList.remove('show');
+  try {
+    const verRes = await fetch('https://n8n.lumeflow.it/webhook/verifica-iscritto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const verData = await verRes.json().catch(() => ({}));
+    if (verData.proceed === false) {
+      const msg = verData.message;
+      if (msg) document.getElementById('blockMsg').textContent = msg;
+      btn.disabled = false; btn.textContent = 'Continua';
+      goto(6);
+      return;
+    }
+  } catch(e) { /* se il webhook non è raggiungibile si procede */ }
 
   try {
     await fetch('https://n8n.lumeflow.it/webhook-test/iscrizione', {
@@ -873,21 +967,38 @@ async function submitContract() {
     firma: state.signature
   };
 
+  // Notifica n8n (fire & forget — non blocca il flusso)
+  fetch('https://n8n.lumeflow.it/webhook-test/contratto', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+
+  // Crea Checkout Session Stripe via Netlify Function
   try {
-    const res = await fetch('https://n8n.lumeflow.it/webhook-test/contratto', {
+    const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        email:    payload.email,
+        nome:     payload.nome,
+        cognome:  payload.cognome,
+        piano_id: payload.piano_id,
+        importo:  payload.importo,
+        rate:     payload.rate,
+        sede:     'Lume Urban',
+      })
     });
-    const data = await res.json().catch(() => ({}));
-    if (data.paymentUrl) {
-      window.location.href = data.paymentUrl;
+    const data = await res.json();
+    if (data.ok && data.url) {
+      window.location.href = data.url;
       return;
     }
-  } catch(e) { /* continua anche se il webhook non risponde */ }
-
-  btn.disabled = false; btn.textContent = 'Invia iscrizione';
-  goto(5);
+    throw new Error(data.error || 'Errore creazione sessione pagamento');
+  } catch(e) {
+    alert('Errore durante la creazione del pagamento: ' + e.message);
+    btn.disabled = false; btn.textContent = 'Procedi al pagamento';
+  }
 }
 
 /* ========================================================
@@ -1062,8 +1173,20 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
   document.getElementById('sigClearBtn').style.display = 'none';
 });
 
-/* init */
-goto(1);
+/* init — gestisce redirect di ritorno da Stripe */
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const payment = params.get('payment');
+  if (payment === 'success') {
+    history.replaceState(null, '', window.location.pathname);
+    goto(5);
+  } else if (payment === 'cancel') {
+    history.replaceState(null, '', window.location.pathname);
+    goto(4);
+  } else {
+    goto(1);
+  }
+})();
 </script>
 </body>
 </html>
