@@ -1023,7 +1023,7 @@ async function submitAnag() {
   } catch(e) { /* se il webhook non è raggiungibile si procede */ }
 
   try {
-    await fetch('https://n8n.lumeflow.it/webhook-test/iscrizione', {
+    await fetch('https://n8n.lumeflow.it/webhook/iscrizione', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
