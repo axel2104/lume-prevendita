@@ -226,11 +226,11 @@ def cover_page():
          Paragraph('<b>Tipo</b>', S_table_head),
          Paragraph('<b>Stato</b>', S_table_head),
          Paragraph('<b>Apertura</b>', S_table_head)],
-        [Paragraph('Lume HQ', S_table_cell),
+        [Paragraph('Lume Lifestyle', S_table_cell),
          Paragraph('Guest Pass 7 gg', S_table_cell),
          Paragraph('Attiva', S_table_cell),
          Paragraph('Macerata', S_table_cell)],
-        [Paragraph('Lume Balance', S_table_cell),
+        [Paragraph('Lume Element', S_table_cell),
          Paragraph('Guest Pass 7 gg', S_table_cell),
          Paragraph('Attiva', S_table_cell),
          Paragraph('Montecassiano', S_table_cell)],
@@ -316,7 +316,7 @@ def build_story():
 
     # ── 2. Flow Guest Pass ───────────────────────────────────────────────────
     story.append(Paragraph('2. Flow — Guest Pass 7 Giorni', S_section))
-    story.append(Paragraph('Sedi attive: Lume HQ (Macerata) &amp; Lume Balance (Montecassiano)', S_h2))
+    story.append(Paragraph('Sedi attive: Lume Lifestyle (Macerata) &amp; Lume Element (Montecassiano)', S_h2))
     story.append(hr())
     story.append(Paragraph(
         'Promozione dedicata alle sedi operative. L\'utente compila un form '
