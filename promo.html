@@ -496,6 +496,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
+  /* ── Tracciamento step: URL hash + dataLayer (GTM) ── */
+  var STEP_SLUGS = { 1: 'step-1-promo', 2: 'step-2-form', 3: 'grazie' };
+  function trackStep(n) {
+    var slug = STEP_SLUGS[n] || ('step-' + n);
+    try { history.replaceState(history.state, '', '#' + slug); } catch (e) {}
+    window.dataLayer = window.dataLayer || [];
+    var data = {
+      form_id: 'promo',
+      form_sede: sedeName || '',
+      step_number: n, step_name: slug, step_slug: slug,
+      virtual_page: location.pathname + '#' + slug
+    };
+    window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
+    if (n === 3) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+  }
+
   /* ── Navigazione step ── */
   function goStep(n) {
     [1, 2, 3].forEach(function (i) {
@@ -503,6 +519,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       el.classList.toggle('active', i === n);
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    trackStep(n);
   }
 
   document.getElementById('btnAvanti').addEventListener('click', function () { goStep(2); });

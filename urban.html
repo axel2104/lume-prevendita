@@ -702,6 +702,23 @@ const PLANS = {
    ======================================================== */
 const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contratto', 5:'Iscritto!', 6:'' };
 
+/* ── Tracciamento step: URL hash + dataLayer (GTM) ── */
+const FORM_ID = 'urban';
+const FORM_SEDE = 'Lume Urban';
+const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile' };
+function trackStep(n) {
+  const slug = STEP_SLUGS[n] || ('step-' + n);
+  try { history.replaceState(history.state, '', '#' + slug); } catch(e) {}
+  window.dataLayer = window.dataLayer || [];
+  const data = {
+    form_id: FORM_ID, form_sede: FORM_SEDE,
+    step_number: n, step_name: stepNames[n] || slug, step_slug: slug,
+    virtual_page: location.pathname + '#' + slug
+  };
+  window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
+  if (n === 5) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+}
+
 function goto(n) {
   state.step = n;
   document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
@@ -711,6 +728,7 @@ function goto(n) {
   document.getElementById('stepName').textContent = stepNames[n] || '';
   document.querySelector('.progress').style.display = n === 6 ? 'none' : '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  trackStep(n);
 }
 
 document.getElementById('step1Next').addEventListener('click', () => goto(2));
