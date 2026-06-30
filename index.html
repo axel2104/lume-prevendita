@@ -77,6 +77,7 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
     padding: clamp(10px,1.7vh,24px) 18px clamp(8px,1.5vh,22px);
     display: flex;
     flex-direction: column;
+    min-height: 100dvh;
   }
 
   /* ── TOPBAR ── */
@@ -252,6 +253,27 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
   .cta-pre { background: transparent; color: var(--accent-hi); border: 2px solid var(--accent); }
   .cta-pre:hover { background: rgba(196,0,66,.1); }
 
+  /* ── SOLO URBAN: tastone gigante centrato ── */
+  .solo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: clamp(16px,3vh,34px);
+    padding: clamp(20px,4vh,60px) 0;
+  }
+  .solo-card {
+    width: min(480px,94vw);
+    box-shadow: 0 18px 52px rgba(0,0,0,.45);
+  }
+  /* CTA della card singola: più grande e in evidenza */
+  .solo-card .cta {
+    font-size: clamp(16px,min(2.4vw,2.6vh),24px);
+    padding: clamp(12px,1.7vh,18px) 16px;
+  }
+
   /* ── FEATURED: nuove sedi (Urban + Motion) grandi e centrate ── */
   .featured {
     display: grid;
@@ -395,16 +417,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="label">Promo</span>
   </div>
 
-  <div class="hero">
-    <h1>Scegli la tua <em>sede</em></h1>
-    <p>Clicca sulla sede per scoprire la promo. Lume Fitness 4 Club in Zona Macerata.</p>
-  </div>
-
-  <!-- ===== NUOVE SEDI — Urban + Motion (in primo piano) ===== -->
-  <div class="featured">
-
-    <!-- Lume Urban -->
-    <div class="loc loc-feature loc-urban">
+  <!-- ===== SOLO URBAN — card centrata ===== -->
+  <div class="solo">
+    <div class="loc loc-feature loc-urban solo-card">
       <span class="badge badge-coming">Apertura Settembre 2026</span>
       <h2 class="loc-name">Lume Urban</h2>
       <p class="loc-addr">
@@ -423,79 +438,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <a href="urban.html" class="cta cta-pre">Accedi alla Prevendita</a>
     </div>
-
-    <!-- Lume Motion — coming soon (bloccata) -->
-    <div class="loc loc-feature loc-locked" aria-label="Lume Motion — prossima apertura">
-      <div class="loc-inner" aria-hidden="true">
-        <span class="badge badge-coming">Apertura Ottobre 2026</span>
-        <h2 class="loc-name">Lume Motion</h2>
-        <p class="loc-addr"><span>Piediripa MC</span></p>
-        <div class="sep"></div>
-        <div class="pills">
-          <span class="pill">Sala Pesi</span>
-          <span class="pill">Hyrox Training</span>
-          <span class="pill">Pilates Reformer</span>
-        </div>
-      </div>
-      <div class="locked-overlay">
-        <h2 class="lk-name">Lume Motion</h2>
-        <span class="lk-soon">Coming Soon</span>
-        <p class="lk-date">Apertura Ottobre 2026</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ===== SEDI GIÀ ATTIVE (in secondo piano) ===== -->
-  <div class="secondary-head">Le nostre sedi già attive</div>
-  <div class="locations locations-small">
-
-    <!-- Lume Lifestyle -->
-    <div class="loc">
-      <span class="badge badge-active">Sede Attiva</span>
-      <h2 class="loc-name">Lume Lifestyle</h2>
-      <p class="loc-addr">
-        <span>Piazzale Fattorini 1 — Macerata</span>
-        <button class="map-btn" data-q="Piazzale+Fattorini+1+Macerata+Italy" aria-label="Vedi sulla mappa">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
-          </svg>
-        </button>
-      </p>
-      <div class="sep"></div>
-      <div class="pills">
-        <span class="pill">Sala Pesi</span>
-        <span class="pill">Corsi Fitness</span>
-        <span class="pill">Pilates Reformer</span>
-        <span class="pill">Personal Training</span>
-      </div>
-      <a href="promo.html?sede=macerata" class="cta cta-promo">Scopri la promo</a>
-    </div>
-
-    <!-- Lume Element -->
-    <div class="loc">
-      <span class="badge badge-active">Sede Attiva</span>
-      <h2 class="loc-name">Lume Element</h2>
-      <p class="loc-addr">
-        <span>Via Sergio Piermanni 3 — Montecassiano</span>
-        <button class="map-btn" data-q="Via+Sergio+Piermanni+3+Montecassiano+Italy" aria-label="Vedi sulla mappa">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
-          </svg>
-        </button>
-      </p>
-      <div class="sep"></div>
-      <div class="pills">
-        <span class="pill">Sala Pesi</span>
-        <span class="pill">Corsi Fitness</span>
-        <span class="pill">Pilates Reformer</span>
-        <span class="pill">Personal Training</span>
-        <span class="pill">Aqua Fitness</span>
-        <span class="pill">Nuoto</span>
-      </div>
-      <a href="promo.html?sede=montecassiano" class="cta cta-promo">Scopri la promo</a>
-    </div>
-
   </div>
 
 </div>
