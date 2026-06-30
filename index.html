@@ -252,6 +252,73 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
   .cta-pre { background: transparent; color: var(--accent-hi); border: 2px solid var(--accent); }
   .cta-pre:hover { background: rgba(196,0,66,.1); }
 
+  /* ── FEATURED: nuove sedi (Urban + Motion) grandi e centrate ── */
+  .featured {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(14px,2.2vh,28px);
+    max-width: 840px;
+    width: 100%;
+    margin: clamp(6px,1.4vh,18px) auto clamp(18px,2.6vh,34px);
+  }
+  @media (max-width: 620px) { .featured { grid-template-columns: 1fr; } }
+
+  .loc-feature { padding: clamp(18px,2.7vh,34px) clamp(18px,2vw,30px); }
+  .loc-feature .loc-name { font-size: clamp(40px,min(6.4vw,7vh),70px); }
+  .loc-feature .loc-addr { font-size: clamp(13px,min(1.6vw,1.9vh),17px); }
+  .loc-feature.loc-urban {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(196,0,66,.25), 0 18px 48px rgba(0,0,0,.45);
+  }
+
+  /* ── LOCKED OVERLAY (Motion — coming soon) ── */
+  .loc-locked { position: relative; overflow: hidden; }
+  .loc-locked .loc-inner {
+    display: flex; flex-direction: column; gap: clamp(5px,0.8vh,10px);
+    filter: blur(7px);
+    opacity: .45;
+    pointer-events: none;
+    user-select: none;
+  }
+  .locked-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: clamp(8px,1.3vh,14px);
+    text-align: center; padding: 20px;
+    background: rgba(20,20,20,.55);
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    border-radius: var(--radius);
+  }
+  .locked-overlay .lk-name {
+    font-family: 'Teko', sans-serif; text-transform: uppercase;
+    font-weight: 700; letter-spacing: .02em; line-height: 1;
+    font-size: clamp(36px,min(5.6vw,6vh),60px);
+  }
+  .locked-overlay .lk-soon {
+    font-family: 'Teko', sans-serif; text-transform: uppercase;
+    letter-spacing: .18em; font-weight: 600;
+    font-size: clamp(15px,2.3vh,23px);
+    color: var(--accent-hi);
+    border: 2px solid var(--accent); border-radius: 99px;
+    padding: clamp(5px,0.7vh,8px) clamp(16px,1.6vw,24px);
+  }
+  .locked-overlay .lk-date {
+    font-size: clamp(12px,1.6vh,15px); color: #c8c8c8; font-weight: 300;
+  }
+
+  /* ── SECONDARY: sedi attive, piccole ── */
+  .secondary-head {
+    text-align: center;
+    font-family: 'Teko', sans-serif; text-transform: uppercase;
+    letter-spacing: .14em; color: #9a9a9a;
+    font-size: clamp(13px,1.8vh,16px);
+    margin-bottom: clamp(8px,1.3vh,14px);
+  }
+  .locations-small { max-width: 780px; margin: 0 auto; width: 100%; }
+  .locations-small .loc { padding: clamp(9px,1.3vh,15px) clamp(12px,1.4vw,18px); }
+  .locations-small .loc-name { font-size: clamp(24px,min(4vw,4.4vh),38px); }
+
   /* ── MAP MODAL ── */
   .map-modal {
     display: none;
@@ -333,9 +400,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>Clicca sulla sede per scoprire la promo. Lume Fitness 4 Club in Zona Macerata.</p>
   </div>
 
-  <div class="locations">
+  <!-- ===== NUOVE SEDI — Urban + Motion (in primo piano) ===== -->
+  <div class="featured">
 
-    <!-- 1 — Lume Lifestyle -->
+    <!-- Lume Urban -->
+    <div class="loc loc-feature loc-urban">
+      <span class="badge badge-coming">Apertura Settembre 2026</span>
+      <h2 class="loc-name">Lume Urban</h2>
+      <p class="loc-addr">
+        <span>Viale Giacomo Leopardi 91 — Macerata</span>
+        <button class="map-btn" data-q="Viale+Giacomo+Leopardi+91+Macerata+Italy" aria-label="Vedi sulla mappa">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
+          </svg>
+        </button>
+      </p>
+      <div class="sep"></div>
+      <div class="pills">
+        <span class="pill">Sala Pesi</span>
+        <span class="pill">Corsi Fitness</span>
+        <span class="pill">Personal Training</span>
+      </div>
+      <a href="urban.html" class="cta cta-pre">Accedi alla Prevendita</a>
+    </div>
+
+    <!-- Lume Motion — coming soon (bloccata) -->
+    <div class="loc loc-feature loc-locked" aria-label="Lume Motion — prossima apertura">
+      <div class="loc-inner" aria-hidden="true">
+        <span class="badge badge-coming">Apertura Ottobre 2026</span>
+        <h2 class="loc-name">Lume Motion</h2>
+        <p class="loc-addr"><span>Piediripa MC</span></p>
+        <div class="sep"></div>
+        <div class="pills">
+          <span class="pill">Sala Pesi</span>
+          <span class="pill">Hyrox Training</span>
+          <span class="pill">Pilates Reformer</span>
+        </div>
+      </div>
+      <div class="locked-overlay">
+        <h2 class="lk-name">Lume Motion</h2>
+        <span class="lk-soon">Coming Soon</span>
+        <p class="lk-date">Apertura Ottobre 2026</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SEDI GIÀ ATTIVE (in secondo piano) ===== -->
+  <div class="secondary-head">Le nostre sedi già attive</div>
+  <div class="locations locations-small">
+
+    <!-- Lume Lifestyle -->
     <div class="loc">
       <span class="badge badge-active">Sede Attiva</span>
       <h2 class="loc-name">Lume Lifestyle</h2>
@@ -357,7 +472,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="promo.html?sede=macerata" class="cta cta-promo">Scopri la promo</a>
     </div>
 
-    <!-- 2 — Lume Element -->
+    <!-- Lume Element -->
     <div class="loc">
       <span class="badge badge-active">Sede Attiva</span>
       <h2 class="loc-name">Lume Element</h2>
@@ -379,50 +494,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="pill">Nuoto</span>
       </div>
       <a href="promo.html?sede=montecassiano" class="cta cta-promo">Scopri la promo</a>
-    </div>
-
-    <!-- 3 — Lume Urban -->
-    <div class="loc">
-      <span class="badge badge-coming">Apertura Settembre 2026</span>
-      <h2 class="loc-name">Lume Urban</h2>
-      <p class="loc-addr">
-        <span>Viale Giacomo Leopardi 91 — Macerata</span>
-        <button class="map-btn" data-q="Viale+Giacomo+Leopardi+91+Macerata+Italy" aria-label="Vedi sulla mappa">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
-          </svg>
-        </button>
-      </p>
-      <div class="sep"></div>
-      <div class="pills">
-        <span class="pill">Sala Pesi</span>
-        <span class="pill">Corsi Fitness</span>
-        <span class="pill">Personal Training</span>
-      </div>
-      <a href="urban.html" class="cta cta-pre">Accedi alla Prevendita</a>
-    </div>
-
-    <!-- 4 — Lume Motion -->
-    <div class="loc">
-      <span class="badge badge-coming">Apertura Ottobre 2026</span>
-      <h2 class="loc-name">Lume Motion</h2>
-      <p class="loc-addr">
-        <span>C.C. Val di Chienti, Via G.B. Velluti 31 — Piediripa MC</span>
-        <button class="map-btn" data-q="Via+Giovan+Battista+Velluti+31+Piediripa+Macerata+Italy" aria-label="Vedi sulla mappa">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2C7.24 2 5 4.24 5 7c0 3.94 5 11 5 11s5-7.06 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" fill="currentColor"/>
-          </svg>
-        </button>
-      </p>
-      <div class="sep"></div>
-      <div class="pills">
-        <span class="pill">Sala Pesi</span>
-        <span class="pill">Corsi Fitness</span>
-        <span class="pill">Hyrox Training</span>
-        <span class="pill">Pilates Reformer</span>
-        <span class="pill">Personal Training</span>
-      </div>
-      <a href="motion.html" class="cta cta-pre">Accedi alla Prevendita</a>
     </div>
 
   </div>
