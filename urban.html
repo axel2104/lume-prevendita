@@ -621,6 +621,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
+  <!-- ========== STEP 7: PAGAMENTO NON CONFERMATO ========== -->
+  <section class="step" data-step="7">
+    <div class="done">
+      <div class="done-circle" style="background:var(--err)">
+        <svg viewBox="0 0 24 24" fill="none" width="44" height="44"><path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Pagamento non confermato</h1>
+      <p style="color:var(--text-dim);line-height:1.6">Non abbiamo ricevuto la conferma del pagamento. <b style="color:#fff">Nessun problema</b>: i tuoi dati sono al sicuro e ti <b style="color:#fff">ricontatteremo telefonicamente</b> per completare la tua iscrizione a <b style="color:#fff">Lume Urban</b>.</p>
+      <a href="mailto:macerata@lumefitness.it" class="btn btn-primary" style="display:inline-block;margin-top:24px;text-decoration:none;text-align:center">✉ macerata@lumefitness.it</a>
+      <p style="font-size:13px;color:var(--text-dim);margin-top:16px">Oppure scrivici: ti risponderemo il prima possibile.</p>
+    </div>
+  </section>
+
 </div><!-- /wrap -->
 
 <!-- ========== MODAL CONTRATTO + FIRMA ========== -->
@@ -705,7 +718,7 @@ const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contrat
 /* ── Tracciamento step: URL hash + dataLayer (GTM) ── */
 const FORM_ID = 'urban';
 const FORM_SEDE = 'Lume Urban';
-const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile' };
+const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile', 7:'pagamento-non-confermato' };
 function trackStep(n) {
   const slug = STEP_SLUGS[n] || ('step-' + n);
   try { history.replaceState(history.state, '', '#' + slug); } catch(e) {}
@@ -726,7 +739,7 @@ function goto(n) {
   document.getElementById('fill').style.width = pct + '%';
   document.getElementById('stepNum').textContent = Math.min(n, 4);
   document.getElementById('stepName').textContent = stepNames[n] || '';
-  document.querySelector('.progress').style.display = n === 6 ? 'none' : '';
+  document.querySelector('.progress').style.display = (n === 6 || n === 7) ? 'none' : '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
   trackStep(n);
 }
@@ -1386,7 +1399,9 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
     goto(5);
   } else if (payment === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
-    goto(4);
+    sessionStorage.removeItem('lume_checkout_payload');
+    sessionStorage.removeItem('lume_utm');
+    goto(7);
   } else {
     goto(1);
   }

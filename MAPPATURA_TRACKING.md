@@ -47,6 +47,7 @@ Ogni passaggio di step aggiorna l'**hash dell'URL** (senza ricaricare la pagina)
 | 4 | Contratto + firma | `#step-4-contratto` |
 | 5 | **Thank you / Iscritto** | `#grazie` |
 | 6 | Non disponibile (già iscritto) | `#non-disponibile` |
+| 7 | **Pagamento non confermato** (annulla/chiude Stripe) | `#pagamento-non-confermato` |
 
 ### `form.html`
 | Step | Schermata | URL hash |
@@ -124,7 +125,7 @@ Oltre agli eventi GTM, i form inviano già dati lato server a **n8n** (`https://
 2. L'utente viene reindirizzato alla pagina di pagamento Stripe.
 3. Al ritorno:
    - **Successo** → `https://promo.lumefitness.it/{sede}.html?payment=success&session_id=...` → la pagina mostra il thank you (`#grazie`) e chiama `conferma-stripe`.
-   - **Annullato** → `https://promo.lumefitness.it/{sede}.html?payment=cancel` → torna allo step contratto.
+   - **Annullato / chiusura Stripe** → `https://promo.lumefitness.it/{sede}.html?payment=cancel` → l'utente **non torna al form** ma finisce sulla pagina **"Pagamento non confermato"** (`#pagamento-non-confermato`) con messaggio *"ti ricontatteremo telefonicamente"*. I dati sono già stati salvati negli step precedenti (webhook `iscrizione` + `FIRMA-CONTRATTO`).
 
 > ⚠️ **Da allineare con marketing/Alexia:** gli UTM e gli identificatori Meta (`fbp`/`fbc`) **non viaggiano ancora** nei metadata della sessione Stripe. Inserirli renderebbe l'attribuzione e la futura CAPI indipendenti dal browser. (Vedi punto in sezione 1.)
 
