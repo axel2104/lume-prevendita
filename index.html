@@ -273,6 +273,25 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
     font-size: clamp(16px,min(2.4vw,2.6vh),24px);
     padding: clamp(12px,1.7vh,18px) 16px;
   }
+  /* descrizione breve sotto al nome */
+  .solo-desc {
+    color: #c8c8c8;
+    font-weight: 300;
+    line-height: 1.45;
+    font-size: clamp(13px,1.7vh,16px);
+  }
+  /* ── DESKTOP: card più grande e con più respiro ── */
+  @media (min-width: 700px) {
+    .solo-card {
+      width: 660px;
+      padding: clamp(28px,3.6vh,48px) clamp(30px,2.6vw,44px);
+      gap: clamp(10px,1.4vh,18px);
+    }
+    .solo-card .loc-name { font-size: clamp(58px,7.6vh,88px); }
+    .solo-card .loc-addr { font-size: 18px; }
+    .solo-card .pill { font-size: 15px; }
+    .solo-card .cta { font-size: 26px; }
+  }
 
   /* ── FEATURED: nuove sedi (Urban + Motion) grandi e centrate ── */
   .featured {
@@ -430,11 +449,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </svg>
         </button>
       </p>
+      <p class="solo-desc">Lo Strength Club nel cuore di Macerata. Iscriviti in prevendita Early&nbsp;Bird e blocca la quota di attivazione GRATIS.</p>
       <div class="sep"></div>
       <div class="pills">
         <span class="pill">Sala Pesi</span>
+        <span class="pill">Functional Training</span>
         <span class="pill">Corsi Fitness</span>
         <span class="pill">Personal Training</span>
+        <span class="pill">Area Cardio</span>
+        <span class="pill">Spogliatoi Premium</span>
       </div>
       <a href="urban.html" class="cta cta-pre">Accedi alla Prevendita</a>
     </div>
