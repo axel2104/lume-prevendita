@@ -27,6 +27,7 @@
 | Promo Lifestyle | `https://promo.lumefitness.it/promo.html?sede=macerata` | Pagina promo **Lume Lifestyle** (sede attiva) |
 | Promo Element | `https://promo.lumefitness.it/promo.html?sede=montecassiano` | Pagina promo **Lume Element** (sede attiva) |
 | Form PerfectGym | `https://promo.lumefitness.it/form.html` | Form generico PerfectGym (demo/interno) |
+| Richiedi informazioni | `https://promo.lumefitness.it/richiedi-info.html?sede=urban` | Form **lead** (nome, cognome, email, telefono) — aperto dal pulsante "Richiedi informazioni" nello step 2 |
 
 ### Propagazione UTM
 - La home (`index.html`) **propaga automaticamente** i parametri `utm_source, utm_medium, utm_campaign, utm_term, utm_content, canale` sul link CTA verso `urban.html`.
@@ -66,6 +67,12 @@ Ogni passaggio di step aggiorna l'**hash dell'URL** (senza ricaricare la pagina)
 | 2 | Form contatto | `#step-2-form` |
 | 3 | **Thank you / Richiesta inviata** | `#grazie` |
 
+### `richiedi-info.html` (lead)
+| Step | Schermata | URL hash |
+|---|---|---|
+| 1 | Form richiesta info | `#richiedi-info` |
+| 2 | **Richiesta inviata (lead)** | `#grazie` |
+
 > **Thank you page = URL con hash `#grazie`** in tutti i form → da usare come pagina di conversione in GTM/GA4.
 
 ---
@@ -94,6 +101,9 @@ A ogni cambio step viene fatto un push su `dataLayer`:
 |---|---|---|
 | `form_step` | a ogni step di ogni form | page_view virtuale / evento funnel GA4 |
 | `form_thank_you` | sul completamento (step finale) | **evento di conversione** |
+| `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead) |
+
+> ⚠️ La pagina "Richiedi informazioni" invia i dati a un **webhook n8n dedicato** — attualmente **placeholder da configurare** (`LEAD_WEBHOOK` in `richiedi-info.html`). Appena fornito l'URL, i lead vengono recapitati.
 
 ### Valori di `form_id` / `form_sede`
 | Pagina | `form_id` | `form_sede` |

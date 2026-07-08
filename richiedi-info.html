@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K7P3RJNK');</script>
+<!-- End Google Tag Manager -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1498688582000036');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Richiedi informazioni — Lume Urban</title>
+<meta name="robots" content="noindex, follow" />
+<link rel="icon" href="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#1d1d1d;--surface:#262626;--surface-2:#2f2f2f;--line:#3a3a3a;--gray:#33373d;
+    --accent:#c40042;--accent-hi:#e4135c;--text:#ffffff;--text-dim:#b9b9b9;--text-mut:#8a8a8a;
+    --ok:#34c759;--err:#ff5252;--radius:14px;--maxw:560px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{font-family:'Roboto Condensed',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100dvh;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px 40px;display:flex;flex-direction:column;min-height:100dvh;}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+  .topbar img{height:42px;width:auto;display:block;}
+  .tag{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:18px;color:var(--accent-hi);font-weight:600;margin-left:auto;}
+  .step-nav{margin-bottom:14px;}
+  .btn-back-top{background:transparent;border:none;color:var(--text-mut);font-family:'Roboto Condensed',sans-serif;font-size:14px;cursor:pointer;text-decoration:none;}
+  .btn-back-top:hover{color:var(--text);}
+  h1.title{font-family:'Teko',sans-serif;font-size:44px;line-height:1;text-transform:uppercase;font-weight:700;margin-bottom:8px;}
+  .sub{color:var(--text-dim);font-size:15px;font-weight:300;margin-bottom:24px;line-height:1.5;}
+  .sub b{color:var(--accent-hi);}
+  .grid{display:grid;gap:14px;}
+  @media(min-width:520px){.grid.two{grid-template-columns:1fr 1fr;}}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);font-weight:700;}
+  .field label .req{color:var(--accent-hi);}
+  .field input{background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:13px 14px;color:#fff;font-family:'Roboto Condensed',sans-serif;font-size:16px;transition:border-color .2s;width:100%;}
+  .field input:focus{outline:none;border-color:var(--accent-hi);}
+  .field.invalid input{border-color:var(--err);}
+  .ferr{font-size:12.5px;color:var(--err);display:none;}
+  .field.invalid .ferr{display:block;}
+  .consent{display:flex;align-items:flex-start;gap:10px;margin-top:18px;font-size:13.5px;color:var(--text-dim);line-height:1.45;}
+  .consent input{margin-top:2px;accent-color:var(--accent);width:17px;height:17px;flex-shrink:0;}
+  .consent a{color:var(--accent-hi);}
+  .consent.invalid{color:var(--err);}
+  .btn{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:22px;font-weight:600;border:none;border-radius:10px;padding:15px 26px;cursor:pointer;transition:transform .12s,filter .2s;width:100%;color:#fff;background:var(--accent);margin-top:22px;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn:active{transform:scale(.99);}
+  .btn:disabled{background:var(--gray);color:var(--text-mut);cursor:not-allowed;filter:none;}
+  /* thank you */
+  .done{display:none;flex-direction:column;align-items:center;text-align:center;gap:6px;flex:1;justify-content:center;}
+  .done.active{display:flex;}
+  .done-circle{width:76px;height:76px;border-radius:50%;background:var(--ok);display:grid;place-items:center;margin-bottom:14px;}
+  .done h1{font-family:'Teko',sans-serif;font-size:40px;text-transform:uppercase;}
+  .done p{color:var(--text-dim);line-height:1.6;max-width:400px;}
+  .form-wrap.hidden{display:none;}
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7P3RJNK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="wrap">
+
+  <div class="topbar">
+    <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" alt="Lume Fitness" />
+    <span class="tag">Info</span>
+  </div>
+
+  <div class="form-wrap" id="formWrap">
+    <div class="step-nav">
+      <a href="urban.html" class="btn-back-top" id="backLink">← Torna alla prevendita</a>
+    </div>
+
+    <h1 class="title" id="pageTitle">Richiedi informazioni</h1>
+    <p class="sub" id="pageSub">Lasciaci i tuoi dati: il team <b>Lume Urban</b> ti ricontatterà il prima possibile per rispondere a tutte le tue domande.</p>
+
+    <form id="infoForm" novalidate>
+      <div class="grid two">
+        <div class="field" id="f-nome-wrap">
+          <label>Nome <span class="req">*</span></label>
+          <input type="text" id="f-nome" autocomplete="given-name" />
+          <span class="ferr">Inserisci il nome.</span>
+        </div>
+        <div class="field" id="f-cognome-wrap">
+          <label>Cognome <span class="req">*</span></label>
+          <input type="text" id="f-cognome" autocomplete="family-name" />
+          <span class="ferr">Inserisci il cognome.</span>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:14px">
+        <div class="field" id="f-email-wrap">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="f-email" inputmode="email" autocomplete="email" placeholder="nome@email.it" />
+          <span class="ferr">Inserisci un'email valida.</span>
+        </div>
+        <div class="field" id="f-tel-wrap">
+          <label>Telefono <span class="req">*</span></label>
+          <input type="tel" id="f-tel" inputmode="tel" autocomplete="tel" placeholder="333 1234567" />
+          <span class="ferr">Inserisci un numero di telefono valido.</span>
+        </div>
+      </div>
+
+      <label class="consent" id="consentWrap">
+        <input type="checkbox" id="f-privacy" />
+        <span>Ho letto e accetto la <a href="https://www.lumefitness.it/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a> e acconsento a essere ricontattato.</span>
+      </label>
+
+      <button type="submit" class="btn" id="submitBtn">Invia richiesta</button>
+    </form>
+  </div>
+
+  <!-- Thank you -->
+  <div class="done" id="done">
+    <div class="done-circle">
+      <svg viewBox="0 0 24 24" fill="none" width="42" height="42"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1>Richiesta inviata!</h1>
+    <p>Grazie, abbiamo ricevuto la tua richiesta. Ti ricontatteremo il prima possibile.</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ── Webhook lead (DA COMPILARE): incolla qui l'URL fornito ──────────────
+  var LEAD_WEBHOOK = ''; // es. 'https://n8n.lumeflow.it/webhook/richiedi-info'
+
+  var params = new URLSearchParams(location.search);
+  var SEDE_NAMES = { urban: 'Lume Urban', motion: 'Lume Motion', macerata: 'Lume Lifestyle', montecassiano: 'Lume Element' };
+  var sedeKey = params.get('sede') || 'urban';
+  var sedeName = SEDE_NAMES[sedeKey] || 'Lume';
+
+  // Personalizza testi + link "indietro" in base alla sede
+  document.getElementById('pageSub').innerHTML =
+    'Lasciaci i tuoi dati: il team <b>' + sedeName + '</b> ti ricontatterà il prima possibile per rispondere a tutte le tue domande.';
+  if (sedeKey === 'motion') document.getElementById('backLink').href = 'motion.html';
+
+  // UTM: dalla query, con fallback a sessionStorage (impostato dai form)
+  function getUtms(){
+    var keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+    var out = {};
+    keys.forEach(function(k){ if(params.get(k)) out[k] = params.get(k); });
+    if(!Object.keys(out).length){
+      try { out = JSON.parse(sessionStorage.getItem('lume_utm') || '{}'); } catch(e){}
+    }
+    return out;
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'form_step', form_id: 'richiedi-info', form_sede: sedeName, step_number: 1, step_name: 'Richiedi informazioni', step_slug: 'richiedi-info', virtual_page: location.pathname + '#richiedi-info' });
+
+  var form = document.getElementById('infoForm');
+  function setErr(id, show){ document.getElementById(id).classList.toggle('invalid', show); }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function validTel(v){ return v.replace(/[^0-9]/g,'').length >= 6; }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var nome = document.getElementById('f-nome').value.trim();
+    var cognome = document.getElementById('f-cognome').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var tel = document.getElementById('f-tel').value.trim();
+    var privacy = document.getElementById('f-privacy').checked;
+
+    var ok = true;
+    setErr('f-nome-wrap', !nome); if(!nome) ok = false;
+    setErr('f-cognome-wrap', !cognome); if(!cognome) ok = false;
+    setErr('f-email-wrap', !validEmail(email)); if(!validEmail(email)) ok = false;
+    setErr('f-tel-wrap', !validTel(tel)); if(!validTel(tel)) ok = false;
+    document.getElementById('consentWrap').classList.toggle('invalid', !privacy); if(!privacy) ok = false;
+    if(!ok) return;
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Invio…';
+
+    var payload = {
+      tipo: 'lead',
+      sede: sedeName,
+      nome: nome, cognome: cognome, email: email, telefono: tel
+    };
+    var utms = getUtms();
+    for(var k in utms){ payload[k] = utms[k]; }
+
+    // Webhook (inviato solo se l'URL è configurato)
+    if(LEAD_WEBHOOK){
+      fetch(LEAD_WEBHOOK, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }).catch(function(){});
+    }
+
+    // Tracciamento: lead + thank you
+    window.dataLayer.push({ event: 'form_lead', form_id: 'richiedi-info', form_sede: sedeName });
+    window.dataLayer.push({ event: 'form_thank_you', form_id: 'richiedi-info', form_sede: sedeName, step_slug: 'grazie', virtual_page: location.pathname + '#grazie' });
+    try { history.replaceState(history.state, '', '#grazie'); } catch(e){}
+
+    document.getElementById('formWrap').classList.add('hidden');
+    document.getElementById('done').classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>
