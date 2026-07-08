@@ -84,20 +84,11 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .struttura-banner h2{font-family:'Teko',sans-serif;font-size:56px;font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:14px;}
 .addr-line{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--text-dim);margin-bottom:16px;}
 .addr-line svg{width:15px;height:15px;flex-shrink:0;fill:var(--accent-hi);}
-/* ── CAROSELLO RENDER CENTRO ── */
-.carousel{position:relative;aspect-ratio:16/9;margin-bottom:18px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#000;}
-.carousel-track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.carousel-track::-webkit-scrollbar{display:none;}
-.carousel-slide{flex:0 0 100%;width:100%;height:100%;scroll-snap-align:center;}
+/* ── CAROSELLO RENDER CENTRO (automatico, senza controlli) ── */
+.carousel{position:relative;aspect-ratio:16/9;margin-bottom:18px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#000;pointer-events:none;}
+.carousel-track{display:flex;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1);}
+.carousel-slide{flex:0 0 100%;width:100%;height:100%;}
 .carousel-slide img,.carousel-slide video{width:100%;height:100%;object-fit:cover;display:block;background:#000;}
-.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:38px;height:38px;border:none;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
-.carousel-arrow:hover{background:var(--accent);}
-.carousel-arrow.prev{left:10px;}
-.carousel-arrow.next{right:10px;}
-.carousel-dots{position:absolute;left:0;right:0;bottom:10px;z-index:2;display:flex;justify-content:center;gap:7px;}
-.carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);border:none;padding:0;cursor:pointer;transition:background .2s,transform .2s;}
-.carousel-dot.active{background:var(--accent-hi);transform:scale(1.35);}
-@media(max-width:520px){.carousel-arrow{width:32px;height:32px;font-size:19px;}}
 .activity-pills{display:flex;flex-wrap:wrap;gap:8px;}
 .pill{background:#383838;border:1px solid #4e4e4e;color:#fff;font-size:13px;padding:4px 12px;border-radius:99px;font-weight:500;}
 
@@ -313,17 +304,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
-    <!-- Carosello render / immagini del centro -->
+    <!-- Carosello render/video del centro (automatico, senza controlli) -->
     <div class="carousel" id="urbanCarousel" aria-label="Immagini e render Lume Urban">
       <div class="carousel-track" id="carTrack">
+        <div class="carousel-slide"><video src="https://www.lumefitness.it/wp-content/uploads/2026/07/Lume_Urban.mp4" muted playsinline autoplay preload="auto" data-video></video></div>
         <div class="carousel-slide"><img src="https://www.lumefitness.it/wp-content/uploads/2026/07/Img_1.png" alt="Render Lume Urban" loading="lazy"></div>
         <div class="carousel-slide"><img src="https://www.lumefitness.it/wp-content/uploads/2026/07/LM_MC_P-1_R2_scale_PS.jpg.jpeg" alt="Render Lume Urban" loading="lazy"></div>
-        <div class="carousel-slide"><video src="https://www.lumefitness.it/wp-content/uploads/2026/07/Lume_Urban.mp4" muted playsinline controls preload="metadata" data-video></video></div>
         <div class="carousel-slide"><img src="https://www.lumefitness.it/wp-content/uploads/2026/07/Img_2-scaled.png" alt="Render Lume Urban" loading="lazy"></div>
       </div>
-      <button class="carousel-arrow prev" id="carPrev" type="button" aria-label="Immagine precedente">&#8249;</button>
-      <button class="carousel-arrow next" id="carNext" type="button" aria-label="Immagine successiva">&#8250;</button>
-      <div class="carousel-dots" id="carDots"></div>
     </div>
 
     <div class="features">
@@ -1436,74 +1424,39 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
 </script>
 
 <script>
-/* ── CAROSELLO render/video Lume Urban ── */
+/* ── CAROSELLO render/video Lume Urban (automatico, senza controlli) ── */
 (function(){
   var car = document.getElementById('urbanCarousel');
   if(!car) return;
   var track = document.getElementById('carTrack');
   var slides = Array.prototype.slice.call(track.children);
-  var dotsWrap = document.getElementById('carDots');
   var vid = track.querySelector('video[data-video]');
   var idx = 0, timer = null, DELAY = 4500;
 
-  slides.forEach(function(_, i){
-    var d = document.createElement('button');
-    d.type = 'button';
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Vai alla slide ' + (i + 1));
-    d.addEventListener('click', function(){ go(i, true); });
-    dotsWrap.appendChild(d);
-  });
-  var dots = Array.prototype.slice.call(dotsWrap.children);
-
-  function setActive(i){
-    idx = i;
-    dots.forEach(function(d, j){ d.classList.toggle('active', j === i); });
-    handleVideo();
-  }
-  function go(i, user){
-    idx = (i + slides.length) % slides.length;
-    track.scrollTo({ left: track.clientWidth * idx, behavior: 'smooth' });
-    setActive(idx);
-    if(user) start();
-  }
+  function render(){ track.style.transform = 'translateX(-' + (idx * 100) + '%)'; handleVideo(); }
+  function go(i){ idx = (i + slides.length) % slides.length; render(); }
   function next(){ go(idx + 1); }
-
-  document.getElementById('carNext').addEventListener('click', function(){ go(idx + 1, true); });
-  document.getElementById('carPrev').addEventListener('click', function(){ go(idx - 1, true); });
-
-  /* sincronizza il puntino attivo quando si scorre a mano (swipe) */
-  var st;
-  track.addEventListener('scroll', function(){
-    clearTimeout(st);
-    st = setTimeout(function(){
-      var i = Math.round(track.scrollLeft / track.clientWidth);
-      if(i !== idx) setActive(i);
-    }, 80);
-  });
-
   function start(){ stop(); timer = setInterval(next, DELAY); }
   function stop(){ if(timer){ clearInterval(timer); timer = null; } }
 
-  car.addEventListener('mouseenter', stop);
-  car.addEventListener('mouseleave', start);
-  track.addEventListener('touchstart', stop, { passive: true });
-  track.addEventListener('touchend', function(){ setTimeout(start, 3000); }, { passive: true });
-
-  /* sul video: pausa autoplay, riproduci; a fine clip vai avanti e riprendi */
+  /* sul video (prima slide): ferma il timer, riproduci; a fine clip avanza */
   function handleVideo(){
     if(!vid) return;
     if(slides[idx].contains(vid)){
       stop();
-      try { vid.currentTime = 0; vid.play(); } catch(e){}
+      try {
+        vid.currentTime = 0;
+        var p = vid.play();
+        if(p && p.catch) p.catch(function(){ go(idx + 1); start(); }); // se l'autoplay è bloccato, prosegui
+      } catch(e){ go(idx + 1); start(); }
     } else {
       try { vid.pause(); } catch(e){}
       if(!timer) start();
     }
   }
-  if(vid) vid.addEventListener('ended', function(){ go(idx + 1); start(); });
+  if(vid) vid.addEventListener('ended', function(){ go(idx + 1); if(!timer) start(); });
 
-  start();
+  render(); // idx 0 = video → parte subito, autoplay in pausa finché non finisce
 })();
 </script>
 </body>
