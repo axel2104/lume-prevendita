@@ -758,7 +758,7 @@ function trackStep(n) {
 }
 /* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
    → feedback su dove si fermano (GA) + beacon di abbandono verso n8n. */
-const ABANDON_WEBHOOK = ''; // TODO: incollare qui il webhook n8n abbandono (es. https://n8n.lumeflow.it/webhook/abbandono)
+const ABANDON_WEBHOOK = 'https://n8n.lumeflow.it/webhook/abbandono';
 (function(){
   let exitSent = false;
   const val = function(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; };
