@@ -107,6 +107,9 @@ A ogni cambio step viene fatto un push su `dataLayer`:
 | `utm_context` | caricamento di **ogni** pagina | riporta la sorgente `{ page, utm_* }` → GTM/GA sa da dove arriva l'utente su ogni pagina |
 | `form_exit` | quando l'utente lascia/chiude la pagina del form (urban/motion) | riporta `{ furthest_step, furthest_slug, completed, utm_* }` = **punto più avanzato raggiunto** → feedback sugli step di abbandono |
 
+### Beacon di abbandono → n8n (opzionale, da configurare)
+Su uscita pagina (step 2+ e non completato) la landing invia via `navigator.sendBeacon` un POST al webhook n8n **`abbandono`** (`ABANDON_WEBHOOK` in urban.html/motion.html — placeholder da compilare) con: `furthest_step`, `furthest_slug`, dati parziali già digitati (`nome/cognome/email/telefono/codice_fiscale/via/comune`), `sede`/`sede_key`, `piano_nome`/`piano_id`, UTM completi. In Airtable (tabella *Prevendita Urban*) le nuove colonne: **Furthest Step**, **Furthest Slug**, **Abbandono** (checkbox).
+
 ### Come vedere "dove si fermano le persone" (drop-off)
 Due modi complementari, entrambi già disponibili:
 1. **Funnel da `form_step`** — in GA4 crea una *Funnel exploration* con gli step (`step_slug` = sede → abbonamento → dati → contratto → grazie): mostra quanti proseguono a ogni step e dove calano.
