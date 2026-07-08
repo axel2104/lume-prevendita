@@ -205,23 +205,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = 'Invio…';
 
-    var payload = {
+    // Set UTM completo (tutte le chiavi, anche vuote → dati uniformi lato CRM/GTM)
+    var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+    var utms = getUtms();
+    var fullUtms = {};
+    UTM_KEYS.forEach(function(k){ fullUtms[k] = utms[k] || ''; });
+
+    var payload = Object.assign({
       tipo: 'lead',
       sede: sedeName,
+      sede_key: sedeKey,
       nome: nome, cognome: cognome, email: email, telefono: tel,
       abbonamento_interesse: pianoNome,
       piano_key: pianoKey
-    };
-    var utms = getUtms();
-    for(var k in utms){ payload[k] = utms[k]; }
+    }, fullUtms);
 
     // Webhook (inviato solo se l'URL è configurato)
     if(LEAD_WEBHOOK){
       fetch(LEAD_WEBHOOK, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }).catch(function(){});
     }
 
-    // Tracciamento: lead + thank you
-    window.dataLayer.push({ event: 'form_lead', form_id: 'richiedi-info', form_sede: sedeName, piano_key: pianoKey, piano_nome: pianoNome });
+    // Tracciamento: lead con TUTTI gli UTM + sede + piano scelto, poi thank you
+    window.dataLayer.push(Object.assign({
+      event: 'form_lead',
+      form_id: 'richiedi-info',
+      form_sede: sedeName,
+      sede_key: sedeKey,
+      piano_key: pianoKey,
+      piano_nome: pianoNome
+    }, fullUtms));
     window.dataLayer.push({ event: 'form_thank_you', form_id: 'richiedi-info', form_sede: sedeName, step_slug: 'grazie', virtual_page: location.pathname + '#grazie' });
     try { history.replaceState(history.state, '', '#grazie'); } catch(e){}
 
