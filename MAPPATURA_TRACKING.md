@@ -104,6 +104,13 @@ A ogni cambio step viene fatto un push su `dataLayer`:
 | `form_step` | a ogni step di ogni form | page_view virtuale / evento funnel GA4 |
 | `form_thank_you` | sul completamento (step finale) | **evento di conversione** |
 | `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead). Include il set UTM completo (`utm_source/medium/campaign/content/term`) + sede (`form_sede`, `sede_key`) + piano scelto (`piano_key`, `piano_nome`) → attribuzione completa e feedback su quale piano è più richiesto. Gli stessi campi sono nel payload del webhook lead |
+| `utm_context` | caricamento di **ogni** pagina | riporta la sorgente `{ page, utm_* }` → GTM/GA sa da dove arriva l'utente su ogni pagina |
+| `form_exit` | quando l'utente lascia/chiude la pagina del form (urban/motion) | riporta `{ furthest_step, furthest_slug, completed, utm_* }` = **punto più avanzato raggiunto** → feedback sugli step di abbandono |
+
+### Come vedere "dove si fermano le persone" (drop-off)
+Due modi complementari, entrambi già disponibili:
+1. **Funnel da `form_step`** — in GA4 crea una *Funnel exploration* con gli step (`step_slug` = sede → abbonamento → dati → contratto → grazie): mostra quanti proseguono a ogni step e dove calano.
+2. **`form_exit`** — dà il *punto più avanzato raggiunto* per sessione anche per chi abbandona senza completare (`completed: false`). Raggruppando per `furthest_slug` si vede su quale step si ferma la maggior parte.
 
 > ⚠️ La pagina "Richiedi informazioni" invia i dati a un **webhook n8n dedicato** — attualmente **placeholder da configurare** (`LEAD_WEBHOOK` in `richiedi-info.html`). Appena fornito l'URL, i lead vengono recapitati.
 

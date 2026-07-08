@@ -26,6 +26,20 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+<!-- UTM capture + report (indipendente dal resto della pagina) -->
+<script>
+(function(){
+  var p = new URLSearchParams(location.search);
+  var keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var stored = {};
+  try { stored = JSON.parse(sessionStorage.getItem('lume_utm')||'{}'); } catch(e){}
+  var utms = Object.assign({}, stored);
+  keys.forEach(function(k){ if (p.get(k)) utms[k] = p.get(k); });
+  try { if (Object.keys(utms).length) sessionStorage.setItem('lume_utm', JSON.stringify(utms)); } catch(e){}
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(Object.assign({ event:'utm_context', page:'form' }, utms));
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Prevendita — Lume Fitness Club</title>
 <meta name="description" content="Iscriviti in prevendita ai nuovi club Lume Fitness a Macerata. Offerte Early Bird esclusive con quota di attivazione GRATIS per i primi iscritti." />

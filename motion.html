@@ -742,8 +742,10 @@ const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contrat
 const FORM_ID = 'motion';
 const FORM_SEDE = 'Lume Motion';
 const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile', 7:'pagamento-non-confermato' };
+let maxStepReached = 0, maxStepSlug = 'step-1-sede';
 function trackStep(n) {
   const slug = STEP_SLUGS[n] || ('step-' + n);
+  if (n >= 1 && n <= 5 && n > maxStepReached) { maxStepReached = n; maxStepSlug = slug; }
   try { history.replaceState(history.state, '', '#' + slug); } catch(e) {}
   window.dataLayer = window.dataLayer || [];
   const data = {
@@ -754,6 +756,23 @@ function trackStep(n) {
   window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
   if (n === 5) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
 }
+/* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
+   → feedback su dove le persone si fermano (step difficili). */
+(function(){
+  let exitSent = false;
+  function reportExit(){
+    if (exitSent || !maxStepReached) return;
+    exitSent = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({
+      event: 'form_exit', form_id: FORM_ID, form_sede: FORM_SEDE,
+      furthest_step: maxStepReached, furthest_slug: maxStepSlug,
+      completed: maxStepReached >= 5
+    }, getUtms()));
+  }
+  document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') reportExit(); });
+  window.addEventListener('pagehide', reportExit);
+})();
 
 function goto(n) {
   state.step = n;
