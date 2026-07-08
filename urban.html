@@ -119,7 +119,9 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
   .badge-best,.badge-early{font-size:9px;padding:2px 7px;letter-spacing:.06em;}
   .check{width:20px;height:20px;top:10px;right:10px;}
 }
-.card{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:20px 18px 18px;cursor:pointer;transition:border-color .2s,transform .15s,background .2s;}
+.card{position:relative;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:20px 18px 18px;cursor:pointer;transition:border-color .2s,transform .15s,background .2s;display:flex;flex-direction:column;}
+.card .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.card .badges .badge-best,.card .badges .badge-early{margin-bottom:0;}
 .card:hover{border-color:#555;transform:translateY(-2px);}
 .card.sel{border-color:var(--accent);background:linear-gradient(180deg,rgba(196,0,66,.14),rgba(196,0,66,.04));}
 .check{position:absolute;top:14px;right:14px;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.2s;}
@@ -148,7 +150,7 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .savings-body{font-size:14px;color:var(--text-dim);line-height:1.5;position:relative;}
 .savings-body b{color:#fff;}
 .savings-urgency{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-mut);padding:5px 14px;border-radius:99px;}
-.card-saving{display:flex;align-items:center;gap:8px;background:rgba(126,250,78,.1);border:1px solid rgba(126,250,78,.28);color:#7efa4e;font-size:13px;font-weight:700;padding:7px 12px;border-radius:8px;margin-top:10px;}
+.card-saving{display:flex;align-items:center;gap:8px;background:rgba(126,250,78,.1);border:1px solid rgba(126,250,78,.28);color:#7efa4e;font-size:13px;font-weight:700;padding:7px 12px;border-radius:8px;margin-top:auto;}
 .card-saving s{color:rgba(255,255,255,.35);font-weight:400;font-style:normal;text-decoration-color:rgba(196,0,66,.7);}
 
 /* form fields */
@@ -394,8 +396,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="card" id="card-unica" onclick="selectPlan('unica')">
         <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <span class="badge-best">Miglior Prezzo</span><br>
-        <span class="badge-early">⚡ Early Bird</span>
+        <div class="badges"><span class="badge-best">Miglior Prezzo</span><span class="badge-early">⚡ Early Bird</span></div>
         <h3>12 Mesi — Soluzione Unica</h3>
         <div class="cdesc">Pagamento in un'unica soluzione. Massimo risparmio garantito.</div>
         <div class="price">360<small> € / anno</small></div>
@@ -405,7 +406,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="card" id="card-rate3" onclick="selectPlan('rate3')">
         <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <span class="badge-early">⚡ Early Bird</span>
+        <div class="badges"><span class="badge-early">⚡ Early Bird</span></div>
         <h3>12 Mesi — 3 Rate</h3>
         <div class="cdesc">Tre comode rate mensili a distanza di 30 giorni l'una dall'altra.</div>
         <div class="price">130<small> € / rata</small></div>
@@ -809,6 +810,12 @@ function selectPlan(key) {
   // Mostra selettore metodo pagamento solo per piano unico + canale=sede
   const box = document.getElementById('metodoPagBox');
   if (box) box.style.display = (CANALE_SEDE && state.plan.installments === 1) ? 'block' : 'none';
+  // Porta il piano scelto al link "Richiedi informazioni" (feedback sull'abbonamento più richiesto)
+  const infoBtn = document.getElementById('step2Info');
+  if (infoBtn) {
+    const p = Object.assign({ sede: 'urban', piano: key, piano_nome: PLANS[key].name }, getUtms());
+    infoBtn.href = 'richiedi-info.html?' + new URLSearchParams(p).toString();
+  }
 }
 
 /* ========================================================

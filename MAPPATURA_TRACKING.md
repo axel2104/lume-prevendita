@@ -101,7 +101,7 @@ A ogni cambio step viene fatto un push su `dataLayer`:
 |---|---|---|
 | `form_step` | a ogni step di ogni form | page_view virtuale / evento funnel GA4 |
 | `form_thank_you` | sul completamento (step finale) | **evento di conversione** |
-| `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead) |
+| `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead). Include `piano_key` / `piano_nome` = abbonamento selezionato prima di chiedere info (feedback su quale piano è più richiesto) |
 
 > ⚠️ La pagina "Richiedi informazioni" invia i dati a un **webhook n8n dedicato** — attualmente **placeholder da configurare** (`LEAD_WEBHOOK` in `richiedi-info.html`). Appena fornito l'URL, i lead vengono recapitati.
 

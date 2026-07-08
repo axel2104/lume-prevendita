@@ -154,10 +154,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var SEDE_NAMES = { urban: 'Lume Urban', motion: 'Lume Motion', macerata: 'Lume Lifestyle', montecassiano: 'Lume Element' };
   var sedeKey = params.get('sede') || 'urban';
   var sedeName = SEDE_NAMES[sedeKey] || 'Lume';
+  var pianoKey = params.get('piano') || '';
+  var pianoNome = params.get('piano_nome') || '';
 
   // Personalizza testi + link "indietro" in base alla sede
   document.getElementById('pageSub').innerHTML =
-    'Lasciaci i tuoi dati: il team <b>' + sedeName + '</b> ti ricontatterà il prima possibile per rispondere a tutte le tue domande.';
+    'Lasciaci i tuoi dati: il team <b>' + sedeName + '</b> ti ricontatterà il prima possibile per rispondere a tutte le tue domande.'
+    + (pianoNome ? '<br><span style="font-size:13px;color:var(--text-mut)">Soluzione di interesse: <b style="color:var(--accent-hi)">' + pianoNome + '</b></span>' : '');
   if (sedeKey === 'motion') document.getElementById('backLink').href = 'motion.html';
 
   // UTM: dalla query, con fallback a sessionStorage (impostato dai form)
@@ -201,7 +204,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var payload = {
       tipo: 'lead',
       sede: sedeName,
-      nome: nome, cognome: cognome, email: email, telefono: tel
+      nome: nome, cognome: cognome, email: email, telefono: tel,
+      abbonamento_interesse: pianoNome,
+      piano_key: pianoKey
     };
     var utms = getUtms();
     for(var k in utms){ payload[k] = utms[k]; }
@@ -212,7 +217,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     // Tracciamento: lead + thank you
-    window.dataLayer.push({ event: 'form_lead', form_id: 'richiedi-info', form_sede: sedeName });
+    window.dataLayer.push({ event: 'form_lead', form_id: 'richiedi-info', form_sede: sedeName, piano_key: pianoKey, piano_nome: pianoNome });
     window.dataLayer.push({ event: 'form_thank_you', form_id: 'richiedi-info', form_sede: sedeName, step_slug: 'grazie', virtual_page: location.pathname + '#grazie' });
     try { history.replaceState(history.state, '', '#grazie'); } catch(e){}
 
