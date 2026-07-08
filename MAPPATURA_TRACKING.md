@@ -105,10 +105,9 @@ A ogni cambio step viene fatto un push su `dataLayer`:
 | `form_thank_you` | sul completamento (step finale) | **evento di conversione** |
 | `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead). Include il set UTM completo (`utm_source/medium/campaign/content/term`) + sede (`form_sede`, `sede_key`) + piano scelto (`piano_key`, `piano_nome`) → attribuzione completa e feedback su quale piano è più richiesto. Gli stessi campi sono nel payload del webhook lead |
 | `utm_context` | caricamento di **ogni** pagina | riporta la sorgente `{ page, utm_* }` → GTM/GA sa da dove arriva l'utente su ogni pagina |
-| `form_exit` | quando l'utente lascia/chiude la pagina del form (urban/motion) | riporta `{ furthest_step, furthest_slug, completed, utm_* }` = **punto più avanzato raggiunto** → feedback sugli step di abbandono |
+| `form_exit` | quando l'utente lascia/chiude la pagina del form (urban/motion) | riporta `{ furthest_step, furthest_slug, completed, utm_* }` = **punto più avanzato raggiunto** → drop-off/abbandoni analizzabili in GA4 |
 
-### Beacon di abbandono → n8n (opzionale, da configurare)
-Su uscita pagina (step 2+ e non completato) la landing invia via `navigator.sendBeacon` un POST al webhook n8n **`abbandono`** (`ABANDON_WEBHOOK` in urban.html/motion.html — placeholder da compilare) con: `furthest_step`, `furthest_slug`, dati parziali già digitati (`nome/cognome/email/telefono/codice_fiscale/via/comune`), `sede`/`sede_key`, `piano_nome`/`piano_id`, UTM completi. In Airtable (tabella *Prevendita Urban*) le nuove colonne: **Furthest Step**, **Furthest Slug**, **Abbandono** (checkbox).
+> Il drop-off ("dove si fermano le persone") si analizza in **GA4** con `form_step` + `form_exit`. Il beacon di abbandono verso n8n/Airtable è stato rimosso (ridondante con GA4 e generava rumore nella tabella iscrizioni).
 
 ### Come vedere "dove si fermano le persone" (drop-off)
 Due modi complementari, entrambi già disponibili:

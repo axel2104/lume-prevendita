@@ -766,36 +766,18 @@ function trackStep(n) {
   if (n === 5) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
 }
 /* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
-   → feedback su dove si fermano (GA) + beacon di abbandono verso n8n. */
-const ABANDON_WEBHOOK = 'https://n8n.lumeflow.it/webhook/abbandono';
+   → feedback su dove si fermano (drop-off in GA4). */
 (function(){
   let exitSent = false;
-  const val = function(id){ const el = document.getElementById(id); return el ? el.value.trim() : ''; };
   function reportExit(){
     if (exitSent || !maxStepReached) return;
     exitSent = true;
-    const completed = maxStepReached >= 5;
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(Object.assign({
       event: 'form_exit', form_id: FORM_ID, form_sede: FORM_SEDE,
-      furthest_step: maxStepReached, furthest_slug: maxStepSlug, completed: completed
+      furthest_step: maxStepReached, furthest_slug: maxStepSlug,
+      completed: maxStepReached >= 5
     }, getUtms()));
-    // Beacon abbandono → n8n: solo step 2+ e non completato, con dati parziali già digitati
-    if (ABANDON_WEBHOOK && !completed && maxStepReached >= 2) {
-      try {
-        const payload = Object.assign({
-          tipo: 'abbandono', abbandono: true,
-          furthest_step: maxStepReached, furthest_slug: maxStepSlug,
-          sede: FORM_SEDE, sede_key: FORM_ID,
-          piano_nome: (state.plan && state.plan.name) || '',
-          piano_id: (state.plan && state.plan.id) || '',
-          nome: val('inp-nome'), cognome: val('inp-cognome'), email: val('inp-email'),
-          telefono: (typeof fullPhone === 'function' ? fullPhone('tel-prefix','inp-tel') : val('inp-tel')),
-          codice_fiscale: val('inp-cf'), via: val('inp-via'), comune: val('inp-comune')
-        }, getUtms());
-        navigator.sendBeacon(ABANDON_WEBHOOK, new Blob([JSON.stringify(payload)], { type: 'text/plain' }));
-      } catch(e){}
-    }
   }
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') reportExit(); });
   window.addEventListener('pagehide', reportExit);
