@@ -176,6 +176,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: 'form_step', form_id: 'richiedi-info', form_sede: sedeName, step_number: 1, step_name: 'Richiedi informazioni', step_slug: 'richiedi-info', virtual_page: location.pathname + '#richiedi-info' });
+  // Persisti + riporta la sorgente a GTM (capire da dove arrivano le persone)
+  var utmCtx = getUtms();
+  try { if (Object.keys(utmCtx).length) sessionStorage.setItem('lume_utm', JSON.stringify(utmCtx)); } catch(e){}
+  window.dataLayer.push(Object.assign({ event: 'utm_context', page: 'richiedi-info' }, utmCtx));
 
   var form = document.getElementById('infoForm');
   function setErr(id, show){ document.getElementById(id).classList.toggle('invalid', show); }

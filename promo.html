@@ -468,7 +468,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
   var utmData = {};
-  UTM_KEYS.forEach(function (k) { utmData[k] = p.get(k) || ''; });
+  try { utmData = JSON.parse(sessionStorage.getItem('lume_utm') || '{}'); } catch(e) {}
+  UTM_KEYS.forEach(function (k) { if (p.get(k)) utmData[k] = p.get(k); }); // URL ha priorità
+  try { if (Object.keys(utmData).length) sessionStorage.setItem('lume_utm', JSON.stringify(utmData)); } catch(e) {}
+  // Riporta la sorgente a GTM su ogni pagina (capire da dove arrivano le persone)
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(Object.assign({ event: 'utm_context', page: 'promo' }, utmData));
 
   /* ── Mostra badge sede ── */
   var SEDE_NAMES = { macerata: 'Lume Lifestyle', montecassiano: 'Lume Element' };

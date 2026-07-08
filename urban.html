@@ -722,11 +722,14 @@ const CANALE_SEDE = new URLSearchParams(window.location.search).get('canale') ==
 (function() {
   const p = new URLSearchParams(window.location.search);
   const keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
-  const utms = {};
-  keys.forEach(k => { if (p.get(k)) utms[k] = p.get(k); });
-  if (Object.keys(utms).length) {
-    sessionStorage.setItem('lume_utm', JSON.stringify(utms));
-  }
+  let stored = {};
+  try { stored = JSON.parse(sessionStorage.getItem('lume_utm') || '{}'); } catch(e) {}
+  const utms = Object.assign({}, stored);           // parte dai valori già salvati
+  keys.forEach(k => { if (p.get(k)) utms[k] = p.get(k); }); // l'URL corrente ha priorità
+  try { if (Object.keys(utms).length) sessionStorage.setItem('lume_utm', JSON.stringify(utms)); } catch(e) {}
+  // Riporta la sorgente a GTM su ogni pagina (capire da dove arrivano le persone)
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(Object.assign({ event: 'utm_context', page: 'urban' }, utms));
 })();
 
 function getUtms() {

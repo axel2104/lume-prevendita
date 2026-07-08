@@ -30,8 +30,10 @@
 | Richiedi informazioni | `https://promo.lumefitness.it/richiedi-info.html?sede=urban` | Form **lead** (nome, cognome, email, telefono) — aperto dal pulsante "Richiedi informazioni" nello step 2 |
 
 ### Propagazione UTM
-- La home (`index.html`) **propaga automaticamente** i parametri `utm_source, utm_medium, utm_campaign, utm_term, utm_content, canale` sul link CTA verso `urban.html`.
-- I form (`urban.html`, `motion.html`) salvano gli UTM in `sessionStorage` e li inoltrano ai webhook n8n. *(Nota: non ancora inseriti nei metadata Stripe — vedi sezione 6.)*
+- Ogni pagina del funnel (`urban`, `motion`, `promo`, `richiedi-info`) al caricamento: legge gli UTM dall'URL, li **fonde e persiste** in `sessionStorage` (`lume_utm`) e spinge un evento **`utm_context`** nel `dataLayer` con `{ page, utm_source, utm_medium, utm_campaign, utm_term, utm_content }` → così GTM/GA sa **da dove arriva l'utente su ogni pagina**, anche quando l'URL corrente non contiene più gli UTM.
+- Gli UTM persistiti vengono **inclusi in tutti i webhook n8n** (verifica-iscritto, iscrizione, FIRMA-CONTRATTO, conferma-stripe, promo-prova, lead).
+- La home (`index.html`) reindirizza a `urban.html` preservando la query (UTM inclusi).
+- ⚠️ **Ancora da fare**: inserire gli UTM nei **metadata della sessione Stripe** (vedi sezione 6) — oggi sul round-trip di pagamento sopravvivono solo via `sessionStorage`.
 
 ---
 
