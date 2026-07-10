@@ -234,6 +234,8 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 @keyframes buyPulse{0%{box-shadow:0 0 0 0 rgba(228,19,92,.55);}70%{box-shadow:0 0 0 12px rgba(228,19,92,0);}100%{box-shadow:0 0 0 0 rgba(228,19,92,0);}}
 .btn-info{background:transparent;color:var(--text-dim);border:2px solid var(--line);width:100%;display:flex;align-items:center;justify-content:center;text-decoration:none;}
 .btn-info:hover{border-color:var(--accent-hi);color:#fff;}
+.btn-info.is-disabled{opacity:.45;pointer-events:none;}
+.step2-hint{margin:0 0 2px;text-align:center;font-size:13px;color:var(--text-mut);}
 
 /* done */
 .done{text-align:center;padding:40px 0 20px;}
@@ -408,8 +410,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div class="step2-actions">
+      <p class="step2-hint" id="step2Hint">👆 Seleziona un piano per continuare</p>
       <button class="btn btn-buy" id="step2Next" disabled>Acquista la prevendita</button>
-      <a class="btn btn-info" id="step2Info" href="richiedi-info.html?sede=urban">Richiedi informazioni</a>
+      <a class="btn btn-info is-disabled" id="step2Info" href="richiedi-info.html?sede=urban" aria-disabled="true">Richiedi informazioni</a>
     </div>
   </section>
 
@@ -827,7 +830,11 @@ function selectPlan(key) {
   if (infoBtn) {
     const p = Object.assign({ sede: 'urban', piano: key, piano_nome: PLANS[key].name }, getUtms());
     infoBtn.href = 'richiedi-info.html?' + new URLSearchParams(p).toString();
+    infoBtn.classList.remove('is-disabled');
+    infoBtn.removeAttribute('aria-disabled');
   }
+  const hint = document.getElementById('step2Hint');
+  if (hint) hint.style.display = 'none';
 }
 
 /* ========================================================
