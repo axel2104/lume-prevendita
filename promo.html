@@ -512,7 +512,11 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
       virtual_page: location.pathname + '#' + slug
     };
     window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
-    if (n === 3) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+    if (window.gtag) gtag('event', 'form_step', data);
+    if (n === 3) {
+      window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+      if (window.gtag) gtag('event', 'form_thank_you', data);
+    }
   }
 
   /* ── Navigazione step ── */

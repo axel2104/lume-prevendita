@@ -752,7 +752,11 @@ function trackStep(n) {
     virtual_page: location.pathname + '#' + slug
   };
   window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
-  if (n === 5) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+  if (window.gtag) gtag('event', 'form_step', data);
+  if (n === 5) {
+    window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+    if (window.gtag) gtag('event', 'form_thank_you', data);
+  }
 }
 /* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
    → feedback su dove si fermano (drop-off in GA4). */
@@ -767,6 +771,7 @@ function trackStep(n) {
       furthest_step: maxStepReached, furthest_slug: maxStepSlug,
       completed: maxStepReached >= 5
     }, getUtms()));
+    if (window.gtag) gtag('event', 'form_exit', { form_id: FORM_ID, form_sede: FORM_SEDE, furthest_step: maxStepReached, furthest_slug: maxStepSlug, completed: maxStepReached >= 5 });
   }
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') reportExit(); });
   window.addEventListener('pagehide', reportExit);

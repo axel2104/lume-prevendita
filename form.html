@@ -590,7 +590,11 @@ function trackStep(n){
     virtual_page: location.pathname + '#' + slug
   };
   window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
-  if (n === 6) window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+  if (window.gtag) gtag('event', 'form_step', data);
+  if (n === 6) {
+    window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
+    if (window.gtag) gtag('event', 'form_thank_you', data);
+  }
 }
 function goto(n){
   state.step=n;
