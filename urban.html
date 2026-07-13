@@ -1264,7 +1264,7 @@ ${buildContractHTML()}
         sede:          'Lume Urban',
         ...getUtms()
       };
-      sessionStorage.setItem('lume_checkout_payload', JSON.stringify(sessionPayload));
+      localStorage.setItem('lume_checkout_payload', JSON.stringify(sessionPayload));
       window.location.href = data.url;
       return;
     }
@@ -1460,7 +1460,8 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
   if (payment === 'success') {
     history.replaceState(null, '', window.location.pathname);
     const sessionId = params.get('session_id');
-    const savedPayload = JSON.parse(sessionStorage.getItem('lume_checkout_payload') || '{}');
+    const savedPayload = JSON.parse(localStorage.getItem('lume_checkout_payload') || sessionStorage.getItem('lume_checkout_payload') || '{}');
+    localStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_utm');
     fetch('https://n8n.lumeflow.it/webhook/conferma-stripe', {
@@ -1471,6 +1472,7 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
     goto(5);
   } else if (payment === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
+    localStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_utm');
     goto(7);
