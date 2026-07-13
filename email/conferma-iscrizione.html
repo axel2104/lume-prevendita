@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Iscrizione confermata — Lume Fitness</title>
+<!--
+  TEMPLATE EMAIL — Conferma iscrizione Lume (prevendita)
+  Placeholder da sostituire (via n8n o Airtable):
+    {{nome}}          nome del cliente
+    {{sede}}          es. "Lume Urban"
+    {{piano}}         es. "12 Mesi — Soluzione Unica"
+    {{importo}}       es. "360,00 €"
+    {{url_contratto}} link al PDF del contratto firmato (Airtable attachment o storage)
+    {{url_ricevuta}}  link alla ricevuta Stripe (receipt_url) — oppure allega il PDF
+  In alternativa ai link, allega i due file (contratto + ricevuta) all'email.
+-->
+</head>
+<body style="margin:0;padding:0;background:#ececec;-webkit-text-size-adjust:100%;">
+  <!-- preheader (nascosto) -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#ececec;font-size:1px;line-height:1px;">
+    La tua iscrizione a {{sede}} è confermata. In allegato contratto firmato e ricevuta.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ececec;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;font-family:'Helvetica Neue',Arial,sans-serif;">
+
+          <!-- HEADER scuro con logo -->
+          <tr>
+            <td align="center" style="background:#1d1d1d;padding:28px 24px 22px;">
+              <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" width="64" height="64" alt="Lume Fitness" style="display:block;border:0;width:64px;height:64px;" />
+            </td>
+          </tr>
+          <!-- barra accento -->
+          <tr><td style="height:5px;background:#c40042;line-height:5px;font-size:5px;">&nbsp;</td></tr>
+
+          <!-- HERO -->
+          <tr>
+            <td align="center" style="background:#1d1d1d;padding:8px 24px 34px;">
+              <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#e4135c;font-weight:bold;margin-bottom:10px;">Prevendita Early Bird</div>
+              <div style="font-size:38px;line-height:1.05;color:#ffffff;font-weight:800;text-transform:uppercase;letter-spacing:1px;">Ci sei!</div>
+              <div style="font-size:19px;line-height:1.3;color:#ffffff;font-weight:600;margin-top:6px;">Iscrizione confermata a {{sede}}</div>
+            </td>
+          </tr>
+
+          <!-- CORPO -->
+          <tr>
+            <td style="padding:34px 34px 8px;">
+              <p style="margin:0 0 16px;font-size:17px;line-height:1.5;color:#222;">Ciao <strong>{{nome}}</strong>,</p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#444;">
+                è tutto confermato: abbiamo <strong>ricevuto il tuo pagamento</strong> e la tua iscrizione in prevendita a
+                <strong style="color:#c40042;">{{sede}}</strong> è registrata. 🎉
+              </p>
+              <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#444;">
+                Hai bloccato la tua tariffa <strong>Early Bird</strong> con la <strong>quota di attivazione gratuita</strong>. Ti aspettiamo all'apertura!
+              </p>
+            </td>
+          </tr>
+
+          <!-- RIEPILOGO -->
+          <tr>
+            <td style="padding:0 34px 26px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f7f7;border:1px solid #e6e6e6;border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 20px;">
+                    <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#999;font-weight:bold;margin-bottom:12px;">Riepilogo iscrizione</div>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;color:#777;">Sede</td>
+                        <td align="right" style="padding:6px 0;font-size:15px;color:#222;font-weight:bold;">{{sede}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;color:#777;border-top:1px solid #ececec;">Abbonamento</td>
+                        <td align="right" style="padding:6px 0;font-size:15px;color:#222;font-weight:bold;border-top:1px solid #ececec;">{{piano}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:15px;color:#777;border-top:1px solid #ececec;">Importo</td>
+                        <td align="right" style="padding:6px 0;font-size:18px;color:#c40042;font-weight:800;border-top:1px solid #ececec;">{{importo}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- DOCUMENTI (contratto + ricevuta) -->
+          <tr>
+            <td style="padding:0 34px 8px;">
+              <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#999;font-weight:bold;margin-bottom:12px;">I tuoi documenti</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 34px 30px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding:0 5px 0 0;" width="50%">
+                    <a href="{{url_contratto}}" target="_blank" style="display:block;background:#c40042;color:#ffffff;text-decoration:none;font-size:15px;font-weight:bold;padding:15px 10px;border-radius:10px;">📄 Contratto firmato</a>
+                  </td>
+                  <td align="center" style="padding:0 0 0 5px;" width="50%">
+                    <a href="{{url_ricevuta}}" target="_blank" style="display:block;background:#ffffff;color:#c40042;text-decoration:none;font-size:15px;font-weight:bold;padding:15px 10px;border-radius:10px;border:2px solid #c40042;">🧾 Ricevuta pagamento</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:14px 0 0;font-size:13px;line-height:1.5;color:#999;text-align:center;">
+                Trovi il contratto firmato e la ricevuta anche in allegato a questa email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- CHIUSURA -->
+          <tr>
+            <td style="padding:0 34px 34px;">
+              <p style="margin:0 0 6px;font-size:16px;line-height:1.6;color:#444;">Per qualsiasi domanda, rispondi pure a questa email: siamo qui per te.</p>
+              <p style="margin:18px 0 0;font-size:16px;line-height:1.5;color:#222;">A presto,<br><strong>Il team Lume Fitness</strong></p>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#1d1d1d;padding:24px 34px;">
+              <p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:#bdbdbd;">
+                <strong style="color:#ffffff;">Lume Fitness Club</strong><br>
+                Viale Giacomo Leopardi 91 — Macerata
+              </p>
+              <p style="margin:0 0 10px;font-size:13px;line-height:1.5;color:#bdbdbd;">
+                ✉ <a href="mailto:macerata@lumefitness.it" style="color:#e4135c;text-decoration:none;">macerata@lumefitness.it</a>
+                &nbsp;•&nbsp; 🌐 <a href="https://www.lumefitness.it" target="_blank" style="color:#e4135c;text-decoration:none;">lumefitness.it</a>
+              </p>
+              <p style="margin:0;font-size:11px;line-height:1.4;color:#777;">
+                Hai ricevuto questa email perché ti sei iscritto alla prevendita Lume. Se pensi sia un errore, contattaci.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
