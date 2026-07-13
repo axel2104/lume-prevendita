@@ -88,27 +88,29 @@
             </td>
           </tr>
 
-          <!-- DOCUMENTI (contratto + ricevuta) -->
+          <!-- DOCUMENTI (contratto + ricevuta) — pulsanti condizionali -->
           <tr>
             <td style="padding:0 34px 8px;">
               <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#999;font-weight:bold;margin-bottom:12px;">I tuoi documenti</div>
             </td>
           </tr>
+          {{#if url_contratto}}
           <tr>
-            <td style="padding:0 34px 30px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td align="center" style="padding:0 5px 0 0;" width="50%">
-                    <a href="{{url_contratto}}" target="_blank" style="display:block;background:#c40042;color:#ffffff;text-decoration:none;font-size:15px;font-weight:bold;padding:15px 10px;border-radius:10px;">📄 Contratto firmato</a>
-                  </td>
-                  <td align="center" style="padding:0 0 0 5px;" width="50%">
-                    <a href="{{url_ricevuta}}" target="_blank" style="display:block;background:#ffffff;color:#c40042;text-decoration:none;font-size:15px;font-weight:bold;padding:15px 10px;border-radius:10px;border:2px solid #c40042;">🧾 Ricevuta pagamento</a>
-                  </td>
-                </tr>
-              </table>
-              <p style="margin:14px 0 0;font-size:13px;line-height:1.5;color:#999;text-align:center;">
-                Trovi il contratto firmato e la ricevuta anche in allegato a questa email.
-              </p>
+            <td style="padding:0 34px 12px;">
+              <a href="{{url_contratto}}" target="_blank" style="display:block;background:#c40042;color:#ffffff;text-decoration:none;font-size:15px;font-weight:bold;text-align:center;padding:15px 10px;border-radius:10px;">📄 Scarica il contratto firmato</a>
+            </td>
+          </tr>
+          {{/if}}
+          {{#if url_ricevuta}}
+          <tr>
+            <td style="padding:0 34px 12px;">
+              <a href="{{url_ricevuta}}" target="_blank" style="display:block;background:#ffffff;color:#c40042;text-decoration:none;font-size:15px;font-weight:bold;text-align:center;padding:15px 10px;border-radius:10px;border:2px solid #c40042;">🧾 Ricevuta di pagamento</a>
+            </td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td style="padding:2px 34px 30px;">
+              <p style="margin:0;font-size:13px;line-height:1.5;color:#999;text-align:center;">Trovi i tuoi documenti anche in allegato a questa email.</p>
             </td>
           </tr>
 
