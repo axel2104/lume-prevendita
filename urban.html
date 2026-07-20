@@ -104,6 +104,17 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .info-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
 .info-chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
 .info-chip b{color:var(--text);}
+/* Countdown Early Bird */
+.countdown{background:linear-gradient(180deg,rgba(196,0,66,.16),rgba(196,0,66,.05));border:1px solid rgba(196,0,66,.4);border-radius:12px;padding:13px 16px;margin:16px 0 4px;text-align:center;}
+.countdown-label{font-family:'Teko',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:16px;font-weight:600;color:var(--accent-hi);margin-bottom:9px;display:flex;align-items:center;justify-content:center;gap:7px;}
+.countdown-timer{display:flex;justify-content:center;gap:9px;}
+.cd-block{background:var(--surface);border:1px solid var(--line);border-radius:8px;min-width:56px;padding:7px 6px;}
+.cd-num{font-family:'Teko',sans-serif;font-size:33px;line-height:1;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
+.cd-unit{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-mut);margin-top:2px;}
+.countdown-ended-msg{display:none;font-size:14px;color:var(--text-dim);}
+.countdown.ended .countdown-timer{display:none;}
+.countdown.ended .countdown-ended-msg{display:block;}
+@media(max-width:420px){.cd-block{min-width:48px;padding:6px 4px;}.cd-num{font-size:27px;}.countdown-label{font-size:14px;}}
 
 /* plan cards */
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -316,6 +327,18 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
         <span class="pill">Corsi Live</span>
         <span class="pill">Corsi On Demand</span>
       </div>
+    </div>
+
+    <!-- Countdown Early Bird -->
+    <div class="countdown" id="earlyBirdCountdown" data-deadline="2026-07-31T23:59:59">
+      <div class="countdown-label">⏰ La prevendita Early Bird scade tra</div>
+      <div class="countdown-timer">
+        <div class="cd-block"><div class="cd-num" id="cdD">--</div><div class="cd-unit">Giorni</div></div>
+        <div class="cd-block"><div class="cd-num" id="cdH">--</div><div class="cd-unit">Ore</div></div>
+        <div class="cd-block"><div class="cd-num" id="cdM">--</div><div class="cd-unit">Min</div></div>
+        <div class="cd-block"><div class="cd-num" id="cdS">--</div><div class="cd-unit">Sec</div></div>
+      </div>
+      <div class="countdown-ended-msg">La prevendita Early Bird è terminata. Contattaci per verificare la disponibilità.</div>
     </div>
 
     <!-- Carosello render/video del centro (automatico, senza controlli) -->
@@ -1519,6 +1542,29 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
   if(vid) vid.addEventListener('ended', function(){ go(idx + 1); if(!timer) start(); });
 
   render(); // idx 0 = video → parte subito, autoplay in pausa finché non finisce
+})();
+</script>
+
+<script>
+/* ── COUNTDOWN Early Bird ── */
+(function(){
+  var el = document.getElementById('earlyBirdCountdown');
+  if(!el) return;
+  var deadline = new Date(el.getAttribute('data-deadline')).getTime();
+  var dEl = document.getElementById('cdD'), hEl = document.getElementById('cdH'),
+      mEl = document.getElementById('cdM'), sEl = document.getElementById('cdS');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function tick(){
+    var diff = deadline - Date.now();
+    if(diff <= 0){ el.classList.add('ended'); clearInterval(t); return; }
+    var s = Math.floor(diff / 1000);
+    dEl.textContent = Math.floor(s / 86400);
+    hEl.textContent = pad(Math.floor((s % 86400) / 3600));
+    mEl.textContent = pad(Math.floor((s % 3600) / 60));
+    sEl.textContent = pad(s % 60);
+  }
+  tick();
+  var t = setInterval(tick, 1000);
 })();
 </script>
 </body>
