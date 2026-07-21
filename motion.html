@@ -2,15 +2,13 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V7GT05VPZ2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-V7GT05VPZ2');
-</script>
-<!-- End Google tag -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K7P3RJNK');</script>
+<!-- End Google Tag Manager -->
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -262,6 +260,10 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7P3RJNK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="wrap">
 
   <div class="topbar">
@@ -752,10 +754,8 @@ function trackStep(n) {
     virtual_page: location.pathname + '#' + slug
   };
   window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
-  if (window.gtag) gtag('event', 'form_step', data);
   if (n === 5) {
     window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
-    if (window.gtag) gtag('event', 'form_thank_you', data);
   }
 }
 /* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
@@ -771,7 +771,6 @@ function trackStep(n) {
       furthest_step: maxStepReached, furthest_slug: maxStepSlug,
       completed: maxStepReached >= 5
     }, getUtms()));
-    if (window.gtag) gtag('event', 'form_exit', { form_id: FORM_ID, form_sede: FORM_SEDE, furthest_step: maxStepReached, furthest_slug: maxStepSlug, completed: maxStepReached >= 5 });
   }
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') reportExit(); });
   window.addEventListener('pagehide', reportExit);

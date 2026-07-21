@@ -2,15 +2,13 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V7GT05VPZ2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-V7GT05VPZ2');
-</script>
-<!-- End Google tag -->
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K7P3RJNK');</script>
+<!-- End Google Tag Manager -->
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -81,6 +79,10 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K7P3RJNK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="wrap">
 
   <div class="topbar">
@@ -174,7 +176,6 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: 'form_step', form_id: 'richiedi-info', form_sede: sedeName, step_number: 1, step_name: 'Richiedi informazioni', step_slug: 'richiedi-info', virtual_page: location.pathname + '#richiedi-info' });
-  if (window.gtag) gtag('event', 'form_step', { form_id: 'richiedi-info', form_sede: sedeName, step_number: 1, step_slug: 'richiedi-info' });
   // Persisti + riporta la sorgente a GTM (capire da dove arrivano le persone)
   var utmCtx = getUtms();
   try { if (Object.keys(utmCtx).length) sessionStorage.setItem('lume_utm', JSON.stringify(utmCtx)); } catch(e){}
@@ -234,10 +235,6 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
       piano_nome: pianoNome
     }, fullUtms));
     window.dataLayer.push({ event: 'form_thank_you', form_id: 'richiedi-info', form_sede: sedeName, step_slug: 'grazie', virtual_page: location.pathname + '#grazie' });
-    if (window.gtag) {
-      gtag('event', 'generate_lead', Object.assign({ form_id: 'richiedi-info', form_sede: sedeName, piano_key: pianoKey, piano_nome: pianoNome }, fullUtms));
-      gtag('event', 'form_thank_you', { form_id: 'richiedi-info', form_sede: sedeName });
-    }
     try { history.replaceState(history.state, '', '#grazie'); } catch(e){}
 
     document.getElementById('formWrap').classList.add('hidden');
