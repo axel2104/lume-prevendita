@@ -788,9 +788,15 @@ function trackStep(n) {
   };
   window.dataLayer.push(Object.assign({ event: 'form_step' }, data));
   if (window.gtag) gtag('event', 'form_step', data);
+  // Alias eventi coi nomi previsti dalla guida GA4 marketing (view_step / sign_contract / thank_you)
+  if (window.gtag) {
+    gtag('event', 'view_step', { step_slug: slug, form_sede: FORM_SEDE });
+    if (n === 4) gtag('event', 'sign_contract', { step_slug: slug, form_sede: FORM_SEDE });
+  }
   if (n === 5) {
     window.dataLayer.push(Object.assign({ event: 'form_thank_you' }, data));
     if (window.gtag) gtag('event', 'form_thank_you', data);
+    if (window.gtag) gtag('event', 'thank_you', { step_slug: slug, form_sede: FORM_SEDE });
   }
 }
 /* Report del punto più avanzato raggiunto quando l'utente lascia la pagina
@@ -824,7 +830,10 @@ function goto(n) {
   trackStep(n);
 }
 
-document.getElementById('step1Next').addEventListener('click', () => goto(2));
+document.getElementById('step1Next').addEventListener('click', () => {
+  if (window.gtag) gtag('event', 'select_sede', { sede: FORM_SEDE, form_sede: FORM_SEDE });
+  goto(2);
+});
 document.getElementById('step2Back').addEventListener('click', () => goto(1));
 document.getElementById('step2Next').addEventListener('click', () => goto(3));
 document.getElementById('step3Back').addEventListener('click', () => goto(2));
@@ -838,6 +847,9 @@ document.getElementById('step4Next').addEventListener('click', submitContract);
   if(!infoBtn) return;
   const params = Object.assign({ sede: 'urban' }, getUtms());
   infoBtn.href = 'richiedi-info.html?' + new URLSearchParams(params).toString();
+  infoBtn.addEventListener('click', function(){
+    if (window.gtag) gtag('event', 'richiedi_info', { form_sede: FORM_SEDE });
+  });
 })();
 
 /* ========================================================
@@ -845,6 +857,7 @@ document.getElementById('step4Next').addEventListener('click', submitContract);
    ======================================================== */
 function selectPlan(key) {
   state.plan = PLANS[key];
+  if (window.gtag) gtag('event', 'select_piano', { piano: PLANS[key].name, piano_nome: PLANS[key].name, form_sede: FORM_SEDE });
   document.querySelectorAll('#planCards .card').forEach(c => c.classList.remove('sel'));
   document.getElementById('card-' + key).classList.add('sel');
   document.getElementById('step2Next').disabled = false;
