@@ -757,7 +757,7 @@ const CANALE_SEDE = new URLSearchParams(window.location.search).get('canale') ==
   try { if (Object.keys(utms).length) sessionStorage.setItem('lume_utm', JSON.stringify(utms)); } catch(e) {}
   // Riporta la sorgente a GTM su ogni pagina (capire da dove arrivano le persone)
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(Object.assign({ event: 'utm_context', page: 'motion' }, utms));
+  window.dataLayer.push(Object.assign({ event: 'utm_context', page: 'val-di-chienti' }, utms));
 })();
 
 function getUtms() {
