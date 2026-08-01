@@ -151,7 +151,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var LEAD_WEBHOOK = 'https://n8n.lumeflow.it/webhook/richiestainfo';
 
   var params = new URLSearchParams(location.search);
-  var SEDE_NAMES = { urban: 'Lume Urban', motion: 'Lume Motion', macerata: 'Lume Lifestyle', montecassiano: 'Lume Element' };
+  var SEDE_NAMES = { urban: 'Lume Urban', 'val-di-chienti': 'Lume Val di Chienti', macerata: 'Lume Lifestyle', montecassiano: 'Lume Element' };
   var sedeKey = params.get('sede') || 'urban';
   var sedeName = SEDE_NAMES[sedeKey] || 'Lume';
   var pianoKey = params.get('piano') || '';
@@ -161,7 +161,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   document.getElementById('pageSub').innerHTML =
     'Lasciaci i tuoi dati: il team <b>' + sedeName + '</b> ti ricontatterà il prima possibile per rispondere a tutte le tue domande.'
     + (pianoNome ? '<br><span style="font-size:13px;color:var(--text-mut)">Soluzione di interesse: <b style="color:var(--accent-hi)">' + pianoNome + '</b></span>' : '');
-  if (sedeKey === 'motion') document.getElementById('backLink').href = 'motion.html';
+  if (sedeKey === 'val-di-chienti') document.getElementById('backLink').href = 'val-di-chienti.html';
 
   // UTM: dalla query, con fallback a sessionStorage (impostato dai form)
   function getUtms(){
