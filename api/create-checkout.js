@@ -74,9 +74,10 @@ exports.handler = async function(event) {
       });
 
     } else {
-      // ── Rateizzato: N rate da €130/mese ──────────────────────────
+      // ── Rateizzato: N rate mensili (importo per rata = importo / N) ──
       // n8n gestisce la cancellazione dopo N pagamenti ascoltando
       // l'evento invoice.paid e cancellando la subscription all'Nª rata.
+      const perRataCents = Math.round(((importo || 0) / nRate) * 100); // importo per rata, dinamico
       session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         customer_email: email,
@@ -86,9 +87,9 @@ exports.handler = async function(event) {
             currency: 'eur',
             product_data: {
               name: `${sedeLabel} — Abbonamento Annuale ${nRate} Rate`,
-              description: `${nRate} rate mensili da €130 · totale €${importo || nRate * 130}`,
+              description: `${nRate} rate mensili da €${Math.round((importo || 0) / nRate)} · totale €${importo || 0}`,
             },
-            unit_amount: 13000, // €130 in centesimi
+            unit_amount: perRataCents,
             recurring: { interval: 'month', interval_count: 1 },
           },
           quantity: 1,

@@ -28,14 +28,14 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Prevendita Early Bird — Lume Urban | Lume Fitness</title>
-<meta name="description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €360, quota di attivazione GRATIS per i primi iscritti. Apertura settembre 2026." />
+<meta name="description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €390, quota di attivazione GRATIS per i primi iscritti. Apertura settembre 2026." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://promo.lumefitness.it/urban.html" />
 <link rel="icon" href="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" type="image/png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Lume Fitness Club" />
 <meta property="og:title" content="Prevendita Early Bird — Lume Urban | Lume Fitness" />
-<meta property="og:description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €360, quota di attivazione GRATIS." />
+<meta property="og:description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €390, quota di attivazione GRATIS." />
 <meta property="og:url" content="https://promo.lumefitness.it/urban.html" />
 <meta property="og:image" content="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" />
 <meta property="og:image:width" content="270" />
@@ -43,7 +43,7 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 <meta property="og:locale" content="it_IT" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Prevendita Early Bird — Lume Urban | Lume Fitness" />
-<meta name="twitter:description" content="Iscriviti in prevendita a Lume Urban, Strength Club nel centro storico di Macerata. Abbonamento da €360, quota attivazione GRATIS." />
+<meta name="twitter:description" content="Iscriviti in prevendita a Lume Urban, Strength Club nel centro storico di Macerata. Abbonamento da €390, quota attivazione GRATIS." />
 <meta name="twitter:image" content="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -414,7 +414,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="badges"><span class="badge-best">Miglior Prezzo</span><span class="badge-early">⚡ Early Bird</span></div>
         <h3>12 Mesi — Soluzione Unica</h3>
         <div class="cdesc">Pagamento in un'unica soluzione. Massimo risparmio garantito.</div>
-        <div class="price">360<small> € / anno</small></div>
+        <div class="price">390<small> € / anno</small></div>
         <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
         <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
       </div>
@@ -424,8 +424,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="badges"><span class="badge-early">⚡ Early Bird</span></div>
         <h3>12 Mesi — 3 Rate</h3>
         <div class="cdesc">Tre comode rate mensili a distanza di 30 giorni l'una dall'altra.</div>
-        <div class="price">130<small> € / rata</small></div>
-        <div class="rate-detail"><b>3 rate × €130</b> ogni 30 giorni — totale €390</div>
+        <div class="price">140<small> € / rata</small></div>
+        <div class="rate-detail"><b>3 rate × €140</b> ogni 30 giorni — totale €420</div>
         <div class="deadline">Offerta valida entro il <b>31 Luglio 2026</b></div>
         <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
       </div>
@@ -756,15 +756,15 @@ function getUtms() {
 const PLANS = {
   unica: {
     id: 'urb-unica', name: '12 Mesi — Soluzione Unica',
-    total: 360, installments: 1,
-    desc: '€360 in un\'unica soluzione anticipata.',
-    paymentLabel: '€360 in unica soluzione'
+    total: 390, installments: 1,
+    desc: '€390 in un\'unica soluzione anticipata.',
+    paymentLabel: '€390 in unica soluzione'
   },
   rate3: {
     id: 'urb-rate3', name: '12 Mesi — 3 Rate',
-    total: 390, installments: 3,
-    desc: '3 rate da €130 ogni 30 giorni.',
-    paymentLabel: '3 rate da €130 ogni 30 giorni (totale €390)'
+    total: 420, installments: 3,
+    desc: '3 rate da €140 ogni 30 giorni.',
+    paymentLabel: '3 rate da €140 ogni 30 giorni (totale €420)'
   }
 };
 
@@ -776,6 +776,7 @@ const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contrat
 /* ── Tracciamento step: URL hash + dataLayer (GTM) ── */
 const FORM_ID = 'urban';
 const FORM_SEDE = 'Lume Urban';
+const RELEASE = 'Fase 2'; // release prevendita — traccia chi si iscrive nella seconda fase
 const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile', 7:'pagamento-non-confermato' };
 let maxStepReached = 0, maxStepSlug = 'step-1-sede';
 function trackStep(n) {
@@ -1118,6 +1119,7 @@ async function submitAnag() {
     importo: state.plan ? state.plan.total : null,
     rate: state.plan ? state.plan.installments : null,
     marketing: document.getElementById('chk-mkt').checked,
+    release: RELEASE,
     ...getUtms()
   };
   if (minor) {
@@ -1207,6 +1209,7 @@ ${buildContractHTML()}
     firma: state.signature,
     firma_base64: state.signature ? state.signature.replace(/^data:image\/png;base64,/, '') : null,
     contratto_html: signedContractHTML,
+    release: RELEASE,
     ...getUtms()
   };
 
@@ -1241,6 +1244,7 @@ ${buildContractHTML()}
         sede:           'Lume Urban',
         metodo_pagamento: metodoPagSelezionato,
         canale:         'sede',
+        release:        RELEASE,
         ...getUtms()
       })
     }).catch(() => {});
@@ -1287,6 +1291,7 @@ ${buildContractHTML()}
         rate:          payload.rate,
         firma_base64:  payload.firma_base64,
         sede:          'Lume Urban',
+        release:       RELEASE,
         ...getUtms()
       };
       localStorage.setItem('lume_checkout_payload', JSON.stringify(sessionPayload));
@@ -1331,13 +1336,14 @@ function buildContractHTML() {
 
   let payScheduleRows;
   if (p && p.installments === 1) {
-    payScheduleRows = `<tr><td>Pagamento</td><td><b>${fmtDate(d1)} — €360</b></td></tr>`;
+    payScheduleRows = `<tr><td>Pagamento</td><td><b>${fmtDate(d1)} — €${p.total}</b></td></tr>`;
   } else if (p && p.installments === 3) {
+    const rata = Math.round(p.total / p.installments);
     payScheduleRows = `
-      <tr><td>1ª rata</td><td>${fmtDate(d1)} — €130</td></tr>
-      <tr><td>2ª rata</td><td>${fmtDate(d2)} — €130</td></tr>
-      <tr><td>3ª rata</td><td>${fmtDate(d3)} — €130</td></tr>
-      <tr><td>Totale</td><td><b>€390</b></td></tr>`;
+      <tr><td>1ª rata</td><td>${fmtDate(d1)} — €${rata}</td></tr>
+      <tr><td>2ª rata</td><td>${fmtDate(d2)} — €${rata}</td></tr>
+      <tr><td>3ª rata</td><td>${fmtDate(d3)} — €${rata}</td></tr>
+      <tr><td>Totale</td><td><b>€${p.total}</b></td></tr>`;
   } else {
     payScheduleRows = `<tr><td>Piano di pagamento</td><td>${p ? p.paymentLabel : '—'}</td></tr>`;
   }
