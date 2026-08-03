@@ -248,6 +248,33 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .btn-info.is-disabled{opacity:.45;pointer-events:none;}
 .step2-hint{margin:0 0 2px;text-align:center;font-size:13px;color:var(--text-mut);}
 
+/* abbonamento — prodotto/prezzo protagonisti, pagamento come scelta secondaria */
+.promo-strip{background:rgba(45,158,0,.12);border:1px solid rgba(45,158,0,.35);border-radius:10px;padding:9px 14px;text-align:center;font-size:13px;color:var(--text-dim);margin:8px 0 22px;}
+.promo-strip b{color:#7efa4e;}
+.promo-strip span{color:var(--text-mut);}
+.plan-block{position:relative;border:2px solid var(--line);border-radius:16px;padding:22px 20px 20px;margin-bottom:16px;background:var(--surface);transition:border-color .2s,background .2s;}
+.plan-block.active{border-color:var(--fam);background:linear-gradient(180deg,var(--fam-bg),transparent);}
+.fam-green{--fam:#2d9e00;--fam-hi:#7efa4e;--fam-bg:rgba(45,158,0,.10);}
+.fam-magenta{--fam:var(--accent);--fam-hi:var(--accent-hi);--fam-bg:rgba(196,0,66,.12);}
+.pb-tag{position:absolute;top:-11px;left:20px;background:var(--fam);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 12px;border-radius:99px;}
+.pb-name{font-family:'Teko',sans-serif;font-size:36px;line-height:1;text-transform:uppercase;font-weight:700;color:#fff;}
+.pb-sub{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--fam-hi);font-weight:600;margin-top:5px;}
+.pb-price{font-family:'Teko',sans-serif;font-size:62px;line-height:.9;font-weight:700;color:var(--fam-hi);margin:12px 0 8px;}
+.pb-price .pb-from{font-family:'Roboto Condensed',sans-serif;font-size:15px;color:var(--text-mut);font-weight:400;text-transform:uppercase;letter-spacing:.05em;vertical-align:22px;margin-right:6px;}
+.pb-price small{font-size:20px;color:var(--text-mut);font-weight:300;}
+.pb-incl{font-size:14px;color:var(--text-dim);line-height:1.5;font-weight:300;margin-bottom:16px;}
+.pb-incl b{color:#fff;font-weight:600;}
+.pb-choose{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-mut);margin-bottom:10px;font-weight:700;}
+.pay-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:440px){.pay-options{grid-template-columns:1fr;}}
+.pay-pill{display:flex;flex-direction:column;align-items:flex-start;gap:3px;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;font-family:'Roboto Condensed',sans-serif;transition:border-color .15s,background .15s;}
+.pay-pill:hover{border-color:var(--fam);}
+.pay-pill.sel{border-color:var(--fam);background:var(--fam-bg);}
+.pp-label{font-size:16px;font-weight:700;color:#fff;}
+.pay-pill.sel .pp-label{color:var(--fam-hi);}
+.pp-detail{font-size:12px;color:var(--text-mut);}
+.pp-detail b{color:var(--text-dim);}
+
 /* done */
 .done{text-align:center;padding:40px 0 20px;}
 .done-circle{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-hi));display:grid;place-items:center;margin:0 auto 22px;}
@@ -392,44 +419,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="btn-back-top" id="step2Back">← Indietro</button>
     </div>
     <h1 class="title">Abbonamento</h1>
-    <p class="sub">Iscriviti adesso e risparmia. <b style="color:var(--accent-hi)">Offerta scade il 31 Agosto 2026.</b></p>
+    <p class="sub">Scegli l'abbonamento. Il metodo di pagamento lo decidi dopo.</p>
 
-    <div class="savings-banner">
-      <div class="savings-label">⚡ Prevendita — Solo per i primi iscritti</div>
-      <div class="savings-row">
-        <span class="savings-old">€50</span>
-        <span class="savings-arrow">→</span>
-        <span class="savings-new">GRATIS</span>
+    <!-- Promo attivazione — ridotta a fascia (non protagonista) -->
+    <div class="promo-strip">🎁 <b>Attivazione €50 → GRATIS</b> in prevendita <span>· scade il 31 Agosto 2026</span></div>
+
+    <div class="plan-block fam-magenta">
+      <div class="pb-name">🏋️ Palestra + Corsi</div>
+      <div class="pb-sub">Sala Pesi Panatta · Calisthenics · Functional · Corsi</div>
+      <div class="pb-price"><span class="pb-from">da</span>32,50<small>€ / mese</small></div>
+      <div class="pb-incl">Accesso illimitato a <b>sala pesi Panatta</b>, <b>area calisthenics &amp; functional</b>, <b>corsi live</b> e <b>corsi on demand</b>.</div>
+      <div class="pb-choose">Scegli come preferisci pagare</div>
+      <div class="pay-options">
+        <button type="button" class="pay-pill" data-plan="unica" onclick="selectPlan('unica')">
+          <span class="pp-label">Soluzione unica</span>
+          <span class="pp-detail">€390 · <b>€32,50/mese</b></span>
+        </button>
+        <button type="button" class="pay-pill" data-plan="rate3" onclick="selectPlan('rate3')">
+          <span class="pp-label">3 rate</span>
+          <span class="pp-detail">3 × €140 · tot. €420</span>
+        </button>
       </div>
-      <div class="savings-body">
-        La <b>quota di attivazione</b> — normalmente <b>€50</b> — è <b style="color:#7efa4e">completamente azzerata</b> per chi si iscrive in prevendita entro la scadenza.
-      </div>
-      <div class="savings-urgency">⏰ Scade il 31 Agosto 2026</div>
-    </div>
-
-    <div class="cards" id="planCards">
-
-      <div class="card" id="card-unica" onclick="selectPlan('unica')">
-        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="badges"><span class="badge-best">Miglior Prezzo</span><span class="badge-early">⚡ Prevendita</span></div>
-        <h3>12 Mesi — Soluzione Unica</h3>
-        <div class="cdesc">Pagamento in un'unica soluzione. Massimo risparmio garantito.</div>
-        <div class="price">390<small> € / anno</small></div>
-        <div class="deadline">Offerta valida entro il <b>31 Agosto 2026</b></div>
-        <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
-      </div>
-
-      <div class="card" id="card-rate3" onclick="selectPlan('rate3')">
-        <div class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="badges"><span class="badge-early">⚡ Prevendita</span></div>
-        <h3>12 Mesi — 3 Rate</h3>
-        <div class="cdesc">Tre comode rate mensili a distanza di 30 giorni l'una dall'altra.</div>
-        <div class="price">140<small> € / rata</small></div>
-        <div class="rate-detail"><b>3 rate × €140</b> ogni 30 giorni — totale €420</div>
-        <div class="deadline">Offerta valida entro il <b>31 Agosto 2026</b></div>
-        <div class="card-saving">✓ Attivazione <s>€50</s> → INCLUSA GRATIS</div>
-      </div>
-
     </div>
 
     <div class="step2-actions">
@@ -845,8 +855,10 @@ document.getElementById('step4Next').addEventListener('click', submitContract);
    ======================================================== */
 function selectPlan(key) {
   state.plan = PLANS[key];
-  document.querySelectorAll('#planCards .card').forEach(c => c.classList.remove('sel'));
-  document.getElementById('card-' + key).classList.add('sel');
+  document.querySelectorAll('.pay-pill.sel').forEach(p => p.classList.remove('sel'));
+  document.querySelectorAll('.plan-block.active').forEach(b => b.classList.remove('active'));
+  const pill = document.querySelector('.pay-pill[data-plan="' + key + '"]');
+  if (pill) { pill.classList.add('sel'); pill.closest('.plan-block').classList.add('active'); }
   document.getElementById('step2Next').disabled = false;
   // Mostra selettore metodo pagamento solo per piano unico + canale=sede
   const box = document.getElementById('metodoPagBox');
