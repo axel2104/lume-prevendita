@@ -1,48 +1,157 @@
-# Mappatura Tracking & Link — Lume Prevendita
+# Prevendita Lume — Stato del tracciamento e dei link
 
-> Documento per il reparto marketing / configurazione GTM.
+> Documento di passaggio di consegne per il reparto marketing.
 > Dominio di produzione: **https://promo.lumefitness.it/**
-> Ultimo aggiornamento: 2026-06-30
+> Ultimo aggiornamento: **2026-08-07** — verificato sul codice in produzione (branch `main`).
 
 ---
 
-## 1. Tag installati (tutte le pagine)
+## 1. In sintesi
 
-| Strumento | ID | Stato |
+| Cosa | Stato |
+|---|---|
+| Google Tag Manager `GTM-K7P3RJNK` | ✅ installato su **tutte** le pagine |
+| Meta Pixel `1498688582000036` | ⚠️ installato, ma invia **solo `PageView`** |
+| Iubenda (privacy/cookie) | ✅ attivo su tutte le pagine |
+| Google Analytics 4 | ❌ **nessun tag GA4 nel codice** — va creato dentro GTM |
+| Eventi `dataLayer` per il funnel | ✅ già inviati dal sito (sezione 5) |
+| UTM | ✅ letti, persistiti e propagati (sezione 4) |
+| Meta: `InitiateCheckout` / `Purchase` / CAPI | ❌ da fare |
+| UTM nei metadata Stripe | ❌ da fare |
+
+**Il punto più importante:** il sito **manda già tutti gli eventi al `dataLayer`**, ma dentro GTM non risulta configurato nessun tag GA4. Finché non lo si crea, i dati del funnel non arrivano in Analytics. È il primo lavoro da fare (sezione 6).
+
+---
+
+## 2. Le pagine
+
+Tutte servite da Netlify; gli URL funzionano **senza** `.html`.
+
+| Pagina | URL | Ruolo nel funnel |
 |---|---|---|
-| Google Tag Manager | `GTM-K7P3RJNK` | ✅ attivo su tutte le pagine (`<head>` + `<noscript>`) |
-| Meta Pixel | `1498688582000036` | ✅ attivo — invia `PageView` al caricamento di ogni pagina |
+| Hub centri | `/` | Scelta del centro: card **Lume Urban** e **Lume Val di Chienti**. Propaga la query string (UTM inclusi) ai link |
+| Prevendita Urban | `/urban` | Form prevendita **Lume Urban** — Macerata, centro storico |
+| Prevendita Val di Chienti | `/val-di-chienti` | Form prevendita **Lume Val di Chienti** — Piediripa (ex "Motion") |
+| Promo Lifestyle | `/promo?sede=macerata` | Landing promo **Lume Lifestyle** |
+| Promo Element | `/promo?sede=montecassiano` | Landing promo **Lume Element** |
+| Richiedi informazioni | `/richiedi-info?sede=urban` oppure `?sede=val-di-chienti` | Form **lead**, aperto dal pulsante nello step 2 dei form prevendita |
+| Form PerfectGym | `/form` | Form generico interno/demo — **non usare in campagna** |
 
-> ⚠️ Eventi Meta avanzati (`InitiateCheckout`, `Purchase`) e **CAPI server-side**: **non ancora attivi**, in attesa del piano marketing. Oggi la landing manda a GTM solo gli eventi `dataLayer` descritti sotto (sezione 4).
+> ⚠️ `motion.html` **non esiste più**: la pagina è stata rinominata `val-di-chienti.html`. Qualsiasi link vecchio a `/motion` va aggiornato.
 
 ---
 
-## 2. Mappa delle pagine e dei link
+## 3. Offerta attuale — Fase 2
 
-| Pagina | URL | Funzione |
+Prevendita in **Fase 2**, con scadenza **31 Agosto 2026**. Quota di attivazione **€50 → GRATIS** per chi si iscrive entro la scadenza.
+
+### Lume Urban
+| Piano | Prezzo | Equivalente mensile |
 |---|---|---|
-| Home | `https://promo.lumefitness.it/` | Mostra la card **Lume Urban** → CTA verso `urban.html` |
-| Prevendita Urban | `https://promo.lumefitness.it/urban.html` | Form prevendita **Lume Urban** (Macerata) |
-| Prevendita Motion | `https://promo.lumefitness.it/motion.html` | Form prevendita **Lume Motion** (Piediripa) — pagina esistente, attualmente non linkata dalla home |
-| Promo Lifestyle | `https://promo.lumefitness.it/promo.html?sede=macerata` | Pagina promo **Lume Lifestyle** (sede attiva) |
-| Promo Element | `https://promo.lumefitness.it/promo.html?sede=montecassiano` | Pagina promo **Lume Element** (sede attiva) |
-| Form PerfectGym | `https://promo.lumefitness.it/form.html` | Form generico PerfectGym (demo/interno) |
-| Richiedi informazioni | `https://promo.lumefitness.it/richiedi-info.html?sede=urban` | Form **lead** (nome, cognome, email, telefono) — aperto dal pulsante "Richiedi informazioni" nello step 2 |
+| 12 Mesi — Soluzione Unica | €390 | €32,50 / mese |
+| 12 Mesi — 3 Rate | 3 × €140 = €420 | €35 / mese |
 
-### Propagazione UTM
-- Ogni pagina del funnel (`urban`, `motion`, `promo`, `richiedi-info`) al caricamento: legge gli UTM dall'URL, li **fonde e persiste** in `sessionStorage` (`lume_utm`) e spinge un evento **`utm_context`** nel `dataLayer` con `{ page, utm_source, utm_medium, utm_campaign, utm_term, utm_content }` → così GTM/GA sa **da dove arriva l'utente su ogni pagina**, anche quando l'URL corrente non contiene più gli UTM.
-- Gli UTM persistiti vengono **inclusi in tutti i webhook n8n** (verifica-iscritto, iscrizione, FIRMA-CONTRATTO, conferma-stripe, promo-prova, lead).
-- La home (`index.html`) reindirizza a `urban.html` preservando la query (UTM inclusi).
-- ⚠️ **Ancora da fare**: inserire gli UTM nei **metadata della sessione Stripe** (vedi sezione 6) — oggi sul round-trip di pagamento sopravvivono solo via `sessionStorage`.
+### Lume Val di Chienti
+| Pacchetto | Piano | Prezzo | Equivalente mensile |
+|---|---|---|---|
+| Palestra + Corsi | Soluzione Unica | €480 | €40 / mese |
+| Palestra + Corsi | 4 Rate | 4 × €130 = €520 | €43,33 / mese |
+| Box Hybrid + Palestra | Soluzione Unica | €720 | €60 / mese |
+| Box Hybrid + Palestra | 6 Rate | 6 × €130 = €780 | €65 / mese |
+
+Nel messaggio pubblicitario la dicitura corretta è **"Prevendita"** (non più "Early Bird", cambiata in Fase 2).
 
 ---
 
-## 3. Step di ogni form → URL (hash)
+## 4. Gestione UTM
 
-Ogni passaggio di step aggiorna l'**hash dell'URL** (senza ricaricare la pagina). Questo permette a GTM (trigger **History Change**) di tracciare il funnel e capire **dove si ferma l'utente**.
+### Come funziona
+1. Ogni pagina del funnel, al caricamento, legge dall'URL i cinque parametri `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`.
+2. Li **unisce** a quelli già salvati e li **persiste** in `sessionStorage` (chiave `lume_utm`). L'URL corrente ha priorità sui valori vecchi.
+3. Li rimanda al `dataLayer` con l'evento **`utm_context`** su *ogni* pagina, così si sa sempre da dove arriva l'utente anche quando l'URL non contiene più gli UTM.
+4. Li allega a **tutti i webhook n8n**, quindi finiscono anche in Airtable insieme al lead.
+5. La pagina hub `/` propaga la query string ai link dei due club: gli UTM sopravvivono al passaggio.
 
-### `urban.html` e `motion.html`
-| Step | Schermata | URL hash |
+### Regola da rispettare nei link
+Gli UTM vengono letti da `location.search`, cioè **devono stare prima del `#`**. Un link come `…/val-di-chienti#step-1-sede?utm_source=…` **non viene tracciato**.
+
+✅ `…/val-di-chienti?utm_source=ig&utm_medium=social#step-1-sede`
+❌ `…/val-di-chienti#step-1-sede?utm_source=ig&utm_medium=social`
+
+L'hash `#step-1-sede` è comunque **superfluo**: la pagina non lo legge al caricamento, si apre allo step 1 in ogni caso. Meglio ometterlo, anche perché Meta aggiunge il proprio `fbclid` in coda e un fragment può interferire.
+
+### Convenzione consigliata
+| Parametro | Uso |
+|---|---|
+| `utm_source` | piattaforma: `facebook`, `instagram`, `whatsapp`, `google` |
+| `utm_medium` | `paid_social` a pagamento · `social` organico · `referral` passaparola/segreteria |
+| `utm_campaign` | campagna, es. `valdichienti_prevendita`, `urban_prevendita` |
+| `utm_content` | creatività o posizionamento, es. `stories`, `reel_01`, `bio`, `segreteria` |
+| `utm_term` | gruppo di inserzioni / pubblico |
+
+---
+
+## 5. Link pronti all'uso
+
+### Inserzioni Meta (parametri dinamici)
+Meta compila da solo campagna, adset e creatività. Incollare l'URL completo nel campo **URL del sito web** a livello di inserzione, **senza** usare anche il campo "Parametri URL" (altrimenti i parametri si duplicano).
+
+**Val di Chienti**
+```
+https://promo.lumefitness.it/val-di-chienti?utm_source={{site_source_name}}&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}
+```
+
+**Urban**
+```
+https://promo.lumefitness.it/urban?utm_source={{site_source_name}}&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}
+```
+
+`{{site_source_name}}` diventa `fb` o `ig` a seconda di dove viene mostrata l'inserzione.
+
+### Organico (Storie, bio, WhatsApp)
+I parametri dinamici non esistono fuori dalle inserzioni: vanno scritti a mano.
+
+```
+https://promo.lumefitness.it/val-di-chienti?utm_source=instagram&utm_medium=social&utm_campaign=valdichienti_prevendita&utm_content=stories
+```
+```
+https://promo.lumefitness.it/urban?utm_source=instagram&utm_medium=social&utm_campaign=urban_prevendita&utm_content=bio
+```
+```
+https://promo.lumefitness.it/val-di-chienti?utm_source=whatsapp&utm_medium=referral&utm_campaign=valdichienti_prevendita&utm_content=segreteria
+```
+
+---
+
+## 6. Eventi inviati al `dataLayer`
+
+Il sito **non ha GA4 installato**: spinge gli eventi nel `dataLayer` e sta a GTM raccoglierli e inoltrarli.
+
+| Evento | Dove | Quando | Campi |
+|---|---|---|---|
+| `select_club` | `/` | click su una card centro | `club` |
+| `utm_context` | tutte le pagine funnel | caricamento pagina | `page`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term` |
+| `form_step` | tutti i form | a ogni step | `form_id`, `form_sede`, `step_number`, `step_name`, `step_slug`, `virtual_page` |
+| `form_thank_you` | tutti i form | completamento (hash `#grazie`) | come sopra → **conversione** |
+| `form_lead` | `/richiedi-info` | invio richiesta info | `form_sede`, `sede_key`, `piano_key`, `abbonamento_interesse` + tutti gli UTM → **lead** |
+| `form_exit` | `/urban`, `/val-di-chienti` | uscita dalla pagina | `furthest_step`, `furthest_slug`, `completed` + UTM → **abbandoni** |
+
+### Cosa configurare in GTM
+1. **Variabile GA4 Configuration** con il measurement ID della property (non è nel codice: recuperarlo da GA4 → Amministrazione → Origini dati).
+2. **Trigger Custom Event** per ciascun evento della tabella.
+3. **Tag GA4 Event** per ognuno, mappando i campi come parametri evento.
+4. Registrare i parametri come **Dimensioni personalizzate** in GA4 (`form_id`, `form_sede`, `step_slug`, `furthest_slug`, `piano_key`), altrimenti non compaiono nei report. Non sono retroattive.
+5. Segnare **`form_thank_you`** e **`form_lead`** come *Key event* (conversioni).
+6. Costruire una **Funnel exploration** con `form_step` filtrando su `step_slug` (sezione 7).
+
+---
+
+## 7. Step dei form → hash URL
+
+Ogni cambio step aggiorna l'hash senza ricaricare la pagina: è la base per il funnel e per capire dove si fermano le persone.
+
+### `/urban` e `/val-di-chienti`
+| Step | Schermata | Hash |
 |---|---|---|
 | 1 | Sede | `#step-1-sede` |
 | 2 | Abbonamento | `#step-2-abbonamento` |
@@ -50,111 +159,77 @@ Ogni passaggio di step aggiorna l'**hash dell'URL** (senza ricaricare la pagina)
 | 4 | Contratto + firma | `#step-4-contratto` |
 | 5 | **Thank you / Iscritto** | `#grazie` |
 | 6 | Non disponibile (già iscritto) | `#non-disponibile` |
-| 7 | **Pagamento non confermato** (annulla/chiude Stripe) | `#pagamento-non-confermato` |
+| 7 | Pagamento non confermato | `#pagamento-non-confermato` |
 
-### `form.html`
-| Step | Schermata | URL hash |
-|---|---|---|
-| 1 | Sede | `#step-1-sede` |
-| 2 | Abbonamento | `#step-2-abbonamento` |
-| 3 | Dati | `#step-3-dati` |
-| 4 | Riepilogo | `#step-4-riepilogo` |
-| 5 | Pagamento | `#step-5-pagamento` |
-| 6 | **Thank you** | `#grazie` |
+### `/promo`
+`#step-1-promo` → `#step-2-form` → `#grazie`
 
-### `promo.html`
-| Step | Schermata | URL hash |
-|---|---|---|
-| 1 | Info promo | `#step-1-promo` |
-| 2 | Form contatto | `#step-2-form` |
-| 3 | **Thank you / Richiesta inviata** | `#grazie` |
+### `/richiedi-info`
+`#richiedi-info` → `#grazie`
 
-### `richiedi-info.html` (lead)
-| Step | Schermata | URL hash |
-|---|---|---|
-| 1 | Form richiesta info | `#richiedi-info` |
-| 2 | **Richiesta inviata (lead)** | `#grazie` |
+### `/form` (interno)
+`#step-1-sede` → `#step-2-abbonamento` → `#step-3-dati` → `#step-4-riepilogo` → `#step-5-pagamento` → `#grazie`
 
-> **Thank you page = URL con hash `#grazie`** in tutti i form → da usare come pagina di conversione in GTM/GA4.
+> **La thank you page è sempre l'hash `#grazie`**, su tutti i form.
+
+### Analisi del drop-off
+- **Funnel exploration** su `form_step` con gli `step_slug` in sequenza: mostra quanti proseguono e dove calano.
+- **`form_exit`** dà il punto più avanzato raggiunto anche da chi non completa: raggruppando per `furthest_slug` si vede lo step che perde più persone.
 
 ---
 
-## 4. Eventi `dataLayer` (per GTM)
+## 8. Dove finiscono i dati
 
-A ogni cambio step viene fatto un push su `dataLayer`:
+### Webhook n8n (`https://n8n.lumeflow.it`)
+| Momento | Webhook |
+|---|---|
+| Step 3 — verifica se già iscritto | `/webhook/verifica-iscritto` |
+| Step 3 — anagrafica | `/webhook/iscrizione` |
+| Step 4 — contratto firmato | `/webhook/FIRMA-CONTRATTO` |
+| Pagamento (in sede o ritorno Stripe) | `/webhook/conferma-stripe` |
+| Submit promo | `/webhook/promo-prova` |
+| Submit richiedi info | `/webhook/richiestainfo` |
 
-```js
-// Ad ogni step:
-{
-  event: 'form_step',
-  form_id: 'urban',            // urban | motion | form | promo
-  form_sede: 'Lume Urban',     // nome sede
-  step_number: 3,              // numero step
-  step_name: 'Dati Personali', // nome leggibile
-  step_slug: 'step-3-dati',    // = hash URL
-  virtual_page: '/urban.html#step-3-dati'
-}
+Tutti i payload includono gli UTM persistiti.
 
-// In più, al completamento (thank you):
-{ event: 'form_thank_you', form_id: 'urban', form_sede: 'Lume Urban', step_number: 5, step_slug: 'grazie', ... }
-```
+### Airtable — base **LUME FITNESS**, tabella **Prevendita Urban**
+Raccoglie i lead e le iscrizioni. Campi utili al marketing: `UTM Source/Medium/Campaign/Content/Term`, `Sede`, `Piano`, `Importo`, `Abbonamento Interesse`, `Stato`, `Data Iscrizione`.
 
-| Evento | Quando scatta | Uso consigliato in GTM |
-|---|---|---|
-| `form_step` | a ogni step di ogni form | page_view virtuale / evento funnel GA4 |
-| `form_thank_you` | sul completamento (step finale) | **evento di conversione** |
-| `form_lead` | invio del form "Richiedi informazioni" | **evento Lead** (GTM → Meta Lead / GA4 generate_lead). Include il set UTM completo (`utm_source/medium/campaign/content/term`) + sede (`form_sede`, `sede_key`) + piano scelto (`piano_key`, `piano_nome`) → attribuzione completa e feedback su quale piano è più richiesto. Gli stessi campi sono nel payload del webhook lead |
-| `utm_context` | caricamento di **ogni** pagina | riporta la sorgente `{ page, utm_* }` → GTM/GA sa da dove arriva l'utente su ogni pagina |
-| `form_exit` | quando l'utente lascia/chiude la pagina del form (urban/motion) | riporta `{ furthest_step, furthest_slug, completed, utm_* }` = **punto più avanzato raggiunto** → drop-off/abbandoni analizzabili in GA4 |
+Valori del campo **Stato**: `Pagamento completato` · `In attesa` · `Contratto firmato` · `Annullato` · `Non Interessato` · `Bloccato`.
 
-> Il drop-off ("dove si fermano le persone") si analizza in **GA4** con `form_step` + `form_exit`. Il beacon di abbandono verso n8n/Airtable è stato rimosso (ridondante con GA4 e generava rumore nella tabella iscrizioni).
-
-### Come vedere "dove si fermano le persone" (drop-off)
-Due modi complementari, entrambi già disponibili:
-1. **Funnel da `form_step`** — in GA4 crea una *Funnel exploration* con gli step (`step_slug` = sede → abbonamento → dati → contratto → grazie): mostra quanti proseguono a ogni step e dove calano.
-2. **`form_exit`** — dà il *punto più avanzato raggiunto* per sessione anche per chi abbandona senza completare (`completed: false`). Raggruppando per `furthest_slug` si vede su quale step si ferma la maggior parte.
-
-> ⚠️ La pagina "Richiedi informazioni" invia i dati a un **webhook n8n dedicato** — attualmente **placeholder da configurare** (`LEAD_WEBHOOK` in `richiedi-info.html`). Appena fornito l'URL, i lead vengono recapitati.
-
-### Valori di `form_id` / `form_sede`
-| Pagina | `form_id` | `form_sede` |
-|---|---|---|
-| `urban.html` | `urban` | `Lume Urban` |
-| `motion.html` | `motion` | `Lume Motion` |
-| `form.html` | `form` | nome club selezionato (dinamico) |
-| `promo.html` | `promo` | `Lume Lifestyle` / `Lume Element` (da `?sede=`) |
+Guardie anti-invio-doppio gestite da n8n: `Invia email conferma`, `Conferma inviata`, `Email Info Lead Inviata`. Il campo **`Email Disiscritto`** segna chi ha fatto unsubscribe: **va escluso da ogni invio** (`NOT({Email Disiscritto})` nei filtri).
 
 ---
 
-## 5. Tracciamento server-side esistente (n8n)
+## 9. Flusso di pagamento (Stripe)
 
-Oltre agli eventi GTM, i form inviano già dati lato server a **n8n** (`https://n8n.lumeflow.it`). Utile per il CRM/Airtable e come base per la futura CAPI Meta.
-
-| Momento | Webhook n8n | Note |
-|---|---|---|
-| Step 3 — verifica | `/webhook/verifica-iscritto` | controlla se già iscritto (urban/motion) |
-| Step 3 — anagrafica | `/webhook/iscrizione` | registra i dati inseriti |
-| Step 4 — firma | `/webhook/FIRMA-CONTRATTO` | invio contratto firmato |
-| Pagamento (in sede / ritorno Stripe) | `/webhook/conferma-stripe` | conferma iscrizione + `session_id` |
-| Submit promo | `/webhook/promo-prova` | lead dalla pagina promo |
-
----
-
-## 6. Flusso di pagamento (Stripe)
-
-1. Allo step 4, il form chiama `POST /api/create-checkout` (Netlify Function) → crea la **Stripe Checkout Session**.
-2. L'utente viene reindirizzato alla pagina di pagamento Stripe.
+1. Allo step 4 il form chiama `POST /api/create-checkout` → crea la Stripe Checkout Session.
+2. L'utente viene portato sulla pagina di pagamento Stripe.
 3. Al ritorno:
-   - **Successo** → `https://promo.lumefitness.it/{sede}.html?payment=success&session_id=...` → la pagina mostra il thank you (`#grazie`) e chiama `conferma-stripe`.
-   - **Annullato / chiusura Stripe** → `https://promo.lumefitness.it/{sede}.html?payment=cancel` → l'utente **non torna al form** ma finisce sulla pagina **"Pagamento non confermato"** (`#pagamento-non-confermato`) con messaggio *"ti ricontatteremo telefonicamente"*. I dati sono già stati salvati negli step precedenti (webhook `iscrizione` + `FIRMA-CONTRATTO`).
+   - **successo** → `?payment=success&session_id=…` → thank you (`#grazie`) e webhook `conferma-stripe`;
+   - **annullato** → `?payment=cancel` → schermata "Pagamento non confermato" (`#pagamento-non-confermato`). I dati sono già stati salvati negli step precedenti, quindi la persona è comunque ricontattabile.
 
-> ⚠️ **Da allineare con marketing/Alexia:** gli UTM e gli identificatori Meta (`fbp`/`fbc`) **non viaggiano ancora** nei metadata della sessione Stripe. Inserirli renderebbe l'attribuzione e la futura CAPI indipendenti dal browser. (Vedi punto in sezione 1.)
+È previsto anche il **pagamento in sede** (contanti/POS/bonifico), che salta Stripe e va diretto al thank you.
 
 ---
 
-## 7. Riepilogo per GTM — cosa configurare
+## 10. Cosa manca — lista di lavoro
 
-1. **Trigger History Change** → mappare `form_step` su un evento GA4 (es. `view_form_step`) con i parametri `form_id`, `form_sede`, `step_number`, `step_slug` → abilita analisi funnel/drop-off.
-2. **Trigger Custom Event = `form_thank_you`** → evento di **conversione** GA4 / Meta.
-3. Pagine di conversione identificabili dall'hash **`#grazie`**.
-4. (Da pianificare) eventi Meta `InitiateCheckout` / `Purchase` + CAPI server-side via n8n.
+| Priorità | Attività | Perché |
+|---|---|---|
+| **Alta** | Creare i tag GA4 in GTM (sezione 6) | Oggi gli eventi partono ma **non arrivano in Analytics**: nessun dato di funnel |
+| **Alta** | Registrare le dimensioni personalizzate in GA4 | Senza, i parametri non sono usabili nei report — e non sono retroattive |
+| Media | Eventi Meta `InitiateCheckout` e `Purchase` | Oggi il Pixel manda solo `PageView`: campagne non ottimizzabili sulla conversione |
+| Media | Meta CAPI server-side (via n8n) | Attribuzione indipendente dal browser |
+| Media | UTM + `fbp`/`fbc` nei metadata Stripe | Oggi sopravvivono solo in `sessionStorage`, si perdono nel round-trip |
+| Bassa | Verificare il campo `Fase Prevendita` in Airtable | Risulta **vuoto su tutti i record**: la costante `RELEASE` è inviata solo da `/urban`, non da `/val-di-chienti` |
+| Bassa | Aggiornare eventuali link a `/motion` | La pagina è stata rinominata `/val-di-chienti` |
+
+---
+
+## 11. Note operative
+
+- **Fail-open sulla verifica iscritto**: se n8n non risponde, l'utente prosegue comunque. Meglio un'iscrizione doppia che una persona bloccata.
+- **Le persone cambiano email tra un tentativo e l'altro.** Nei controlli sui duplicati non affidarsi all'email: usare **codice fiscale** o **telefono**. In tabella sono già emersi casi di stessa persona con due indirizzi diversi.
+- **`/form` è interno**: non va usato in campagna.
+- Il Pixel Meta e GTM sono inseriti direttamente nell'HTML di ogni pagina, non tramite variabili d'ambiente: cambiarli richiede una modifica al codice.
