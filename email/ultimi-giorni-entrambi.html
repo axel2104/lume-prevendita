@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Ultimi giorni — Prevendita Lume</title>
+<!--
+  TEMPLATE EMAIL — Urgenza scadenza prevendita — versione COMBINATA (Urban + Val di Chienti). Per i contatti senza campo Sede valorizzato.
+  Placeholder da sostituire (via n8n / SendGrid):
+    {{nome}}              nome del destinatario
+    {{numero_whatsapp}}   numero WhatsApp segreteria, formato internazionale senza + (es. 393401234567)
+    {{unsubscribe}}       link di disiscrizione
+  Destinatari: tabella "Prevendita Urban" (base LUME FITNESS) con
+    Stato = "In attesa"  AND  NOT({Email Disiscritto})
+  Prezzi: Fase 2 — prevendita in scadenza il 31 agosto 2026.
+  Scelta editoriale: NON si dichiara di quanto salira il listino, si comunica solo
+  che il prezzo di lancio non tornera. Se cambi il timing, aggiorna le date nel testo.
+  CTA con UTM: utm_source=email&utm_medium=lead_nurture&utm_content=sollecito_listino
+-->
+</head>
+<body style="margin:0;padding:0;background:#ececec;-webkit-text-size-adjust:100%;">
+  <!-- preheader (nascosto) -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#ececec;font-size:1px;line-height:1px;">
+    Hai iniziato l'iscrizione ma non l'hai completata. Dopo il 31 agosto questo prezzo di lancio non torna.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ececec;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;font-family:'Helvetica Neue',Arial,sans-serif;">
+
+          <!-- HEADER -->
+          <tr>
+            <td align="center" style="background:#1d1d1d;padding:28px 24px 22px;">
+              <img src="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" width="64" height="64" alt="Lume Fitness" style="display:block;border:0;width:64px;height:64px;" />
+            </td>
+          </tr>
+          <tr><td style="height:5px;background:#c40042;line-height:5px;font-size:5px;">&nbsp;</td></tr>
+
+          <!-- HERO -->
+          <tr>
+            <td align="center" style="background:#1d1d1d;padding:8px 24px 34px;">
+              <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#e4135c;font-weight:bold;margin-bottom:10px;">⏰ Prevendita in scadenza</div>
+              <div style="font-size:40px;line-height:1.05;color:#ffffff;font-weight:800;text-transform:uppercase;letter-spacing:1px;">Ultimi giorni</div>
+              <div style="font-size:18px;line-height:1.35;color:#ffffff;font-weight:600;margin-top:8px;">Il <span style="color:#e4135c;">31 agosto</span> la prevendita chiude</div>
+            </td>
+          </tr>
+
+          <!-- CORPO -->
+          <tr>
+            <td style="padding:32px 34px 6px;">
+              <p style="margin:0 0 16px;font-size:17px;line-height:1.5;color:#222222;">Ciao <strong>{{nome}}</strong>,</p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#444444;">
+                hai iniziato l'iscrizione in prevendita ma non l'hai completata — e siamo agli ultimi giorni utili.
+              </p>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#444444;">
+                <strong style="color:#222222;">Il 31 agosto la prevendita chiude.</strong> I prezzi che vedi qui sotto sono quelli di <strong style="color:#c40042;">lancio</strong>: valgono solo in prevendita e <strong style="color:#222222;">dopo il 31 agosto non torneranno</strong>. Anche la quota di attivazione, oggi azzerata, torna a <strong style="color:#222222;">€50</strong>.
+              </p>
+              <p style="margin:0 0 8px;font-size:16px;line-height:1.6;color:#444444;">
+                Chi completa entro il 31 agosto blocca questo prezzo per <strong style="color:#222222;">12 mesi</strong>.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 34px 0;">
+              <div style="font-size:22px;line-height:1.15;color:#222222;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin:0 0 4px;">Lume Urban</div>
+              <div style="font-size:13px;line-height:1.4;color:#c40042;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;">Macerata, centro storico · apertura settembre 2026</div>
+              <p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#444444;">Sala pesi con linea <strong>Panatta</strong>, area calisthenics e functional, corsi live in sala e corsi on demand. Mille metri quadri su due livelli.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 34px 6px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f7f7;border:1px solid #e6e6e6;border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 22px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;">✅ Quota di attivazione</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;"><span style="text-decoration:line-through;color:#999999;">€50</span> &nbsp;<span style="color:#1a8f00;">GRATIS</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">✅ Soluzione unica</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">€390 <span style="color:#999999;font-weight:normal;">(€32,50/mese)</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">✅ Oppure in 3 rate</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">3 &times; €140 <span style="color:#999999;font-weight:normal;">(tot. €420)</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 34px 8px;">
+              <a href="https://promo.lumefitness.it/urban?utm_source=email&utm_medium=lead_nurture&utm_campaign=urban_prevendita&utm_content=sollecito_listino" target="_blank" style="display:block;background:#c40042;color:#ffffff;text-decoration:none;font-size:17px;font-weight:bold;text-align:center;padding:18px 10px;border-radius:10px;">Completa l'iscrizione a Urban &rarr;</a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:30px 34px 0;">
+              <div style="height:1px;background:#ececec;line-height:1px;font-size:1px;margin:0 0 26px;">&nbsp;</div>
+              <div style="font-size:22px;line-height:1.15;color:#222222;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin:0 0 4px;">Lume Val di Chienti</div>
+              <div style="font-size:13px;line-height:1.4;color:#c40042;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;">Piediripa, Centro Commerciale · apertura ottobre 2026</div>
+              <p style="margin:0 0 14px;font-size:15px;line-height:1.55;color:#444444;">Sala pesi, corsi di gruppo e <strong>Running Club</strong>. Con il pacchetto Box anche <strong>Hybrid Training</strong>, <strong>Hyrox</strong> e <strong>CrossFit</strong>.</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 34px 6px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f7f7;border:1px solid #e6e6e6;border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 22px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;">✅ Quota di attivazione</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;"><span style="text-decoration:line-through;color:#999999;">€50</span> &nbsp;<span style="color:#1a8f00;">GRATIS</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">✅ Palestra + Corsi</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">€480 <span style="color:#999999;font-weight:normal;">(€40/mese)</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">&nbsp;&nbsp;&nbsp;oppure in 4 rate</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">4 &times; €130 <span style="color:#999999;font-weight:normal;">(tot. €520)</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">✅ Box Hybrid + Palestra</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">€720 <span style="color:#999999;font-weight:normal;">(€60/mese)</span></td>
+                      </tr>
+                      <tr>
+                        <td style="padding:7px 0;font-size:15px;color:#222222;border-top:1px solid #ececec;">&nbsp;&nbsp;&nbsp;oppure in 6 rate</td>
+                        <td align="right" style="padding:7px 0;font-size:15px;color:#222222;font-weight:bold;border-top:1px solid #ececec;">6 &times; €130 <span style="color:#999999;font-weight:normal;">(tot. €780)</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 34px 8px;">
+              <a href="https://promo.lumefitness.it/val-di-chienti?utm_source=email&utm_medium=lead_nurture&utm_campaign=valdichienti_prevendita&utm_content=sollecito_listino" target="_blank" style="display:block;background:#c40042;color:#ffffff;text-decoration:none;font-size:17px;font-weight:bold;text-align:center;padding:18px 10px;border-radius:10px;">Completa l'iscrizione a Val di Chienti &rarr;</a>
+            </td>
+          </tr>
+
+
+          <!-- WHATSAPP -->
+          <tr>
+            <td style="padding:6px 34px 22px;">
+              <p style="margin:0;font-size:13px;line-height:1.5;color:#999999;text-align:center;">Vuoi un consiglio sul piano o preferisci pagare in sede? <a href="https://wa.me/{{numero_whatsapp}}?text=Ciao!%20Vorrei%20completare%20l%27iscrizione%20alla%20prevendita%20Lume%20prima%20della%20scadenza" target="_blank" style="color:#c40042;text-decoration:none;font-weight:bold;">Scrivici su WhatsApp</a> o rispondi a questa email.</p>
+            </td>
+          </tr>
+
+          <!-- CHIUSURA -->
+          <tr>
+            <td style="padding:0 34px 34px;">
+              <p style="margin:0;font-size:16px;line-height:1.5;color:#222222;">A presto,<br><strong>Il team Lume Fitness</strong></p>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#1d1d1d;padding:24px 34px;">
+              <p style="margin:0 0 6px;font-size:13px;line-height:1.5;color:#bdbdbd;">
+                <strong style="color:#ffffff;">Lume Fitness Club</strong><br>
+                Viale Giacomo Leopardi 91 — Macerata Centro Storico
+              </p>
+              <p style="margin:0 0 10px;font-size:13px;line-height:1.5;color:#bdbdbd;">
+                ✉ <a href="mailto:macerata@lumefitness.it" style="color:#e4135c;text-decoration:none;">macerata@lumefitness.it</a>
+                &nbsp;•&nbsp; 🌐 <a href="https://www.lumefitness.it" target="_blank" style="color:#e4135c;text-decoration:none;">lumefitness.it</a>
+              </p>
+              <p style="margin:0;font-size:11px;line-height:1.4;color:#777777;">
+                Ricevi questa email perché hai iniziato l'iscrizione alla prevendita Lume. Se non vuoi più ricevere aggiornamenti, <a href="{{unsubscribe}}" style="color:#999999;text-decoration:underline;">annulla l'iscrizione</a>.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
