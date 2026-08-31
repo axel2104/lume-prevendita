@@ -407,22 +407,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="sub">Scegli l'abbonamento. Il metodo di pagamento lo decidi dopo.</p>
 
     <!-- Promo attivazione — ridotta a fascia (non protagonista) -->
-    <div class="promo-strip">🎁 <b>Attivazione €50 → GRATIS</b> in prevendita <span>· scade il 31 Agosto 2026</span></div>
+    <div class="promo-strip">🎁 <b>Attivazione €50 → GRATIS</b> in prevendita</div>
 
     <!-- FAMIGLIA 1 — Palestra + Corsi -->
     <div class="plan-block fam-green">
       <div class="pb-name">🏋️ Palestra + Corsi</div>
-      <div class="pb-price"><span class="pb-from">da</span>40<small>€ / mese</small></div>
+      <div class="pb-price"><span class="pb-from">da</span>42,50<small>€ / mese</small></div>
       <div class="pb-incl">Accesso illimitato a <b>sala pesi</b>, <b>corsi di gruppo</b>, <b>Running Club</b> e a tutti i servizi della sede.</div>
       <div class="pb-choose">Scegli come preferisci pagare</div>
       <div class="pay-options">
         <button type="button" class="pay-pill" data-plan="mot-unica" onclick="selectPlan('mot-unica')">
           <span class="pp-label">Soluzione unica</span>
-          <span class="pp-detail">€480 · <b>€40/mese</b></span>
+          <span class="pp-detail">€510 · <b>€42,50/mese</b></span>
         </button>
         <button type="button" class="pay-pill" data-plan="mot-rate4" onclick="selectPlan('mot-rate4')">
           <span class="pp-label">4 rate</span>
-          <span class="pp-detail">4 × €130 · tot. €520</span>
+          <span class="pp-detail">4 × €135 · tot. €540</span>
         </button>
       </div>
     </div>
@@ -432,17 +432,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="pb-tag">Tutto incluso</div>
       <div class="pb-name">💪 Box Hybrid + Palestra</div>
       <div class="pb-sub">Sala Pesi · Corsi · Box Hybrid · Hyrox · CrossFit</div>
-      <div class="pb-price"><span class="pb-from">da</span>60<small>€ / mese</small></div>
+      <div class="pb-price"><span class="pb-from">da</span>62,50<small>€ / mese</small></div>
       <div class="pb-incl">Tutti i servizi <b>Palestra + Corsi</b>, in più <b>Box Hybrid Training</b>, <b>Hyrox</b> e <b>CrossFit</b>.</div>
       <div class="pb-choose">Scegli come preferisci pagare</div>
       <div class="pay-options">
         <button type="button" class="pay-pill" data-plan="box-unica" onclick="selectPlan('box-unica')">
           <span class="pp-label">Soluzione unica</span>
-          <span class="pp-detail">€720 · <b>€60/mese</b></span>
+          <span class="pp-detail">€750 · <b>€62,50/mese</b></span>
         </button>
         <button type="button" class="pay-pill" data-plan="box-rate6" onclick="selectPlan('box-rate6')">
           <span class="pp-label">6 rate</span>
-          <span class="pp-detail">6 × €130 · tot. €780</span>
+          <span class="pp-detail">6 × €135 · tot. €810</span>
         </button>
       </div>
     </div>
@@ -768,10 +768,10 @@ function getUtms() {
 }
 
 const PLANS = {
-  'mot-unica': { id:'mot-unica', name:'Palestra — Soluzione Unica', total:480, installments:1, paymentLabel:'€480 in unica soluzione' },
-  'mot-rate4': { id:'mot-rate4', name:'Palestra — 4 Rate', total:520, installments:4, paymentLabel:'4 rate da €130 ogni 30 giorni (totale €520)' },
-  'box-unica': { id:'mot-box-unica', name:'BOX — Soluzione Unica', total:720, installments:1, paymentLabel:'€720 in unica soluzione' },
-  'box-rate6': { id:'mot-box-rate6', name:'BOX — 6 Rate', total:780, installments:6, paymentLabel:'6 rate da €130 ogni 30 giorni (totale €780)' }
+  'mot-unica': { id:'mot-unica', name:'Palestra — Soluzione Unica', total:510, installments:1, paymentLabel:'€510 in unica soluzione' },
+  'mot-rate4': { id:'mot-rate4', name:'Palestra — 4 Rate', total:540, installments:4, paymentLabel:'4 rate da €135 ogni 30 giorni (totale €540)' },
+  'box-unica': { id:'mot-box-unica', name:'BOX — Soluzione Unica', total:750, installments:1, paymentLabel:'€750 in unica soluzione' },
+  'box-rate6': { id:'mot-box-rate6', name:'BOX — 6 Rate', total:810, installments:6, paymentLabel:'6 rate da €135 ogni 30 giorni (totale €810)' }
 };
 
 /* ========================================================
@@ -1340,9 +1340,10 @@ function buildContractHTML() {
   if (p && p.installments === 1) {
     payScheduleRows = `<tr><td>Pagamento</td><td><b>${fmtDate(d1)} — €${p.total}</b></td></tr>`;
   } else if (p && p.installments > 1) {
+    const rata = Math.round(p.total / p.installments);
     const rateRows = Array.from({length: p.installments}, (_, i) => {
       const rd = new Date(); rd.setDate(rd.getDate() + i * 30);
-      return `<tr><td>${i + 1}ª rata</td><td>${fmtDate(rd)} — €130</td></tr>`;
+      return `<tr><td>${i + 1}ª rata</td><td>${fmtDate(rd)} — €${rata}</td></tr>`;
     }).join('');
     payScheduleRows = rateRows + `<tr><td>Totale</td><td><b>€${p.total}</b></td></tr>`;
   } else {

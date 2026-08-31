@@ -28,14 +28,14 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Prevendita — Lume Urban | Lume Fitness</title>
-<meta name="description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €390, quota di attivazione GRATIS per i primi iscritti. Apertura settembre 2026." />
+<meta name="description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €420, quota di attivazione GRATIS per i primi iscritti. Apertura settembre 2026." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://promo.lumefitness.it/urban.html" />
 <link rel="icon" href="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" type="image/png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Lume Fitness Club" />
 <meta property="og:title" content="Prevendita — Lume Urban | Lume Fitness" />
-<meta property="og:description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €390, quota di attivazione GRATIS." />
+<meta property="og:description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €420, quota di attivazione GRATIS." />
 <meta property="og:url" content="https://promo.lumefitness.it/urban.html" />
 <meta property="og:image" content="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" />
 <meta property="og:image:width" content="270" />
@@ -43,7 +43,7 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 <meta property="og:locale" content="it_IT" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Prevendita — Lume Urban | Lume Fitness" />
-<meta name="twitter:description" content="Iscriviti in prevendita a Lume Urban, Strength Club nel centro storico di Macerata. Abbonamento da €390, quota attivazione GRATIS." />
+<meta name="twitter:description" content="Iscriviti in prevendita a Lume Urban, Strength Club nel centro storico di Macerata. Abbonamento da €420, quota attivazione GRATIS." />
 <meta name="twitter:image" content="https://www.lumefitness.it/wp-content/uploads/2024/08/cropped-logo-270x270.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -422,22 +422,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="sub">Scegli l'abbonamento. Il metodo di pagamento lo decidi dopo.</p>
 
     <!-- Promo attivazione — ridotta a fascia (non protagonista) -->
-    <div class="promo-strip">🎁 <b>Attivazione €50 → GRATIS</b> in prevendita <span>· scade il 31 Agosto 2026</span></div>
+    <div class="promo-strip">🎁 <b>Attivazione €50 → GRATIS</b> in prevendita</div>
 
     <div class="plan-block fam-magenta">
       <div class="pb-name">🏋️ Palestra + Corsi</div>
       <div class="pb-sub">Sala Pesi Panatta · Calisthenics · Functional · Corsi</div>
-      <div class="pb-price"><span class="pb-from">da</span>32,50<small>€ / mese</small></div>
+      <div class="pb-price"><span class="pb-from">da</span>35<small>€ / mese</small></div>
       <div class="pb-incl">Accesso illimitato a <b>sala pesi Panatta</b>, <b>area calisthenics &amp; functional</b>, <b>corsi live</b> e <b>corsi on demand</b>.</div>
       <div class="pb-choose">Scegli come preferisci pagare</div>
       <div class="pay-options">
         <button type="button" class="pay-pill" data-plan="unica" onclick="selectPlan('unica')">
           <span class="pp-label">Soluzione unica</span>
-          <span class="pp-detail">€390 · <b>€32,50/mese</b></span>
+          <span class="pp-detail">€420 · <b>€35/mese</b></span>
         </button>
         <button type="button" class="pay-pill" data-plan="rate3" onclick="selectPlan('rate3')">
           <span class="pp-label">3 rate</span>
-          <span class="pp-detail">3 × €140 · tot. €420</span>
+          <span class="pp-detail">3 × €150 · tot. €450</span>
         </button>
       </div>
     </div>
@@ -766,15 +766,15 @@ function getUtms() {
 const PLANS = {
   unica: {
     id: 'urb-unica', name: '12 Mesi — Soluzione Unica',
-    total: 390, installments: 1,
-    desc: '€390 in un\'unica soluzione anticipata.',
-    paymentLabel: '€390 in unica soluzione'
+    total: 420, installments: 1,
+    desc: '€420 in un\'unica soluzione anticipata.',
+    paymentLabel: '€420 in unica soluzione'
   },
   rate3: {
     id: 'urb-rate3', name: '12 Mesi — 3 Rate',
-    total: 420, installments: 3,
-    desc: '3 rate da €140 ogni 30 giorni.',
-    paymentLabel: '3 rate da €140 ogni 30 giorni (totale €420)'
+    total: 450, installments: 3,
+    desc: '3 rate da €150 ogni 30 giorni.',
+    paymentLabel: '3 rate da €150 ogni 30 giorni (totale €450)'
   }
 };
 
@@ -786,7 +786,7 @@ const stepNames = { 1:'La sede', 2:'Abbonamento', 3:'Dati Personali', 4:'Contrat
 /* ── Tracciamento step: URL hash + dataLayer (GTM) ── */
 const FORM_ID = 'urban';
 const FORM_SEDE = 'Lume Urban';
-const RELEASE = 'Fase 2'; // release prevendita — traccia chi si iscrive nella seconda fase
+const RELEASE = 'Fase 3'; // release prevendita — traccia chi si iscrive nella terza fase (listino dal 21/08/2026)
 const STEP_SLUGS = { 1:'step-1-sede', 2:'step-2-abbonamento', 3:'step-3-dati', 4:'step-4-contratto', 5:'grazie', 6:'non-disponibile', 7:'pagamento-non-confermato' };
 let maxStepReached = 0, maxStepSlug = 'step-1-sede';
 function trackStep(n) {
