@@ -64,5 +64,15 @@ t('startDate fissa rispettata', () => {
   assert.strictEqual(p.startDate, '2026-09-01T00:00:00Z');
 });
 
+/* ── Scadenza prevendita (blocco checkout lato server) ── */
+const { prevenditaChiusa } = require('../api/create-checkout');
+const PRIMA  = Date.parse('2026-09-13T23:59:00+02:00');
+const DOPO   = Date.parse('2026-09-14T00:01:00+02:00');
+
+t('Urban: prima della scadenza il checkout e aperto', () => assert.strictEqual(prevenditaChiusa('Lume Urban', PRIMA), false));
+t('Urban: dopo la scadenza il checkout e chiuso',      () => assert.strictEqual(prevenditaChiusa('Lume Urban', DOPO), true));
+t('Val di Chienti: il 14/09 e ancora aperta',          () => assert.strictEqual(prevenditaChiusa('Lume Val di Chienti', DOPO), false));
+t('sede sconosciuta: nessun blocco',                   () => assert.strictEqual(prevenditaChiusa('Lume Boh', DOPO), false));
+
 console.log('\n' + pass + ' passati, ' + fail + ' falliti');
 process.exit(fail ? 1 : 0);

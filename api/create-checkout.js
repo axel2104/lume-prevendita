@@ -12,14 +12,25 @@
  *   STRIPE_SECRET_KEY   — secret key Stripe (sk_live_... / sk_test_...)
  *   ALLOWED_ORIGIN      — opzionale, default '*'
  */
-const Stripe = require('stripe');
-
 const CORS = {
   'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
 };
+
+/* Scadenza prevendita per sede: dopo questa data niente checkout online.
+   Deve restare allineata a data-deadline nelle pagine urban / val-di-chienti. */
+const DEADLINES = {
+  'Lume Urban':          '2026-09-14T00:00:00+02:00',
+  'Lume Val di Chienti': '2026-10-01T00:00:00+02:00',
+};
+
+function prevenditaChiusa(sede, now) {
+  const d = DEADLINES[sede];
+  return !!d && (now || Date.now()) >= new Date(d).getTime();
+}
+exports.prevenditaChiusa = prevenditaChiusa;
 
 exports.handler = async function(event) {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
@@ -28,12 +39,17 @@ exports.handler = async function(event) {
   }
 
   try {
+    const Stripe = require('stripe');
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
     const body = JSON.parse(event.body || '{}');
     const { email, nome, cognome, piano_id, importo, rate, sede, page } = body;
 
     if (!email || !piano_id) {
       return { statusCode: 400, headers: CORS, body: JSON.stringify({ ok: false, error: 'email e piano_id obbligatori' }) };
+    }
+
+    if (prevenditaChiusa(sede)) {
+      return { statusCode: 410, headers: CORS, body: JSON.stringify({ ok: false, error: 'La prevendita per questa sede è terminata. Richiedi informazioni per verificare la disponibilità.' }) };
     }
 
     // Redirect URLs dinamici in base alla pagina sorgente (urban / motion / ...)
