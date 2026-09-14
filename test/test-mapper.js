@@ -65,7 +65,7 @@ t('startDate fissa rispettata', () => {
 });
 
 /* ── Scadenza prevendita (blocco checkout lato server) ── */
-const { prevenditaChiusa } = require('../api/create-checkout');
+const { prevenditaChiusa, tokenSedeValido } = require('../api/create-checkout');
 const PRIMA  = Date.parse('2026-09-13T23:59:00+02:00');
 const DOPO   = Date.parse('2026-09-14T00:01:00+02:00');
 
@@ -73,6 +73,30 @@ t('Urban: prima della scadenza il checkout e aperto', () => assert.strictEqual(p
 t('Urban: dopo la scadenza il checkout e chiuso',      () => assert.strictEqual(prevenditaChiusa('Lume Urban', DOPO), true));
 t('Val di Chienti: il 14/09 e ancora aperta',          () => assert.strictEqual(prevenditaChiusa('Lume Val di Chienti', DOPO), false));
 t('sede sconosciuta: nessun blocco',                   () => assert.strictEqual(prevenditaChiusa('Lume Boh', DOPO), false));
+
+/* -- Token del link consulenti (bypass della scadenza) -- */
+t('senza SEDE_TOKEN impostato nessun token passa', () => {
+  delete process.env.SEDE_TOKEN;
+  assert.strictEqual(tokenSedeValido('qualsiasi'), false);
+  assert.strictEqual(tokenSedeValido(''), false);
+});
+
+t('token giusto passa, token sbagliato no', () => {
+  process.env.SEDE_TOKEN = 'segreto-123';
+  assert.strictEqual(tokenSedeValido('segreto-123'), true);
+  assert.strictEqual(tokenSedeValido('segreto-124'), false);
+  assert.strictEqual(tokenSedeValido('segreto'), false);
+  assert.strictEqual(tokenSedeValido(undefined), false);
+  assert.strictEqual(tokenSedeValido(null), false);
+  delete process.env.SEDE_TOKEN;
+});
+
+t('dopo la scadenza il token sede riapre il checkout', () => {
+  process.env.SEDE_TOKEN = 'segreto-123';
+  assert.strictEqual(prevenditaChiusa('Lume Urban', DOPO) && !tokenSedeValido('segreto-123'), false);
+  assert.strictEqual(prevenditaChiusa('Lume Urban', DOPO) && !tokenSedeValido(''), true);
+  delete process.env.SEDE_TOKEN;
+});
 
 console.log('\n' + pass + ' passati, ' + fail + ' falliti');
 process.exit(fail ? 1 : 0);

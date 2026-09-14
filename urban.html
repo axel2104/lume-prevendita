@@ -330,6 +330,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="tag">Prevendita</span>
   </div>
 
+  <!-- Visibile solo sul link consulenti (canale=sede + k) -->
+  <p id="badgeSede" style="display:none;margin:0 0 14px;padding:8px 12px;border:1px solid var(--acc);border-radius:8px;font-size:13px;color:var(--acc)">
+    Modalità sede — iscrizione compilata dalla consulente in struttura.
+  </p>
+
   <div class="progress">
     <div class="bar"><div class="fill" id="fill"></div></div>
     <div class="pmeta"><span id="stepName">La sede</span><span>Step <b id="stepNum">1</b> / 4</span></div>
@@ -753,8 +758,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
    ======================================================== */
 const state = { step: 1, plan: null, signature: null };
 
-/* canale=sede → abilita metodi di pagamento alternativi per piani unici */
-const CANALE_SEDE = new URLSearchParams(window.location.search).get('canale') === 'sede';
+/* canale=sede + k=<token> → link riservato alle consulenti (lo trovi in Airtable).
+   Sblocca l'acquisto in sede anche dopo la scadenza pubblica e mostra i metodi
+   di pagamento alternativi. Senza k la pagina resta chiusa come per il pubblico.
+   Il token lo valida il server in /api/create-checkout: qui serve solo a
+   decidere cosa mostrare. */
+const QS = new URLSearchParams(window.location.search);
+const SEDE_TOKEN = QS.get('k') || '';
+const CANALE_SEDE = QS.get('canale') === 'sede' && SEDE_TOKEN !== '';
+if (CANALE_SEDE) {
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.getElementById('badgeSede');
+    if (b) b.style.display = 'block';
+  });
+}
 
 /* ========================================================
    UTM CAPTURE — legge parametri UTM dall'URL e li persiste
@@ -1301,6 +1318,7 @@ ${buildContractHTML()}
         importo:  payload.importo,
         rate:     payload.rate,
         sede:     'Lume Urban',
+        sede_token: SEDE_TOKEN,
       })
     });
     const data = await res.json();
@@ -1318,6 +1336,7 @@ ${buildContractHTML()}
         rate:          payload.rate,
         firma_base64:  payload.firma_base64,
         sede:          'Lume Urban',
+        canale:        CANALE_SEDE ? 'sede' : 'online',
         release:       RELEASE,
         ...getUtms()
       };
@@ -1582,6 +1601,8 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
 (function(){
   var el = document.getElementById('earlyBirdCountdown');
   if(!el) return;
+  /* Link consulenti: la prevendita in sede non scade, via il countdown */
+  if(CANALE_SEDE){ el.style.display = 'none'; return; }
   var deadline = new Date(el.getAttribute('data-deadline')).getTime();
   var dEl = document.getElementById('cdD'), hEl = document.getElementById('cdH'),
       mEl = document.getElementById('cdM'), sEl = document.getElementById('cdS');

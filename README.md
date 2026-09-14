@@ -104,3 +104,48 @@ poi `git push`.
 
 Se preferisci un solo deploy, Vercel serve sia `index.html` sia `api/`: importa il repo e basta,
 con `API_BASE: ''`. In quel caso GitHub Pages non serve.
+
+---
+
+## Link riservato alle consulenti (iscrizioni in sede dopo la scadenza)
+
+La prevendita pubblica si chiude da sola alla `data-deadline` della pagina (Urban: 14/09/2026).
+Le consulenti continuano a iscrivere in struttura con un link che porta un token segreto:
+
+```
+https://promo.lumefitness.it/urban?canale=sede&k=TOKEN&utm_source=sede&utm_medium=consulente&utm_campaign=urban_prevendita
+```
+
+Con `canale=sede` **e** `k` valorizzato la pagina:
+
+- nasconde il countdown e non si auto-chiude;
+- tiene attivo il pulsante "Acquista la prevendita";
+- mostra i metodi di pagamento in sede (contanti, POS, bonifico) sui piani in soluzione unica;
+- mostra la fascia "Modalità sede" in alto, così si vede subito di essere sul link giusto;
+- manda `canale: "sede"` a n8n anche sul ramo Stripe.
+
+Senza `k` la pagina resta chiusa esattamente come per il pubblico.
+
+### Impostare il token
+
+1. Genera un valore casuale:
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(12).toString('base64url'))"
+   ```
+2. Mettilo come variabile d'ambiente **`SEDE_TOKEN`** sul deploy del backend, poi ridistribuisci.
+3. Usa lo stesso valore nel `?k=` del link salvato su Airtable.
+
+Il token serve solo al pagamento con carta: `/api/create-checkout` risponde `410` dopo la
+scadenza a meno che `sede_token` non coincida con `SEDE_TOKEN` (confronto a tempo costante).
+Contanti, POS e bonifico non passano dal backend, quindi funzionano anche senza token —
+ma senza `k` nel link la pagina non li mostra nemmeno.
+
+Se `SEDE_TOKEN` non è impostato nessun token passa e vale solo la scadenza pubblica:
+il pagamento con carta dà errore, gli altri tre metodi restano utilizzabili.
+
+### Dove mettere il link in Airtable
+
+Base **LUME FITNESS** → tabella **Prevendita Urban**. Il link è uguale per tutte le consulenti:
+tienilo nella descrizione della vista o in un campo URL fisso, non in un campo per record.
+Chiunque abbia il link può acquistare: trattalo come una password, e per revocarlo cambia
+`SEDE_TOKEN` e aggiorna il link.

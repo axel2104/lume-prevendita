@@ -32,6 +32,18 @@ function prevenditaChiusa(sede, now) {
 }
 exports.prevenditaChiusa = prevenditaChiusa;
 
+/* Token del link riservato alle consulenti (env SEDE_TOKEN, lo stesso che sta
+   nel parametro ?k= del link in Airtable). Con token valido il checkout resta
+   aperto anche dopo la scadenza: le iscrizioni si chiudono in sede.
+   Se SEDE_TOKEN non e impostato nessun token passa e vale solo la scadenza. */
+function tokenSedeValido(token) {
+  const atteso = process.env.SEDE_TOKEN || '';
+  if (!atteso || typeof token !== 'string' || token.length !== atteso.length) return false;
+  const crypto = require('crypto');
+  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(atteso));
+}
+exports.tokenSedeValido = tokenSedeValido;
+
 exports.handler = async function(event) {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
   if (event.httpMethod !== 'POST') {
@@ -42,13 +54,13 @@ exports.handler = async function(event) {
     const Stripe = require('stripe');
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
     const body = JSON.parse(event.body || '{}');
-    const { email, nome, cognome, piano_id, importo, rate, sede, page } = body;
+    const { email, nome, cognome, piano_id, importo, rate, sede, page, sede_token } = body;
 
     if (!email || !piano_id) {
       return { statusCode: 400, headers: CORS, body: JSON.stringify({ ok: false, error: 'email e piano_id obbligatori' }) };
     }
 
-    if (prevenditaChiusa(sede)) {
+    if (prevenditaChiusa(sede) && !tokenSedeValido(sede_token)) {
       return { statusCode: 410, headers: CORS, body: JSON.stringify({ ok: false, error: 'La prevendita per questa sede è terminata. Richiedi informazioni per verificare la disponibilità.' }) };
     }
 
