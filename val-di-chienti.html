@@ -85,6 +85,9 @@ h1.title{font-family:'Teko',sans-serif;font-size:42px;font-weight:700;text-trans
 .struttura-banner h2{font-family:'Teko',sans-serif;font-size:56px;font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:14px;}
 .addr-line{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--text-dim);margin-bottom:16px;}
 .addr-line svg{width:15px;height:15px;flex-shrink:0;fill:var(--accent-hi);}
+.render-video{position:relative;aspect-ratio:4/5;margin-bottom:18px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#000;pointer-events:none;}
+.render-video video{width:100%;height:100%;object-fit:cover;display:block;}
+.render-video figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75);background:linear-gradient(to top,rgba(0,0,0,.65),transparent);}
 .activity-pills{display:flex;flex-wrap:wrap;gap:8px;}
 .pill{background:#383838;border:1px solid #4e4e4e;color:#fff;font-size:13px;padding:4px 12px;border-radius:99px;font-weight:500;}
 
@@ -351,6 +354,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="pill">Functional</span>
       </div>
     </div>
+
+    <!-- Render del centro. Muto, in loop e senza controlli: e' un'immagine che
+         si muove, non un video da guardare. `playsinline` perche' senza di
+         quello iOS lo apre a tutto schermo al primo frame. -->
+    <figure class="render-video">
+      <video poster="/assets/val-di-chienti-poster.webp"
+             muted loop playsinline autoplay preload="metadata"
+             aria-label="Render degli spazi di Lume Val di Chienti">
+        <source src="/assets/val-di-chienti.webm" type="video/webm">
+        <source src="/assets/val-di-chienti.mp4" type="video/mp4">
+      </video>
+      <figcaption>Render di progetto — Lume Val di Chienti</figcaption>
+    </figure>
 
     <!-- Countdown Prevendita -->
     <div class="countdown" id="earlyBirdCountdown" data-deadline="2026-09-30T23:59:59">
