@@ -6,7 +6,8 @@
  * - rate > 1   → mode: 'subscription', €130/mese × N rate
  *
  * Body params:
- *   email, nome, cognome, piano_id, importo, rate, sede, page
+ *   email, nome, cognome, piano_id, sede, page
+ *   (importo e rate NON si leggono dal client: derivano da PIANI[piano_id])
  *
  * Env vars richieste:
  *   STRIPE_SECRET_KEY   — secret key Stripe (sk_live_... / sk_test_...)
@@ -24,6 +25,18 @@ const CORS = {
 const DEADLINES = {
   'Lume Urban':          '2026-09-14T00:00:00+02:00',
   'Lume Val di Chienti': '2026-10-01T00:00:00+02:00',
+};
+
+/* Prezzi ufficiali per piano_id, allineati a PLANS in urban.html / val-di-chienti.html.
+   Il client manda piano_id + importo/rate solo per comodità di visualizzazione:
+   qui si ricontrolla sempre importo/rate contro questa tabella, non ci si fida del body. */
+const PIANI = {
+  'urb-unica':      { importo: 420, rate: 1 },
+  'urb-rate3':      { importo: 450, rate: 3 },
+  'mot-unica':      { importo: 510, rate: 1 },
+  'mot-rate4':      { importo: 540, rate: 4 },
+  'mot-box-unica':  { importo: 750, rate: 1 },
+  'mot-box-rate6':  { importo: 810, rate: 6 },
 };
 
 function prevenditaChiusa(sede, now) {
@@ -54,10 +67,15 @@ exports.handler = async function(event) {
     const Stripe = require('stripe');
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
     const body = JSON.parse(event.body || '{}');
-    const { email, nome, cognome, piano_id, importo, rate, sede, page, sede_token } = body;
+    const { email, nome, cognome, piano_id, sede, page, sede_token } = body;
 
     if (!email || !piano_id) {
       return { statusCode: 400, headers: CORS, body: JSON.stringify({ ok: false, error: 'email e piano_id obbligatori' }) };
+    }
+
+    const piano = PIANI[piano_id];
+    if (!piano) {
+      return { statusCode: 400, headers: CORS, body: JSON.stringify({ ok: false, error: 'piano_id sconosciuto' }) };
     }
 
     if (prevenditaChiusa(sede) && !tokenSedeValido(sede_token)) {
@@ -73,7 +91,8 @@ exports.handler = async function(event) {
 
     const nomeCompleto = [nome, cognome].filter(Boolean).join(' ');
     const sedeLabel = sede || 'Lume';
-    const nRate = Number(rate) || 1;
+    const importoUfficiale = piano.importo;
+    const nRate = piano.rate;
 
     let session;
 
@@ -90,7 +109,7 @@ exports.handler = async function(event) {
               name: `${sedeLabel} — Abbonamento Annuale`,
               description: 'Soluzione unica anticipata',
             },
-            unit_amount: Math.round((importo || 0) * 100),
+            unit_amount: Math.round(importoUfficiale * 100),
           },
           quantity: 1,
         }],
@@ -105,7 +124,7 @@ exports.handler = async function(event) {
       // ── Rateizzato: N rate mensili (importo per rata = importo / N) ──
       // n8n gestisce la cancellazione dopo N pagamenti ascoltando
       // l'evento invoice.paid e cancellando la subscription all'Nª rata.
-      const perRataCents = Math.round(((importo || 0) / nRate) * 100); // importo per rata, dinamico
+      const perRataCents = Math.round((importoUfficiale / nRate) * 100); // importo per rata, dinamico
       session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         customer_email: email,
@@ -115,7 +134,7 @@ exports.handler = async function(event) {
             currency: 'eur',
             product_data: {
               name: `${sedeLabel} — Abbonamento Annuale ${nRate} Rate`,
-              description: `${nRate} rate mensili da €${Math.round((importo || 0) / nRate)} · totale €${importo || 0}`,
+              description: `${nRate} rate mensili da €${Math.round(importoUfficiale / nRate)} · totale €${importoUfficiale}`,
             },
             unit_amount: perRataCents,
             recurring: { interval: 'month', interval_count: 1 },
