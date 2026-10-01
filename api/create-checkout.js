@@ -33,10 +33,10 @@ const DEADLINES = {
 const PIANI = {
   'urb-unica':      { importo: 420, rate: 1 },
   'urb-rate3':      { importo: 450, rate: 3 },
-  'mot-unica':      { importo: 510, rate: 1 },
-  'mot-rate4':      { importo: 540, rate: 4 },
-  'mot-box-unica':  { importo: 750, rate: 1 },
-  'mot-box-rate6':  { importo: 810, rate: 6 },
+  'mot-unica':      { importo: 540, rate: 1 },
+  'mot-rate4':      { importo: 580, rate: 4 },
+  'mot-box-unica':  { importo: 790, rate: 1 },
+  'mot-box-rate6':  { importo: 850, rate: 6 },
 };
 
 function prevenditaChiusa(sede, now) {
@@ -134,7 +134,7 @@ exports.handler = async function(event) {
             currency: 'eur',
             product_data: {
               name: `${sedeLabel} — Abbonamento Annuale ${nRate} Rate`,
-              description: `${nRate} rate mensili da €${Math.round(importoUfficiale / nRate)} · totale €${importoUfficiale}`,
+              description: `${nRate} rate mensili da €${(perRataCents / 100).toFixed(2).replace('.', ',').replace(/,00$/, '')} · totale €${importoUfficiale}`,
             },
             unit_amount: perRataCents,
             recurring: { interval: 'month', interval_count: 1 },
