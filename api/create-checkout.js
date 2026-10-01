@@ -24,7 +24,7 @@ const CORS = {
    Deve restare allineata a data-deadline nelle pagine urban / val-di-chienti. */
 const DEADLINES = {
   'Lume Urban':          '2026-09-14T00:00:00+02:00',
-  'Lume Val di Chienti': '2026-10-01T00:00:00+02:00',
+  'Lume Val di Chienti': '2026-10-16T12:00:00+02:00',
 };
 
 /* Prezzi ufficiali per piano_id, allineati a PLANS in urban.html / val-di-chienti.html.
