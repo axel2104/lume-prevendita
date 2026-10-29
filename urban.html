@@ -27,14 +27,14 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Prevendita — Lume Urban | Lume Fitness</title>
+<title>Abbonamento — Lume Urban | Lume Fitness</title>
 <meta name="description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €420, offerta riservata Under 30." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://promo.lumefitness.it/urban.html" />
 <link rel="icon" href="/assets/logo.png" type="image/png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Lume Fitness Club" />
-<meta property="og:title" content="Prevendita — Lume Urban | Lume Fitness" />
+<meta property="og:title" content="Abbonamento — Lume Urban | Lume Fitness" />
 <meta property="og:description" content="Iscriviti in prevendita a Lume Urban, il nuovo Strength Club nel centro storico di Macerata. Abbonamento annuale da €420, offerta riservata Under 30." />
 <meta property="og:url" content="https://promo.lumefitness.it/urban.html" />
 <meta property="og:image" content="https://promo.lumefitness.it/assets/logo.png" />
@@ -42,7 +42,7 @@ src="https://www.facebook.com/tr?id=1498688582000036&ev=PageView&noscript=1"
 <meta property="og:image:height" content="270" />
 <meta property="og:locale" content="it_IT" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Prevendita — Lume Urban | Lume Fitness" />
+<meta name="twitter:title" content="Abbonamento — Lume Urban | Lume Fitness" />
 <meta name="twitter:description" content="Iscriviti in prevendita a Lume Urban, Strength Club nel centro storico di Macerata. Abbonamento da €420, offerta riservata Under 30." />
 <meta name="twitter:image" content="https://promo.lumefitness.it/assets/logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -327,7 +327,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="topbar">
     <img src="/assets/logo.png" alt="Lume Fitness Club" />
-    <span class="tag">Prevendita</span>
+    <span class="tag">Abbonamento</span>
   </div>
 
   <!-- Visibile solo sul link consulenti (canale=sede + k) -->
@@ -453,16 +453,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span class="pp-label">Soluzione unica</span>
           <span class="pp-detail">€420 · <b>€35/mese</b></span>
         </button>
+        <button type="button" class="pay-pill" data-plan="rate2" onclick="selectPlan('rate2')">
+          <span class="pp-label">2 rate</span>
+          <span class="pp-detail">€220 + €200 · tot. €420</span>
+        </button>
         <button type="button" class="pay-pill" data-plan="rate3" onclick="selectPlan('rate3')">
           <span class="pp-label">3 rate</span>
-          <span class="pp-detail">3 × €150 · tot. €450</span>
+          <span class="pp-detail">€160 + €130 + €130 · tot. €420</span>
         </button>
       </div>
     </div>
 
     <div class="step2-actions">
       <p class="step2-hint" id="step2Hint">👆 Seleziona un piano per continuare</p>
-      <button class="btn btn-buy" id="step2Next" disabled>Acquista la prevendita</button>
+      <button class="btn btn-buy" id="step2Next" disabled>Procedi con l'abbonamento</button>
       <a class="btn btn-info is-disabled" id="step2Info" href="richiedi-info.html?sede=urban" aria-disabled="true">Richiedi informazioni</a>
     </div>
   </section>
@@ -524,6 +528,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <label>Comune <span class="req">*</span></label>
       <input type="text" id="inp-comune" autocomplete="address-level2" placeholder="Macerata" />
       <span class="ferr">Comune obbligatorio</span>
+    </div>
+    <div class="grid two" style="margin-bottom:6px">
+      <div class="field" id="f-cap">
+        <label>CAP <span class="req">*</span></label>
+        <input type="text" id="inp-cap" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="62100" />
+        <span class="ferr">CAP di 5 cifre</span>
+      </div>
+      <div class="field" id="f-prov">
+        <label>Provincia <span class="req">*</span></label>
+        <input type="text" id="inp-prov" maxlength="2" autocomplete="address-level1" placeholder="MC" style="text-transform:uppercase" />
+        <span class="ferr">Sigla di 2 lettere</span>
+      </div>
     </div>
 
     <!-- Sezione genitore/tutore — visibile solo se minorenne -->
@@ -700,7 +716,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <svg viewBox="0 0 24 24" fill="none" width="44" height="44"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <h1>Ci sei!</h1>
-      <p id="doneMsg">La tua prevendita per <b>Lume Urban</b> è confermata. Ti abbiamo inviato un'email di riepilogo all'indirizzo indicato.<br><br>Ci vediamo a settembre 2026!</p>
+      <p id="doneMsg">Il tuo abbonamento per <b>Lume Urban</b> è confermato. Ti abbiamo inviato un'email di riepilogo all'indirizzo indicato.<br><br>Ci vediamo a settembre 2026!</p>
     </div>
   </section>
 
@@ -754,7 +770,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* ========================================================
    STATE
    ======================================================== */
-const state = { step: 1, plan: null, signature: null };
+// Iscrizioni, contratto, checkout Stripe e pagamenti vivono nel CRM (stesso database, webhook Stripe in tempo reale).
+const API_ABB = 'https://crm.lumefitness.it/api/abbonamenti-rate';
+const state = { step: 1, plan: null, signature: null, ordineId: null };
 
 /* canale=sede + k=<token> → link riservato alle consulenti (lo trovi in Airtable).
    Sblocca l'acquisto in sede anche dopo la scadenza pubblica e mostra i metodi
@@ -768,6 +786,10 @@ if (CANALE_SEDE) {
   document.addEventListener('DOMContentLoaded', function () {
     var b = document.getElementById('badgeSede');
     if (b) b.style.display = 'block';
+    // Dal link consulenti la quota di attivazione (€50) non è gratis: si paga in sede.
+    var s = document.querySelector('.savings-banner'); if (s) s.style.display = 'none';
+    var ps = document.querySelector('.promo-strip');
+    if (ps) ps.innerHTML = '💳 <b>Quota di attivazione €50</b> <span>· da pagare in sede</span>';
   });
 }
 
@@ -800,11 +822,17 @@ const PLANS = {
     desc: '€420 in un\'unica soluzione anticipata.',
     paymentLabel: '€420 in unica soluzione'
   },
+  rate2: {
+    id: 'urb-rate2', name: '12 Mesi — 2 Rate',
+    total: 420, installments: 2, rate: [220, 200],
+    desc: '2 rate ogni 30 giorni: €220 + €200.',
+    paymentLabel: '2 rate ogni 30 giorni: €220 + €200 (totale €420)'
+  },
   rate3: {
     id: 'urb-rate3', name: '12 Mesi — 3 Rate',
-    total: 450, installments: 3,
-    desc: '3 rate da €150 ogni 30 giorni.',
-    paymentLabel: '3 rate da €150 ogni 30 giorni (totale €450)'
+    total: 420, installments: 3, rate: [160, 130, 130],
+    desc: '3 rate ogni 30 giorni: €160 + €130 + €130.',
+    paymentLabel: '3 rate ogni 30 giorni: €160 + €130 + €130 (totale €420)'
   }
 };
 
@@ -1086,6 +1114,8 @@ function validateAnag() {
     ['f-cf',      () => isCF(document.getElementById('inp-cf').value.trim())],
     ['f-via',     () => document.getElementById('inp-via').value.trim().length > 0],
     ['f-comune',  () => document.getElementById('inp-comune').value.trim().length > 0],
+    ['f-cap',     () => /^\d{5}$/.test(document.getElementById('inp-cap').value.trim())],
+    ['f-prov',    () => /^[A-Za-z]{2}$/.test(document.getElementById('inp-prov').value.trim())],
   ];
   rows.forEach(([id, fn]) => {
     const field = document.getElementById(id); const valid = fn();
@@ -1155,6 +1185,9 @@ async function submitAnag() {
     codice_fiscale: document.getElementById('inp-cf').value.trim(),
     via: document.getElementById('inp-via').value.trim(),
     comune: document.getElementById('inp-comune').value.trim(),
+    cap: document.getElementById('inp-cap').value.trim(),
+    provincia: document.getElementById('inp-prov').value.trim().toUpperCase(),
+    canale: CANALE_SEDE ? 'sede' : 'online',
     sede: 'Lume Urban',
     piano_id: state.plan ? state.plan.id : null,
     piano_nome: state.plan ? state.plan.name : null,
@@ -1175,32 +1208,25 @@ async function submitAnag() {
     };
   }
 
-  // Verifica iscritto
+  // Salva l'iscrizione nel CRM (e l'anagrafica su PerfectGym). Senza risposta non si procede:
+  // altrimenti l'iscritto non comparirebbe in nessun elenco.
   const errBox = document.getElementById('verificaErr');
   errBox.classList.remove('show');
   try {
-    const verRes = await fetch('https://n8n.lumeflow.it/webhook/verifica-iscritto', {
+    const res = await fetch(API_ABB + '/iscrizione', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    const verData = await verRes.json().catch(() => ({}));
-    if (verData.proceed === false) {
-      const msg = verData.message;
-      if (msg) document.getElementById('blockMsg').textContent = msg;
-      btn.disabled = false; btn.textContent = 'Continua';
-      goto(6);
-      return;
-    }
-  } catch(e) { /* se il webhook non è raggiungibile si procede */ }
-
-  try {
-    await fetch('https://n8n.lumeflow.it/webhook/iscrizione', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { /* continua anche se il webhook non risponde */ }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error((data.details && data.details.join(', ')) || data.error || 'Errore di salvataggio');
+    state.ordineId = data.ordine_id;
+  } catch (e) {
+    errBox.textContent = 'Non siamo riusciti a salvare i dati (' + e.message + '). Riprova tra un attimo.';
+    errBox.classList.add('show');
+    btn.disabled = false; btn.textContent = 'Continua';
+    return;
+  }
 
   btn.disabled = false; btn.textContent = 'Continua';
   goto(4);
@@ -1261,35 +1287,22 @@ ${buildContractHTML()}
     ? (document.querySelector('input[name="metodo_pag"]:checked') || {}).value || 'stripe'
     : 'stripe';
 
-  // Webhook firma contratto (fire & forget)
-  fetch('https://n8n.lumeflow.it/webhook/FIRMA-CONTRATTO', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...payload, metodo_pagamento: metodoPagSelezionato })
-  }).catch(() => {});
-
-  // ── Pagamento in sede (contanti / POS / bonifico) ──────────────────────────
-  if (metodoPagSelezionato !== 'stripe') {
-    fetch('https://n8n.lumeflow.it/webhook/conferma-stripe', {
+  // Contratto firmato → CRM. In sede il pagamento resta da incassare (stato da_pagare_in_sede).
+  try {
+    await fetch(API_ABB + '/contratto', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email:          payload.email,
-        nome:           payload.nome,
-        cognome:        payload.cognome,
-        codice_fiscale: payload.codice_fiscale,
-        piano_id:       payload.piano_id,
-        piano_nome:     payload.piano_nome,
-        importo:        payload.importo,
-        rate:           payload.rate,
-        firma_base64:   payload.firma_base64,
-        sede:           'Lume Urban',
-        metodo_pagamento: metodoPagSelezionato,
-        canale:         'sede',
-        release:        RELEASE,
-        ...getUtms()
+        ordine_id: state.ordineId,
+        contratto_html: signedContractHTML,
+        firma_base64: payload.firma_base64,
+        metodo_pagamento: metodoPagSelezionato
       })
-    }).catch(() => {});
+    });
+  } catch(e) { /* il contratto resta in pagina: si recupera dal CRM con l'email */ }
+
+  // ── Pagamento in sede (contanti / POS / bonifico) ──────────────────────────
+  if (metodoPagSelezionato !== 'stripe') {
     const msgMap = {
       contanti: 'Presentati in sede con questo documento e paga in contanti alla reception.',
       pos: 'Presentati in sede con questo documento e paga con il POS alla reception.',
@@ -1305,7 +1318,7 @@ ${buildContractHTML()}
 
   // ── Pagamento Stripe ───────────────────────────────────────────────────────
   try {
-    const res = await fetch('/api/create-checkout', {
+    const res = await fetch(API_ABB + '/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1317,6 +1330,7 @@ ${buildContractHTML()}
         rate:     payload.rate,
         sede:     'Lume Urban',
         sede_token: SEDE_TOKEN,
+        ordine_id: state.ordineId,
       })
     });
     const data = await res.json();
@@ -1381,13 +1395,12 @@ function buildContractHTML() {
   let payScheduleRows;
   if (p && p.installments === 1) {
     payScheduleRows = `<tr><td>Pagamento</td><td><b>${fmtDate(d1)} — €${p.total}</b></td></tr>`;
-  } else if (p && p.installments === 3) {
-    const rata = Math.round(p.total / p.installments);
-    payScheduleRows = `
-      <tr><td>1ª rata</td><td>${fmtDate(d1)} — €${rata}</td></tr>
-      <tr><td>2ª rata</td><td>${fmtDate(d2)} — €${rata}</td></tr>
-      <tr><td>3ª rata</td><td>${fmtDate(d3)} — €${rata}</td></tr>
-      <tr><td>Totale</td><td><b>€${p.total}</b></td></tr>`;
+  } else if (p && p.rate) {
+    const date = [d1, d2, d3];
+    payScheduleRows = p.rate.map((r, i) => `
+      <tr><td>${i + 1}ª rata</td><td>${fmtDate(date[i])} — €${r}</td></tr>`).join('') + `
+      <tr><td>Totale</td><td><b>€${p.total}</b></td></tr>
+      <tr><td>Quota di attivazione</td><td>€50 da pagare in sede</td></tr>`;
   } else {
     payScheduleRows = `<tr><td>Piano di pagamento</td><td>${p ? p.paymentLabel : '—'}</td></tr>`;
   }
@@ -1407,7 +1420,7 @@ function buildContractHTML() {
   const vessatAccettati  = document.getElementById('chk-vessat').checked  ? 'Sì' : 'No';
 
   return `
-    <h3>Contratto di Abbonamento<br>Lume Urban — Prevendita</h3>
+    <h3>Contratto di Abbonamento<br>Lume Urban — Abbonamento Annuale</h3>
     <hr>
     <p style="font-size:11px;color:#666;margin-bottom:6px"><b>Super Gym 2.0 srl Sportiva Dilettantistica</b> — P.IVA 01890840430<br>Piazzale Fattorini 1, 62100 Macerata (MC) — PEC: supergymsrl@pec.it</p>
     <hr>
@@ -1539,11 +1552,7 @@ document.getElementById('sigClearBtn').addEventListener('click', () => {
     localStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_checkout_payload');
     sessionStorage.removeItem('lume_utm');
-    fetch('https://n8n.lumeflow.it/webhook/conferma-stripe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: sessionId, sede: 'Lume Urban', ...savedPayload })
-    }).catch(() => {});
+    // L'incasso lo registra il webhook Stripe nel CRM (api/stripe-webhook): qui basta mostrare la conferma.
     goto(5);
   } else if (payment === 'cancel') {
     history.replaceState(null, '', window.location.pathname);
