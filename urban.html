@@ -1086,7 +1086,14 @@ document.getElementById('inp-ddn').addEventListener('change', function() {
    VALIDATION
    ======================================================== */
 function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-function isCF(v)    { return /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/.test(v.toUpperCase()); }
+function isCF(v) {
+  const c = v.toUpperCase();
+  if (!/^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/.test(c)) return false;
+  const odd = [1,0,5,7,9,13,15,17,19,21,2,4,18,20,11,3,6,8,12,14,16,10,22,25,24,23];
+  let s = 0;
+  for (let i = 0; i < 15; i++) { const k = /\d/.test(c[i]) ? +c[i] : c.charCodeAt(i) - 65; s += i % 2 === 0 ? odd[k] : k; }
+  return String.fromCharCode(65 + (s % 26)) === c[15];
+}
 function isPhone(v) { return v.replace(/[\s\-().+]/g, '').length >= 6; }
 function fullPhone(prefixId, numId) {
   const p = (document.getElementById(prefixId).value || '').trim();
