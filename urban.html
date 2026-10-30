@@ -1086,7 +1086,7 @@ document.getElementById('inp-ddn').addEventListener('change', function() {
    VALIDATION
    ======================================================== */
 function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-function isCF(v)    { return /^[A-Z0-9]{16}$/.test(v.toUpperCase()); }
+function isCF(v)    { return /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/.test(v.toUpperCase()); }
 function isPhone(v) { return v.replace(/[\s\-().+]/g, '').length >= 6; }
 function fullPhone(prefixId, numId) {
   const p = (document.getElementById(prefixId).value || '').trim();
