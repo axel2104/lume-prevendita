@@ -505,10 +505,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <input type="date" id="inp-ddn" />
         <span class="ferr">Devi avere almeno 12 anni</span>
       </div>
+      <div class="field" id="f-sesso">
+        <label>Sesso <span class="req">*</span></label>
+        <select id="inp-sesso"><option value="">Seleziona</option><option value="M">Maschio</option><option value="F">Femmina</option></select>
+        <span class="ferr">Seleziona il sesso</span>
+      </div>
+      <div class="field" id="f-luogo">
+        <label>Comune o Stato di nascita</label>
+        <input type="text" id="inp-luogo" autocomplete="off" placeholder="Macerata" />
+        <span class="ferr">Non trovato: controlla nome e provincia, o scrivi il CF a mano</span>
+      </div>
+      <div class="field" id="f-luogoprov">
+        <label>Prov. di nascita <span style="font-weight:400;opacity:.7">(estero: EE)</span></label>
+        <input type="text" id="inp-luogoprov" maxlength="2" placeholder="MC" style="text-transform:uppercase" />
+      </div>
       <div class="field" id="f-cf">
         <label>Codice fiscale <span class="req">*</span></label>
         <input type="text" id="inp-cf" maxlength="16" placeholder="RSSMRA80A01D612X" style="text-transform:uppercase" />
-        <span class="ferr">16 caratteri alfanumerici</span>
+        <span class="ferr">Codice fiscale non valido</span>
       </div>
     </div>
 
@@ -762,6 +776,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
+<script src="assets/comuni-cf.js" defer></script>
 <script>
 /* ========================================================
    STATE
@@ -1050,6 +1065,39 @@ fillPrefixes(document.getElementById('ptel-prefix'));
    CF UPPERCASE
    ======================================================== */
 document.getElementById('inp-cf').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+
+// Calcolo del codice fiscale da nome, cognome, data e sesso + luogo di nascita (elenco in assets/comuni-cf.js).
+const _norm = t => t.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Z ]/g, ' ').replace(/\s+/g, ' ').trim();
+let _comuni = null;
+function codiceLuogo(nome, prov) {
+  if (!window.COMUNI_CF) return null;
+  if (!_comuni) { _comuni = new Map(); window.COMUNI_CF.split(';').forEach(r => { const [c, p, n] = r.split('|'); _comuni.set(_norm(n) + '|' + p, c); }); }
+  return _comuni.get(_norm(nome) + '|' + prov.toUpperCase()) || null;
+}
+function codiceFiscale(nome, cognome, sesso, ddn, luogo, prov) {
+  const lett = t => t.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Z]/g, '');
+  const tre = (t, isNome) => {
+    t = lett(t); const c = t.replace(/[AEIOU]/g, ''), v = t.replace(/[^AEIOU]/g, '');
+    return ((isNome && c.length > 3 ? c[0] + c[2] + c[3] : c) + v + 'XXX').slice(0, 3);
+  };
+  const luogoCod = codiceLuogo(luogo, prov);
+  const [y, m, d] = ddn.split('-').map(Number);
+  if (!luogoCod || !y) return null;
+  const c15 = tre(cognome, false) + tre(nome, true) + String(y).slice(-2) + 'ABCDEHLMPRST'[m - 1] + String(d + (sesso === 'F' ? 40 : 0)).padStart(2, '0') + luogoCod;
+  const odd = [1,0,5,7,9,13,15,17,19,21,2,4,18,20,11,3,6,8,12,14,16,10,22,25,24,23];
+  let s = 0;
+  for (let i = 0; i < 15; i++) { const k = /\d/.test(c15[i]) ? +c15[i] : c15.charCodeAt(i) - 65; s += i % 2 === 0 ? odd[k] : k; }
+  return c15 + String.fromCharCode(65 + (s % 26));
+}
+function calcolaCF() {
+  const v = id => document.getElementById(id).value.trim();
+  const luogo = v('inp-luogo'), prov = v('inp-luogoprov');
+  if (!v('inp-nome') || !v('inp-cognome') || !v('inp-ddn') || !v('inp-sesso') || !luogo || prov.length !== 2) return;
+  const cf = codiceFiscale(v('inp-nome'), v('inp-cognome'), v('inp-sesso'), v('inp-ddn'), luogo, prov);
+  document.getElementById('f-luogo').classList.toggle('invalid', !cf);
+  if (cf) { document.getElementById('inp-cf').value = cf; document.getElementById('f-cf').classList.remove('invalid'); }
+}
+['inp-nome', 'inp-cognome', 'inp-ddn', 'inp-sesso', 'inp-luogo', 'inp-luogoprov'].forEach(id => document.getElementById(id).addEventListener('input', calcolaCF));
 document.getElementById('inp-pcf').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
 
 /* ========================================================
@@ -1114,6 +1162,7 @@ function validateAnag() {
     ['f-email',   () => isEmail(document.getElementById('inp-email').value.trim())],
     ['f-tel',     () => isPhone(document.getElementById('inp-tel').value.trim())],
     ['f-ddn',     () => ddnOk],
+    ['f-sesso',   () => ['M', 'F'].includes(document.getElementById('inp-sesso').value)],
     ['f-cf',      () => isCF(document.getElementById('inp-cf').value.trim())],
     ['f-via',     () => document.getElementById('inp-via').value.trim().length > 0],
     ['f-comune',  () => document.getElementById('inp-comune').value.trim().length > 0],
@@ -1186,6 +1235,7 @@ async function submitAnag() {
     telefono: fullPhone('tel-prefix', 'inp-tel'),
     data_nascita: document.getElementById('inp-ddn').value,
     codice_fiscale: document.getElementById('inp-cf').value.trim(),
+    sesso: document.getElementById('inp-sesso').value,
     via: document.getElementById('inp-via').value.trim(),
     comune: document.getElementById('inp-comune').value.trim(),
     cap: document.getElementById('inp-cap').value.trim(),
@@ -1273,6 +1323,7 @@ ${buildContractHTML()}
     nome: document.getElementById('inp-nome').value.trim(),
     cognome: document.getElementById('inp-cognome').value.trim(),
     codice_fiscale: document.getElementById('inp-cf').value.trim(),
+    sesso: document.getElementById('inp-sesso').value,
     piano_id: state.plan ? state.plan.id : null,
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
