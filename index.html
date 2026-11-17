@@ -76,7 +76,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="cards">
-    <a class="club" id="club-urban" href="urban.html">
+    <a class="club" id="club-urban" href="urban.html" style="display:none">
       <span class="badge">⚡ Prevendita</span>
       <h2>Lume Urban</h2>
       <div class="type">Strength Club</div>
@@ -106,6 +106,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* Preserva gli UTM (e l'hash) verso le pagine di prevendita + evento di scelta club */
 (function(){
   var qs = location.search || '';
+  /* Card Urban solo sul link consulenti (?canale=sede&k=...); il token vero lo valida il CRM */
+  var q = new URLSearchParams(qs);
+  if (q.get('canale') === 'sede' && q.get('k')) document.getElementById('club-urban').style.display = '';
   var links = { 'club-urban':'urban', 'club-vdc':'val-di-chienti' };
   Object.keys(links).forEach(function(id){
     var a = document.getElementById(id);

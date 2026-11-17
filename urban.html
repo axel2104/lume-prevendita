@@ -1242,6 +1242,7 @@ async function submitAnag() {
     provincia: document.getElementById('inp-prov').value.trim().toUpperCase(),
     canale: CANALE_SEDE ? 'sede' : 'online',
     sede: 'Lume Urban',
+    sede_token: SEDE_TOKEN,
     piano_id: state.plan ? state.plan.id : null,
     piano_nome: state.plan ? state.plan.name : null,
     importo: state.plan ? state.plan.total : null,
